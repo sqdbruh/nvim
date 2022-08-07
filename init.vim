@@ -8,10 +8,10 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'antoinemadec/FixCursorHold.nvim'
 
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
@@ -50,11 +50,13 @@ Plug 'skywind3000/vim-preview'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'ahmedkhalf/project.nvim'
 
+Plug 'lukas-reineke/indent-blankline.nvim'
+
 
 call plug#end()
 
 let g:Hexokinase_highlighters = ['backgroundfull']
-
+let g:cursorhold_updatetime = 100
 set termguicolors
 " Available values: 'hard', 'medium'(default), 'soft'
 let g:gruvbox_material_background = 'hard'
@@ -65,7 +67,7 @@ colorscheme patatetoy
 let g:lightline = { 'colorscheme': 'tender' }
 
 set completeopt=menu,menuone
-
+luafile C:\Users\sqdrc\AppData\Local\nvim\luasnip.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\lsp.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\nvim-cmp.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\tree-sitter.lua
@@ -127,7 +129,7 @@ nnoremap TT <cmd>TagbarToggle<cr>
 
 nnoremap gr <cmd>Telescope lsp_references<cr>
 nnoremap gs <cmd>Telescope lsp_document_symbols<cr>
-nnoremap <silent> gd :lua require "telescope.builtin".lsp_definitions { jump_type = "never" }<cr>
+"nnoremap <silent> gd :lua require "telescope.builtin".lsp_definitions<cr>
 nnoremap ft <cmd>Telescope treesitter<cr>
 nnoremap fp <cmd>Telescope projects<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
@@ -136,14 +138,19 @@ nnoremap gT <cmd>PreviewClose<cr>
 nnoremap <silent> <leader>dd :lua vim.lsp.diagnostic.disable()<cr>
 nnoremap <silent> <leader>ed :lua vim.lsp.diagnostic.enable()<cr>
 
+nnoremap to <cmd>tabnew<cr>
+nnoremap tn <cmd>tabnext<cr>
+nnoremap tp <cmd>tabprevious<cr>
+
 
 nnoremap <C-t> :NERDTreeToggle<CR>
-nmap <F8> :TagbarToggle<CR>
 
 let g:gutentags_ctags_extra_args = '--fields+nS'
 
 set splitbelow
 set splitright
+
+lua require("indent_blankline").setup {  }
 
 lua << EOF
   require("project_nvim").setup {
