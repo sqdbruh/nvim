@@ -10,6 +10,9 @@ local feedkey = function(key, mode)
 end
 
 cmp.setup({
+        completion = {
+        autocomplete = false,
+    },
     enabled = function()
         -- disable completion in comments
         local context = require 'cmp.config.context'
@@ -31,10 +34,9 @@ cmp.setup({
         end
     },
     mapping = cmp.mapping.preset.insert({
-
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
+        --['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
         ['<C-c>'] = cmp.mapping.abort(),
         ['<CR>'] = cmp.mapping.confirm({
             select = false
@@ -45,8 +47,8 @@ cmp.setup({
             elseif luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
             elseif has_words_before() then
-                cmp.complete()
-                cmp.select_next_item()
+                cmp.complete({reason = cmp.ContextReason.Auto,})
+                --cmp.select_next_item()
             else
                 fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
             end

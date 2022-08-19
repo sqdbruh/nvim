@@ -1,7 +1,7 @@
 set nocompatible
 
 call plug#begin()
-
+Plug 'folke/todo-comments.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -13,14 +13,13 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
+Plug 'kyazdani42/nvim-web-devicons'
+
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 Plug 'tpope/vim-unimpaired'
 
 "Themes
-Plug 'bluz71/vim-moonfly-colors'
-Plug 'jacoborus/tender.vim'
-Plug 'sainnhe/gruvbox-material'
 Plug 'loliee/vim-patatetoy'
 
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
@@ -31,12 +30,10 @@ Plug 'Shougo/vimproc.vim'
 Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'valloric/MatchTagAlways'
-Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
 Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-surround'
-Plug 'tommcdo/vim-lion'
-Plug 'mhinz/vim-startify'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-refactor' " this provides "go to def" etc
 
@@ -52,26 +49,26 @@ Plug 'ahmedkhalf/project.nvim'
 
 Plug 'lukas-reineke/indent-blankline.nvim'
 
+Plug 'easymotion/vim-easymotion'
+
 
 call plug#end()
 
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:cursorhold_updatetime = 100
 set termguicolors
-" Available values: 'hard', 'medium'(default), 'soft'
-let g:gruvbox_material_background = 'hard'
-" For better performance
-let g:gruvbox_material_better_performance = 1
+
 
 colorscheme patatetoy
-let g:lightline = { 'colorscheme': 'tender' }
-
+"let g:lightline = { 'colorscheme': 'tender' }
+let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 luafile C:\Users\sqdrc\AppData\Local\nvim\luasnip.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\lsp.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\nvim-cmp.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\tree-sitter.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\telescope.lua
+luafile C:\Users\sqdrc\AppData\Local\nvim\todo-comments.lua
 luafile C:\Users\sqdrc\AppData\Local\nvim\lua\lsp-ext.lua
 
 nnoremap <SPACE> <Nop>
@@ -83,18 +80,19 @@ set encoding=utf-8
 set mouse=a
 set hidden
 set cursorline
-set relativenumber
 set number
-set number relativenumber
+set relativenumber
+set backspace=indent,eol,start
 
-nnoremap <C-N> <C-W><C-L>
-nnoremap <C-P> <C-W><C-H>
+nnoremap <A-;> <C-W><C-L>
+nnoremap <A-k> <C-W><C-J>
+nnoremap <A-l> <C-W><C-K>
+nnoremap <A-j> <C-W><C-H>
 
 noremap ; l
 noremap l k
 noremap k j
 noremap j h
-inoremap jk <ESC>
 
 map <C-k> :cn<CR>
 map <C-l> :cp<CR>
@@ -119,6 +117,8 @@ set ignorecase
 set smartcase
 let g:compiler = 'msvc'
 
+nnoremap <Leader>v <cmd>vsplit<cr>
+nnoremap <Leader>h <cmd>split<cr>
 nnoremap ff <cmd>Telescope find_files<cr>
 nnoremap fg <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
@@ -128,24 +128,117 @@ nnoremap tt <cmd>TagbarOpenAutoClose<cr>
 nnoremap TT <cmd>TagbarToggle<cr>
 
 nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap gs <cmd>Telescope lsp_document_symbols<cr>
-"nnoremap <silent> gd :lua require "telescope.builtin".lsp_definitions<cr>
-nnoremap ft <cmd>Telescope treesitter<cr>
+function! FindWorkspaceSymbols()
+    let l:search_symbol = 'Telescope lsp_workspace_symbols query='.input("Search for symbol: ")
+    execute l:search_symbol
+endfunction
+nnoremap ft :call FindWorkspaceSymbols()<CR>
+"nnoremap ft <cmd>Telescope lsp_workspace_symbols query=input()<cr>
+nmap gD <C-]> 
 nnoremap fp <cmd>Telescope projects<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
-nnoremap gt <cmd>PreviewTag<cr>
-nnoremap gT <cmd>PreviewClose<cr>
+nnoremap gp <cmd>PreviewTag<cr>
+nnoremap gP <cmd>PreviewClose<cr>
 nnoremap <silent> <leader>dd :lua vim.lsp.diagnostic.disable()<cr>
 nnoremap <silent> <leader>ed :lua vim.lsp.diagnostic.enable()<cr>
 
 nnoremap to <cmd>tabnew<cr>
-nnoremap tn <cmd>tabnext<cr>
-nnoremap tp <cmd>tabprevious<cr>
+nnoremap tc <cmd>tabclose<cr>
+nnoremap t; <cmd>tabnext<cr>
+nnoremap tj <cmd>tabprevious<cr>
+nnoremap ts <C-W>r 
 
+let g:tagbar_foldlevel = 0
+
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+"nmap s <Plug>(easymotion-overwin-f)
+" or
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-linebackward)
+map <Leader>; <Plug>(easymotion-lineforward)
+map <Leader>l <Plug>(easymotion-k)
+map <Leader>k <Plug>(easymotion-j)
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
+" Without these mappings, `n` & `N` works fine. (These mappings just provide
+" different highlight method and have some other features )
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
 
 nnoremap <C-t> :NERDTreeToggle<CR>
 
-let g:gutentags_ctags_extra_args = '--fields+nS'
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git']
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+let g:gutentags_ctags_extra_args = [
+      \ '--tag-relative=yes',
+      \ '--fields=+ailmnS',
+      \ ]
+      let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ '*/tests/*',
+      \ 'build',
+      \ 'dist',
+      \ '*sites/*/files/*',
+      \ 'bin',
+      \ 'node_modules',
+      \ 'bower_components',
+      \ 'cache',
+      \ 'compiled',
+      \ 'docs',
+      \ 'example',
+      \ 'bundle',
+      \ 'vendor',
+      \ '*.md',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '.*rc*',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.sln',
+      \ '*.Master',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.css',
+      \ '*.less',
+      \ '*.scss',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ]
+
 
 set splitbelow
 set splitright
@@ -169,9 +262,8 @@ let g:clang_format#style_options = {
             \ "AlignConsecutiveAssignments  " : "Consecutive",
             \ "Standard" : "C++11"}
 
-" map to <Leader>cf in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer>cf :ClangFormat<CR>
 
 :highlight Normal ctermfg=grey ctermbg=black
 "Autocomplete popup icons color
