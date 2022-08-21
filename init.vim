@@ -35,7 +35,7 @@ Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-surround'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-refactor' " this provides "go to def" etc
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
 Plug 'dhruvasagar/vim-markify'
 
@@ -54,8 +54,19 @@ Plug 'PeterRincker/vim-argumentative'
 Plug 'svermeulen/vim-cutlass'
 Plug 'https://github.com/svermeulen/vim-yoink'
 Plug 'svermeulen/vim-subversive'
-
+Plug 'dbakker/vim-paragraph-motion'
+Plug 'michaeljsmith/vim-indent-object'
 call plug#end()
+
+noremap ; l
+noremap l k
+noremap k j
+noremap j h
+
+nnoremap <SPACE> <Nop>
+nnoremap ,<space> :nohlsearch<CR> 
+let mapleader=" "
+
 let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
 nmap mm <plug>(SubversiveSubstituteLine)
@@ -78,15 +89,26 @@ au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout
 
 nmap ( <Plug>Argumentative_MoveLeft
 nmap ) <Plug>Argumentative_MoveRight
-xmap i; <Plug>Argumentative_InnerTextObject
-xmap a; <Plug>Argumentative_OuterTextObject
-omap i; <Plug>Argumentative_OpPendingInnerTextObject
-omap a; <Plug>Argumentative_OpPendingOuterTextObject
+xmap ia <Plug>Argumentative_InnerTextObject
+xmap aa <Plug>Argumentative_OuterTextObject
+omap ia <Plug>Argumentative_OpPendingInnerTextObject
+omap aa <Plug>Argumentative_OpPendingOuterTextObject
 
 nnoremap x d
 xnoremap x d
 nnoremap xx dd
 nnoremap X D
+
+" JK motions: Line motions
+map s <Plug>(easymotion-overwin-f2)
+map <Leader>j <Plug>(easymotion-linebackward)
+map <Leader>; <Plug>(easymotion-lineforward)
+map <Leader>l <Plug>(easymotion-k)
+map <Leader>k <Plug>(easymotion-j)
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
 
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:cursorhold_updatetime = 100
@@ -98,7 +120,6 @@ colorscheme patatetoy
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
-    echo('win32')
     luafile ~\AppData\Local\nvim\luasnip.lua
     luafile ~\AppData\Local\nvim\lsp.lua
     luafile ~\AppData\Local\nvim\nvim-cmp.lua
@@ -107,8 +128,6 @@ if has('win32')
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
-
-    echo('macunix')
     luafile ~/.config/nvim/luasnip.lua
     luafile ~/.config/nvim/lsp.lua
     luafile ~/.config/nvim/nvim-cmp.lua
@@ -118,9 +137,6 @@ elseif has('macunix')
     luafile ~/.config/nvim/lua/lsp-ext.lua
 endif
 
-nnoremap <SPACE> <Nop>
-nnoremap ,<space> :nohlsearch<CR> 
-let mapleader=" "
 
 set encoding=utf-8
 
@@ -135,11 +151,6 @@ nnoremap <A-;> <C-W><C-L>
 nnoremap <A-k> <C-W><C-J>
 nnoremap <A-l> <C-W><C-K>
 nnoremap <A-j> <C-W><C-H>
-
-noremap ; l
-noremap l k
-noremap k j
-noremap j h
 
 map <C-k> :cn<CR>
 map <C-l> :cp<CR>
@@ -199,24 +210,10 @@ let g:tagbar_foldlevel = 0
 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
-" Jump to anywhere you want with minimal keystrokes, with just one key binding.
-" `s{char}{label}`
-"nmap s <Plug>(easymotion-overwin-f)
-" or
-" `s{char}{char}{label}`
-" Need one more keystroke, but on average, it may be more comfortable.
-nmap s <Plug>(easymotion-overwin-f2)
 
 " Turn on case-insensitive feature
 let g:EasyMotion_smartcase = 1
 
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-linebackward)
-map <Leader>; <Plug>(easymotion-lineforward)
-map <Leader>l <Plug>(easymotion-k)
-map <Leader>k <Plug>(easymotion-j)
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
 
 " These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
 " Without these mappings, `n` & `N` works fine. (These mappings just provide
@@ -296,7 +293,7 @@ lua << EOF
   require("project_nvim").setup {
     -- your configuration comes here
     -- or leave it empty to use the default settings
-    -- refer to the configuration section below
+    -- refer te the configuration section below
   }
 EOF
 
@@ -330,6 +327,9 @@ highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0
 highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
 highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
 highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
-
+highlight! EasyMotionTarget guibg=NONE guifg=#ff6060
+highlight! EasyMotionTarget2First guibg=NONE guifg=#ffaa60
+highlight! EasyMotionTarget2Second guibg=NONE guifg=#ffaa60
+hi link EasyMotionShade  Comment
 nnoremap <silent> <F1> :make<CR>
 nnoremap <silent> <F2> :!build\win32_handmade.exe<CR>
