@@ -147,10 +147,6 @@ set number
 set relativenumber
 set backspace=indent,eol,start
 
-nnoremap <A-;> <C-W><C-L>
-nnoremap <A-k> <C-W><C-J>
-nnoremap <A-l> <C-W><C-K>
-nnoremap <A-j> <C-W><C-H>
 
 map <C-k> :cn<CR>
 map <C-l> :cp<CR>
@@ -202,8 +198,12 @@ nnoremap <silent> <leader>ed :lua vim.lsp.diagnostic.enable()<cr>
 
 nnoremap to <cmd>tabnew<cr>
 nnoremap tc <cmd>tabclose<cr>
-nnoremap t; <cmd>tabnext<cr>
-nnoremap tj <cmd>tabprevious<cr>
+nnoremap t; <C-W><C-L>
+nnoremap tj <C-W><C-H>
+nnoremap tk <C-W><C-J>
+nnoremap tl <C-W><C-K>
+nnoremap tp <cmd>tabnext<cr>
+nnoremap tu <cmd>tabprevious<cr>
 nnoremap ts <C-W>r 
 
 let g:tagbar_foldlevel = 0
