@@ -50,14 +50,46 @@ Plug 'ahmedkhalf/project.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 
 Plug 'easymotion/vim-easymotion'
-
+Plug 'PeterRincker/vim-argumentative'
+Plug 'svermeulen/vim-cutlass'
+Plug 'https://github.com/svermeulen/vim-yoink'
+Plug 'svermeulen/vim-subversive'
 
 call plug#end()
+
+nmap m <plug>(SubversiveSubstitute)
+nmap mm <plug>(SubversiveSubstituteLine)
+nmap M <plug>(SubversiveSubstituteToEndOfLine)
+xmap m <plug>(SubversiveSubstitute)
+nmap <leader>m <plug>(SubversiveSubstituteRangeNoPrompt)
+xmap <leader>m <plug>(SubversiveSubstituteRangeNoPrompt)
+nmap <leader>mm <plug>(SubversiveSubstituteWordRangeNoPrompt)
+
+nmap <c-n> <plug>(YoinkPostPasteSwapBack)
+nmap <c-p> <plug>(YoinkPostPasteSwapForward)
+nmap p <plug>(YoinkPaste_p)
+nmap P <plug>(YoinkPaste_P)
+" Also replace the default gp with yoink paste so we can toggle paste in this case too
+nmap gp <plug>(YoinkPaste_gp)
+nmap gP <plug>(YoinkPaste_gP)
+au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=150}
+
+nmap ( <Plug>Argumentative_MoveLeft
+nmap ) <Plug>Argumentative_MoveRight
+xmap i; <Plug>Argumentative_InnerTextObject
+xmap a; <Plug>Argumentative_OuterTextObject
+omap i; <Plug>Argumentative_OpPendingInnerTextObject
+omap a; <Plug>Argumentative_OpPendingOuterTextObject
+
+nnoremap x d
+xnoremap x d
+nnoremap xx dd
+nnoremap X D
 
 let g:Hexokinase_highlighters = ['backgroundfull']
 let g:cursorhold_updatetime = 100
 set termguicolors
-
+set clipboard=unnamed,unnamedplus
 
 colorscheme patatetoy
 "let g:lightline = { 'colorscheme': 'tender' }
