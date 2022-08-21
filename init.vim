@@ -56,7 +56,7 @@ Plug 'https://github.com/svermeulen/vim-yoink'
 Plug 'svermeulen/vim-subversive'
 
 call plug#end()
-
+let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
 nmap mm <plug>(SubversiveSubstituteLine)
 nmap M <plug>(SubversiveSubstituteToEndOfLine)
@@ -107,6 +107,7 @@ if has('win32')
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
+    echo('macunix')
     luafile ~\.config\nvim\luasnip.lua
     luafile ~\.config\nvim\lsp.lua
     luafile ~\.config\nvim\nvim-cmp.lua
