@@ -61,9 +61,9 @@ nmap m <plug>(SubversiveSubstitute)
 nmap mm <plug>(SubversiveSubstituteLine)
 nmap M <plug>(SubversiveSubstituteToEndOfLine)
 xmap m <plug>(SubversiveSubstitute)
-nmap <leader>m <plug>(SubversiveSubstituteRangeNoPrompt)
-xmap <leader>m <plug>(SubversiveSubstituteRangeNoPrompt)
-nmap <leader>mm <plug>(SubversiveSubstituteWordRangeNoPrompt)
+nmap <leader>m <plug>(SubversiveSubstituteRange)
+xmap <leader>m <plug>(SubversiveSubstituteRange)
+nmap <leader>mm <plug>(SubversiveSubstituteWordRange)
 
 nmap <c-n> <plug>(YoinkPostPasteSwapBack)
 nmap <c-p> <plug>(YoinkPostPasteSwapForward)
@@ -107,14 +107,15 @@ if has('win32')
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
+
     echo('macunix')
-    luafile ~\.config\nvim\luasnip.lua
-    luafile ~\.config\nvim\lsp.lua
-    luafile ~\.config\nvim\nvim-cmp.lua
-    luafile ~\.config\nvim\tree-sitter.lua
-    luafile ~\.config\nvim\telescope.lua
-    luafile ~\.config\nvim\todo-comments.lua
-    luafile ~\.config\nvim\lua\lsp-ext.lua
+    luafile ~/.config/nvim/luasnip.lua
+    luafile ~/.config/nvim/lsp.lua
+    luafile ~/.config/nvim/nvim-cmp.lua
+    luafile ~/.config/nvim/tree-sitter.lua
+    luafile ~/.config/nvim/telescope.lua
+    luafile ~/.config/nvim/todo-comments.lua
+    luafile ~/.config/nvim/lua/lsp-ext.lua
 endif
 
 nnoremap <SPACE> <Nop>
