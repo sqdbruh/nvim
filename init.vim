@@ -72,6 +72,8 @@ nmap P <plug>(YoinkPaste_P)
 " Also replace the default gp with yoink paste so we can toggle paste in this case too
 nmap gp <plug>(YoinkPaste_gp)
 nmap gP <plug>(YoinkPaste_gP)
+nmap [y <plug>(YoinkRotateBack)
+nmap ]y <plug>(YoinkRotateForward)
 au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=150}
 
 nmap ( <Plug>Argumentative_MoveLeft
@@ -95,13 +97,24 @@ colorscheme patatetoy
 "let g:lightline = { 'colorscheme': 'tender' }
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
-luafile C:\Users\sqdrc\AppData\Local\nvim\luasnip.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\lsp.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\nvim-cmp.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\tree-sitter.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\telescope.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\todo-comments.lua
-luafile C:\Users\sqdrc\AppData\Local\nvim\lua\lsp-ext.lua
+if has('win32')
+    echo('win32')
+    luafile ~\AppData\Local\nvim\luasnip.lua
+    luafile ~\AppData\Local\nvim\lsp.lua
+    luafile ~\AppData\Local\nvim\nvim-cmp.lua
+    luafile ~\AppData\Local\nvim\tree-sitter.lua
+    luafile ~\AppData\Local\nvim\telescope.lua
+    luafile ~\AppData\Local\nvim\todo-comments.lua
+    luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
+elseif has('macunix')
+    luafile ~\.config\nvim\luasnip.lua
+    luafile ~\.config\nvim\lsp.lua
+    luafile ~\.config\nvim\nvim-cmp.lua
+    luafile ~\.config\nvim\tree-sitter.lua
+    luafile ~\.config\nvim\telescope.lua
+    luafile ~\.config\nvim\todo-comments.lua
+    luafile ~\.config\nvim\lua\lsp-ext.lua
+endif
 
 nnoremap <SPACE> <Nop>
 nnoremap ,<space> :nohlsearch<CR> 
