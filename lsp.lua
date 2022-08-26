@@ -1,4 +1,3 @@
-require("lspconfig").clangd.setup {}
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = {
@@ -34,7 +33,7 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {'clangd'}
+local servers = {'clangd', 'pyright'}
 for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
         on_attach = on_attach,
@@ -48,12 +47,12 @@ end
   -- Disable Diagnostcs globally
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
---     signs = {
---         severity_limit = "Error"
---     },
---     virtual_text = {
---         severity_limit = "Error"
---     }
--- })
+ --vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+     --signs = {
+         --severity_limit = "Error"
+     --},
+     --virtual_text = {
+         --severity_limit = "Error"
+     --}
+ --})
 
