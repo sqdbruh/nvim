@@ -45,7 +45,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'skywind3000/vim-preview'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'ahmedkhalf/project.nvim'
 
 Plug 'lukas-reineke/indent-blankline.nvim'
 
@@ -56,16 +55,35 @@ Plug 'https://github.com/svermeulen/vim-yoink'
 Plug 'svermeulen/vim-subversive'
 Plug 'dbakker/vim-paragraph-motion'
 Plug 'michaeljsmith/vim-indent-object'
+
+Plug 'ThePrimeagen/git-worktree.nvim'
+Plug 'ThePrimeagen/harpoon'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'glts/vim-radical'
+Plug 'glts/vim-magnum'
+Plug 'nvim-telescope/telescope-project.nvim'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-obsession'
+Plug 'mhinz/vim-startify'
 call plug#end()
 
 noremap ; l
 noremap l k
 noremap k j
 noremap j h
-
 nnoremap <SPACE> <Nop>
-nnoremap ,<space> :nohlsearch<CR> 
+nnoremap <space>/ :nohlsearch<CR> 
 let mapleader=" "
+
+function! MarkAndDo()
+    execute "normal! m" . nr2char(getchar())
+endfunction
+
+nnoremap <silent> <leader>a :call MarkAndDo()<CR>
+
+nnoremap <leader>/ <cmd>nohlsearch<CR> 
+
 
 let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
@@ -74,7 +92,7 @@ nmap M <plug>(SubversiveSubstituteToEndOfLine)
 xmap m <plug>(SubversiveSubstitute)
 nmap <leader>m <plug>(SubversiveSubstituteRange)
 xmap <leader>m <plug>(SubversiveSubstituteRange)
-nmap <leader>mm <plug>(SubversiveSubstituteWordRange)
+nmap <leader>MM <plug>(SubversiveSubstituteWordRange)
 
 nmap <c-n> <plug>(YoinkPostPasteSwapBack)
 nmap <c-p> <plug>(YoinkPostPasteSwapForward)
@@ -110,7 +128,7 @@ omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 
-let g:Hexokinase_highlighters = ['backgroundfull']
+let g:Hexokinase_highlighters = ['virtual']
 let g:cursorhold_updatetime = 100
 set termguicolors
 set clipboard=unnamed,unnamedplus
@@ -178,10 +196,24 @@ nnoremap fg <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
 nnoremap fh <cmd>Telescope help_tags<cr>
 nnoremap fq <cmd>Telescope quickfix<cr>
+nnoremap gr <cmd>Telescope lsp_references<cr>
+nnoremap hl <cmd>Telescope harpoon marks<cr>
+nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
+nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>
+nnoremap hp <cmd>lua require("harpoon.ui").nav_prev()<cr> 
+nnoremap hn <cmd>lua require("harpoon.ui").nav_next()<cr> 
+nnoremap h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> 
+nnoremap h2 <cmd>lua require("harpoon.ui").nav_file(2)<cr> 
+nnoremap h3 <cmd>lua require("harpoon.ui").nav_file(3)<cr> 
+nnoremap h4 <cmd>lua require("harpoon.ui").nav_file(4)<cr> 
+nnoremap h5 <cmd>lua require("harpoon.ui").nav_file(5)<cr> 
+nnoremap h6 <cmd>lua require("harpoon.ui").nav_file(6)<cr> 
+nnoremap h7 <cmd>lua require("harpoon.ui").nav_file(7)<cr> 
+nnoremap h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr> 
+nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> 
 nnoremap tt <cmd>TagbarOpenAutoClose<cr>
 nnoremap TT <cmd>TagbarToggle<cr>
 
-nnoremap gr <cmd>Telescope lsp_references<cr>
 function! FindWorkspaceSymbols()
     let l:search_symbol = 'Telescope lsp_workspace_symbols query='.input("Search for symbol: ")
     execute l:search_symbol
@@ -189,13 +221,11 @@ endfunction
 nnoremap ft :call FindWorkspaceSymbols()<CR>
 "nnoremap ft <cmd>Telescope lsp_workspace_symbols query=input()<cr>
 nmap gD <C-]> 
-nnoremap fp <cmd>Telescope projects<cr>
+nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
 nnoremap <silent> <leader>dd :lua vim.lsp.diagnostic.disable()<cr>
-nnoremap <silent> <leader>ed :lua vim.lsp.diagnostic.enable()<cr>
-
 nnoremap to <cmd>tabnew<cr>
 nnoremap tc <cmd>tabclose<cr>
 nnoremap t; <C-W><C-L>
@@ -205,6 +235,8 @@ nnoremap tl <C-W><C-K>
 nnoremap tp <cmd>tabnext<cr>
 nnoremap tu <cmd>tabprevious<cr>
 nnoremap ts <C-W>r 
+nnoremap <A-j> <cmd>bprev<cr>
+nnoremap <A-;> <cmd>bnext<cr>
 
 let g:tagbar_foldlevel = 0
 
@@ -288,14 +320,6 @@ set splitbelow
 set splitright
 
 lua require("indent_blankline").setup {  }
-
-lua << EOF
-  require("project_nvim").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer te the configuration section below
-  }
-EOF
 
 let g:clang_format#style_options = {
             \ "AccessModifierOffset" : -4,

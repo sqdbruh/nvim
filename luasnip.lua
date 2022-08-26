@@ -24,6 +24,8 @@ ls.add_snippets("all", {
 s("todo", { t("// TODO(sqdrck): ") }),
 s("note", { t("// NOTE(sqdrck): ") }),
 s("important", { t("// IMPORTANT(sqdrck): ") }),
-s("warning", { t("// WARNING(sqdrck): ") }),
-s("performance", { t("// PERFORMANCE(sqdrck): ") }),
+s("warn", { t("// WARNING(sqdrck): ") }),
+s("perf", { t("// PERFORMANCE(sqdrck): ") }),
 })
+
+require("luasnip/loaders/from_vscode").lazy_load() -- You can pass { paths = "./my-snippets/"} as well
