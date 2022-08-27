@@ -65,13 +65,13 @@ Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
-Plug 'mhinz/vim-startify'
 call plug#end()
-
 noremap ; l
 noremap l k
 noremap k j
 noremap j h
+noremap k gj
+noremap l gk
 nnoremap <SPACE> <Nop>
 nnoremap <space>/ :nohlsearch<CR> 
 let mapleader=" "
@@ -84,6 +84,12 @@ nnoremap <silent> <leader>a :call MarkAndDo()<CR>
 
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
+nnoremap <silent> <A-k> :m .+1<CR>==
+nnoremap <silent> <A-l> :m .-2<CR>==
+inoremap <silent> <A-k> <Esc>:m .+1<CR>==gi
+inoremap <silent> <A-l> <Esc>:m .-2<CR>==gi
+vnoremap <silent> <A-k> :m '>+1<CR>gv=gv
+vnoremap <silent> <A-l> :m '<-2<CR>gv=gv
 
 let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
@@ -132,6 +138,8 @@ let g:Hexokinase_highlighters = ['virtual']
 let g:cursorhold_updatetime = 100
 set termguicolors
 set clipboard=unnamed,unnamedplus
+
+let g:terminator_split_location = 'vertical belowright'
 
 colorscheme patatetoy
 "let g:lightline = { 'colorscheme': 'tender' }
@@ -355,5 +363,6 @@ highlight! EasyMotionTarget guibg=NONE guifg=#ff6060
 highlight! EasyMotionTarget2First guibg=NONE guifg=#ffaa60
 highlight! EasyMotionTarget2Second guibg=NONE guifg=#ffaa60
 hi link EasyMotionShade  Comment
+tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <F1> :make<CR>
 nnoremap <silent> <F2> :!build\win32_handmade.exe<CR>
