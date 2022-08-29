@@ -24,8 +24,8 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-Plug 'ray-x/lsp_signature.nvim'
+"Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+"Plug 'ray-x/lsp_signature.nvim'
 "Plug 'hrsh7th/cmp-path'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
@@ -42,7 +42,6 @@ Plug 'loliee/vim-patatetoy'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
 Plug 'rhysd/vim-clang-format'
-Plug 'Shougo/vimproc.vim'
 
 Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
