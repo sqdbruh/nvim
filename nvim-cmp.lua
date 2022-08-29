@@ -49,7 +49,7 @@ cmp.setup({
             elseif has_words_before() then
                 cmp.complete({reason = cmp.ContextReason.Auto,})
                 --cmp.select_next_item()
-            else
+           else
                 fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
             end
         end, {"i", "s"}),
@@ -67,11 +67,11 @@ cmp.setup({
     }, {
         name = 'luasnip'
     } 
-    }, {{
-        name = 'buffer'
     }, {
+        name = 'buffer'
+    },
+    {
         name = 'nvim_lsp_signature_help'
-    } -- for signature help
     })
 })
 
@@ -99,3 +99,20 @@ cmp.setup.cmdline(':', {
         name = 'cmdline'
     }})
 })
+ --cfg = {
+  --floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+  --hint_enable = true, -- virtual hint enable
+  --hint_prefix = "",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
+  --hint_scheme = "String",
+  --always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
+--}
+---- recommended:
+--require'lsp_signature'.setup(cfg) -- no need to specify bufnr if you don't use toggle_key
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = { "documentation", "detail", "additionalTextEdits" },
+}
+require("lspconfig").clangd.setup({ capabilities = capabilities })
+

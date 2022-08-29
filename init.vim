@@ -1,18 +1,18 @@
 set nocompatible
 
 call plug#begin()
-Plug 'folke/todo-comments.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+Plug 'ray-x/lsp_signature.nvim'
+"Plug 'hrsh7th/cmp-path'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
+Plug 'L3MON4D3/LuaSnip'
 Plug 'kyazdani42/nvim-web-devicons'
 
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
@@ -36,6 +36,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-surround'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'nvim-treesitter/nvim-treesitter-context'
 
 Plug 'dhruvasagar/vim-markify'
 
@@ -65,6 +66,9 @@ Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
+Plug 'mrjones2014/smart-splits.nvim'
+"Plug 'ycm-core/YouCompleteMe'
+Plug 'folke/todo-comments.nvim'
 call plug#end()
 noremap ; l
 noremap l k
@@ -76,6 +80,7 @@ nnoremap <SPACE> <Nop>
 nnoremap <space>/ :nohlsearch<CR> 
 let mapleader=" "
 
+set formatoptions-=cro
 function! MarkAndDo()
     execute "normal! m" . nr2char(getchar())
 endfunction
@@ -84,12 +89,17 @@ nnoremap <silent> <leader>a :call MarkAndDo()<CR>
 
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
-nnoremap <silent> <A-k> :m .+1<CR>==
-nnoremap <silent> <A-l> :m .-2<CR>==
-inoremap <silent> <A-k> <Esc>:m .+1<CR>==gi
-inoremap <silent> <A-l> <Esc>:m .-2<CR>==gi
-vnoremap <silent> <A-k> :m '>+1<CR>gv=gv
-vnoremap <silent> <A-l> :m '<-2<CR>gv=gv
+"nnoremap <silent> <A-k> :m .+1<CR>==
+"nnoremap <silent> <A-l> :m .-2<CR>==
+"inoremap <silent> <A-k> <Esc>:m .+1<CR>==gi
+"inoremap <silent> <A-l> <Esc>:m .-2<CR>==gi
+"vnoremap <silent> <A-k> :m '>+1<CR>gv=gv
+"vnoremap <silent> <A-l> :m '<-2<CR>gv=gv
+" resizing splits
+nmap <A-j> :lua require('smart-splits').resize_left()<CR>
+nmap <A-k> :lua require('smart-splits').resize_down()<CR>
+nmap <A-l> :lua require('smart-splits').resize_up()<CR>
+nmap <A-;> :lua require('smart-splits').resize_right()<CR>
 
 let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
@@ -142,7 +152,6 @@ set clipboard=unnamed,unnamedplus
 let g:terminator_split_location = 'vertical belowright'
 
 colorscheme patatetoy
-"let g:lightline = { 'colorscheme': 'tender' }
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
@@ -196,6 +205,7 @@ set smartindent
 set ignorecase
 set smartcase
 let g:compiler = 'msvc'
+set pumheight=10
 
 nnoremap <Leader>v <cmd>vsplit<cr>
 nnoremap <Leader>h <cmd>split<cr>
@@ -242,9 +252,20 @@ nnoremap tk <C-W><C-J>
 nnoremap tl <C-W><C-K>
 nnoremap tp <cmd>tabnext<cr>
 nnoremap tu <cmd>tabprevious<cr>
+nnoremap tU <cmd>tabm -1<cr>
+nnoremap tP <cmd>tabm +1<cr>
 nnoremap ts <C-W>r 
-nnoremap <A-j> <cmd>bprev<cr>
-nnoremap <A-;> <cmd>bnext<cr>
+nnoremap t1 1gt
+nnoremap t2 2gt
+nnoremap t3 3gt
+nnoremap t4 4gt
+nnoremap t5 5gt
+nnoremap t6 6gt
+nnoremap t7 7gt
+nnoremap t8 8gt
+nnoremap t9 9gt
+nnoremap tm <cmd>bprev<cr>
+nnoremap t/ <cmd>bnext<cr>
 
 let g:tagbar_foldlevel = 0
 

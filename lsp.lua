@@ -28,7 +28,14 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    --require'lsp_signature'.setup({
+    --floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+      --hint_enable = true, -- virtual hint enable
+      --hint_prefix = "",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
+      --hint_scheme = "String",
+      --always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
+  --})
+     --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -38,7 +45,6 @@ for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
         on_attach = on_attach,
         flags = {
-            -- This will be the default in neovim 0.7+
             debounce_text_changes = 150
         }
     }
