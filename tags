@@ -1,0 +1,150 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+(	init.vim	/^nmap ( <plug>argumentative_moveleft$/;"	m
+)	init.vim	/^nmap ) <plug>argumentative_moveright$/;"	m
+/	init.vim	/^map  \/ <Plug>(easymotion-sn)$/;"	m
+/	init.vim	/^omap \/ <Plug>(easymotion-tn)$/;"	m
+;	init.vim	/^noremap ; l$/;"	m
+<A-;>	init.vim	/^nmap <A-;> :lua require('smart-splits').resize_right()<CR>$/;"	m
+<A-j>	init.vim	/^nmap <A-j> :lua require('smart-splits').resize_left()<CR>$/;"	m
+<A-k>	init.vim	/^nmap <A-k> :lua require('smart-splits').resize_down()<CR>$/;"	m
+<A-l>	init.vim	/^nmap <A-l> :lua require('smart-splits').resize_up()<CR>$/;"	m
+<C-a>	init.vim	/^imap <silent><expr> <C-a> '<Plug>luasnip-expand-or-jump'$/;"	m
+<C-k>	init.vim	/^map <C-k> :cn<CR>$/;"	m
+<C-l>	init.vim	/^map <C-l> :cp<CR>$/;"	m
+<C-t>	init.vim	/^nnoremap <C-t> :NERDTreeToggle<CR>$/;"	m
+<F1>	init.vim	/^nnoremap <silent> <F1> :make<CR>$/;"	m
+<F2>	init.vim	/^nnoremap <silent> <F2> :!build\\win32_handmade.exe<CR>$/;"	m
+<Leader>;	init.vim	/^map <Leader>; <Plug>(easymotion-lineforward)$/;"	m
+<Leader>h	init.vim	/^nnoremap <Leader>h <cmd>split<cr>$/;"	m
+<Leader>j	init.vim	/^map <Leader>j <Plug>(easymotion-linebackward)$/;"	m
+<Leader>k	init.vim	/^map <Leader>k <Plug>(easymotion-j)$/;"	m
+<Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
+<Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
+<SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
+<c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m
+<c-p>	init.vim	/^nmap <c-p> <plug>(YoinkPostPasteSwapForward)$/;"	m
+<leader>/	init.vim	/^nnoremap <leader>\/ <cmd>nohlsearch<CR> $/;"	m
+<leader>MM	init.vim	/^nmap <leader>MM <plug>(SubversiveSubstituteWordRange)$/;"	m
+<leader>a	init.vim	/^nnoremap <silent> <leader>a :call MarkAndDo()<CR>$/;"	m
+<leader>m	init.vim	/^nmap <leader>m <plug>(SubversiveSubstituteRange)$/;"	m
+B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
+E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
+FindWorkspaceSymbols	init.vim	/^function! FindWorkspaceSymbols()$/;"	f
+GutentagsClearCache	init.vim	/^command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '\/*')$/;"	c
+M	init.vim	/^nmap M <plug>(SubversiveSubstituteToEndOfLine)$/;"	m
+M.peek_definition	.\lua\lsp-ext.lua	/^function M.peek_definition()$/;"	f
+M.preview_location	.\lua\lsp-ext.lua	/^function M.preview_location(location, context, before_context)$/;"	f
+M.preview_location_callback	.\lua\lsp-ext.lua	/^function M.preview_location_callback(_, method, result)$/;"	f
+MarkAndDo	init.vim	/^function! MarkAndDo()$/;"	f
+N	init.vim	/^map  N <Plug>(easymotion-prev)$/;"	m
+P	init.vim	/^nmap P <plug>(YoinkPaste_P)$/;"	m
+TT	init.vim	/^nnoremap TT <cmd>TagbarToggle<cr>$/;"	m
+W	init.vim	/^map <silent> W <Plug>CamelCaseMotion_w$/;"	m
+X	init.vim	/^nnoremap X D$/;"	m
+["<S-Tab>"] 	.\nvim-cmp.lua	/^        ["<S-Tab>"] = cmp.mapping(function()$/;"	f
+["<Tab>"] 	.\nvim-cmp.lua	/^        ["<Tab>"] = cmp.mapping(function(fallback)$/;"	f
+["Kf"] 	.\tree-sitter.lua	/^          ["Kf"] = "@function.outer",$/;"	f
+["af"] 	.\tree-sitter.lua	/^        ["af"] = "@function.outer",$/;"	f
+["if"] 	.\tree-sitter.lua	/^        ["if"] = "@function.inner",$/;"	f
+['@function.outer'] 	.\tree-sitter.lua	/^        ['@function.outer'] = 'V', -- linewise$/;"	f
+[y	init.vim	/^nmap [y <plug>(YoinkRotateBack)$/;"	m
+]y	init.vim	/^nmap ]y <plug>(YoinkRotateForward)$/;"	m
+aa	init.vim	/^omap aa <plug>argumentative_oppendingoutertextobject$/;"	m
+enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
+expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
+fb	init.vim	/^nnoremap fb <cmd>Telescope buffers<cr>$/;"	m
+ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
+fg	init.vim	/^nnoremap fg <cmd>Telescope live_grep<cr>$/;"	m
+fh	init.vim	/^nnoremap fh <cmd>Telescope help_tags<cr>$/;"	m
+fp	init.vim	/^nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
+fq	init.vim	/^nnoremap fq <cmd>Telescope quickfix<cr>$/;"	m
+ft	init.vim	/^nnoremap ft :call FindWorkspaceSymbols()<CR>$/;"	m
+g:EasyMotion_do_mapping	init.vim	/^let g:EasyMotion_do_mapping = 0 " Disable default mappings$/;"	v
+g:EasyMotion_smartcase	init.vim	/^let g:EasyMotion_smartcase = 1$/;"	v
+g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']$/;"	v
+g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
+g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
+g:cursorhold_updatetime	init.vim	/^let g:cursorhold_updatetime = 100$/;"	v
+g:gutentags_add_default_project_roots	init.vim	/^let g:gutentags_add_default_project_roots = 0$/;"	v
+g:gutentags_cache_dir	init.vim	/^let g:gutentags_cache_dir = expand('~\/.cache\/vim\/ctags\/')$/;"	v
+g:gutentags_ctags_exclude	init.vim	/^      let g:gutentags_ctags_exclude = [$/;"	v
+g:gutentags_ctags_extra_args	init.vim	/^let g:gutentags_ctags_extra_args = [$/;"	v
+g:gutentags_generate_on_empty_buffer	init.vim	/^let g:gutentags_generate_on_empty_buffer = 0$/;"	v
+g:gutentags_generate_on_missing	init.vim	/^let g:gutentags_generate_on_missing = 1$/;"	v
+g:gutentags_generate_on_new	init.vim	/^let g:gutentags_generate_on_new = 1$/;"	v
+g:gutentags_generate_on_write	init.vim	/^let g:gutentags_generate_on_write = 1$/;"	v
+g:gutentags_project_root	init.vim	/^let g:gutentags_project_root = ['package.json', '.git']$/;"	v
+g:tagbar_foldlevel	init.vim	/^let g:tagbar_foldlevel = 0$/;"	v
+g:tagbar_map_togglesort	init.vim	/^let g:tagbar_map_togglesort = ''$/;"	v
+g:terminator_split_location	init.vim	/^let g:terminator_split_location = 'vertical belowright'$/;"	v
+g:yoinkIncludeDeleteOperations	init.vim	/^let g:yoinkIncludeDeleteOperations=1 $/;"	v
+gD	init.vim	/^nmap gD <C-]> $/;"	m
+gP	init.vim	/^nmap gP <plug>(YoinkPaste_gP)$/;"	m
+gP	init.vim	/^nnoremap gP <cmd>PreviewClose<cr>$/;"	m
+ge	init.vim	/^map <silent> ge <Plug>CamelCaseMotion_ge$/;"	m
+gp	init.vim	/^nmap gp <plug>(YoinkPaste_gp)$/;"	m
+gp	init.vim	/^nnoremap gp <cmd>PreviewTag<cr>$/;"	m
+gr	init.vim	/^nnoremap gr <cmd>Telescope lsp_references<cr>$/;"	m
+gt	init.vim	/^nmap gt <cmd>tselect<cr>$/;"	m
+h1	init.vim	/^nnoremap h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> $/;"	m
+h2	init.vim	/^nnoremap h2 <cmd>lua require("harpoon.ui").nav_file(2)<cr> $/;"	m
+h3	init.vim	/^nnoremap h3 <cmd>lua require("harpoon.ui").nav_file(3)<cr> $/;"	m
+h4	init.vim	/^nnoremap h4 <cmd>lua require("harpoon.ui").nav_file(4)<cr> $/;"	m
+h5	init.vim	/^nnoremap h5 <cmd>lua require("harpoon.ui").nav_file(5)<cr> $/;"	m
+h6	init.vim	/^nnoremap h6 <cmd>lua require("harpoon.ui").nav_file(6)<cr> $/;"	m
+h7	init.vim	/^nnoremap h7 <cmd>lua require("harpoon.ui").nav_file(7)<cr> $/;"	m
+h8	init.vim	/^nnoremap h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr> $/;"	m
+h9	init.vim	/^nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> $/;"	m
+h;	init.vim	/^nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>$/;"	m
+ha	init.vim	/^nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>$/;"	m
+hh	init.vim	/^nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>$/;"	m
+hl	init.vim	/^nnoremap hl <cmd>Telescope harpoon marks<cr>$/;"	m
+hn	init.vim	/^nnoremap hn <cmd>lua require("harpoon.ui").nav_next()<cr> $/;"	m
+hp	init.vim	/^nnoremap hp <cmd>lua require("harpoon.ui").nav_prev()<cr> $/;"	m
+ia	init.vim	/^omap ia <plug>argumentative_oppendinginnertextobject$/;"	m
+j	init.vim	/^noremap j h$/;"	m
+k	init.vim	/^noremap k gj$/;"	m
+k	init.vim	/^noremap k j$/;"	m
+l	init.vim	/^noremap l gk$/;"	m
+l	init.vim	/^noremap l k$/;"	m
+local f 	.\luasnip.lua	/^local f = ls.function_node$/;"	f
+local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
+local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
+local on_attach 	.\lsp.lua	/^local on_attach = function(client, bufnr)$/;"	f
+m	init.vim	/^nmap m <plug>(SubversiveSubstitute)$/;"	m
+mapleader	init.vim	/^let mapleader=" "$/;"	v
+mm	init.vim	/^nmap mm <plug>(SubversiveSubstituteLine)$/;"	m
+n	init.vim	/^map  n <Plug>(easymotion-next)$/;"	m
+p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
+s	init.vim	/^map s <Plug>(easymotion-overwin-f2)$/;"	m
+t/	init.vim	/^nnoremap t\/ <cmd>bnext<cr>$/;"	m
+t1	init.vim	/^nnoremap t1 1gt$/;"	m
+t2	init.vim	/^nnoremap t2 2gt$/;"	m
+t3	init.vim	/^nnoremap t3 3gt$/;"	m
+t4	init.vim	/^nnoremap t4 4gt$/;"	m
+t5	init.vim	/^nnoremap t5 5gt$/;"	m
+t6	init.vim	/^nnoremap t6 6gt$/;"	m
+t7	init.vim	/^nnoremap t7 7gt$/;"	m
+t8	init.vim	/^nnoremap t8 8gt$/;"	m
+t9	init.vim	/^nnoremap t9 9gt$/;"	m
+t;	init.vim	/^nnoremap t; <C-W><C-L>$/;"	m
+tP	init.vim	/^nnoremap tP <cmd>tabm +1<cr>$/;"	m
+tU	init.vim	/^nnoremap tU <cmd>tabm -1<cr>$/;"	m
+tc	init.vim	/^nnoremap tc <cmd>tabclose<cr>$/;"	m
+tj	init.vim	/^nnoremap tj <C-W><C-H>$/;"	m
+tk	init.vim	/^nnoremap tk <C-W><C-J>$/;"	m
+tl	init.vim	/^nnoremap tl <C-W><C-K>$/;"	m
+tm	init.vim	/^nnoremap tm <cmd>bprev<cr>$/;"	m
+to	init.vim	/^nnoremap to <cmd>tabnew<cr>$/;"	m
+tp	init.vim	/^nnoremap tp <cmd>tabnext<cr>$/;"	m
+ts	init.vim	/^nnoremap ts <C-W>r $/;"	m
+tt	init.vim	/^nnoremap tt <cmd>TagbarOpenAutoClose<cr>$/;"	m
+tu	init.vim	/^nnoremap tu <cmd>tabprevious<cr>$/;"	m
+vim.lsp.handlers["textDocument/publishDiagnostics"] 	.\lsp.lua	/^vim.lsp.handlers["textDocument\/publishDiagnostics"] = function() end$/;"	f
+x	init.vim	/^nnoremap x d$/;"	m
+xx	init.vim	/^nnoremap xx dd$/;"	m

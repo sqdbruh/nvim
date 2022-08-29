@@ -1,5 +1,22 @@
 set nocompatible
-
+mapclear
+nmapclear
+vmapclear
+xmapclear
+smapclear
+omapclear
+mapclear
+imapclear
+lmapclear
+cmapclear
+noremap ; l
+noremap l k
+noremap k j
+noremap j h
+noremap k gj
+noremap l gk
+nnoremap <SPACE> <Nop>
+let mapleader=" "
 call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -69,41 +86,16 @@ Plug 'tpope/vim-obsession'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 call plug#end()
-mapclear
-nmapclear
-vmapclear
-xmapclear
-smapclear
-omapclear
-mapclear
-imapclear
-lmapclear
-cmapclear
-noremap ; l
-noremap l k
-noremap k j
-noremap j h
-noremap k gj
-noremap l gk
-nnoremap <SPACE> <Nop>
-let mapleader=" "
 
 set formatoptions-=cro
 function! MarkAndDo()
-    execute "normal! m" . nr2char(getchar())
+   execute "normal! m" . nr2char(getchar())
 endfunction
 
 nnoremap <silent> <leader>a :call MarkAndDo()<CR>
 
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
-"nnoremap <silent> <A-k> :m .+1<CR>==
-"nnoremap <silent> <A-l> :m .-2<CR>==
-"inoremap <silent> <A-k> <Esc>:m .+1<CR>==gi
-"inoremap <silent> <A-l> <Esc>:m .-2<CR>==gi
-"vnoremap <silent> <A-k> :m '>+1<CR>gv=gv
-"vnoremap <silent> <A-l> :m '<-2<CR>gv=gv
-" resizing splits
 nmap <A-j> :lua require('smart-splits').resize_left()<CR>
 nmap <A-k> :lua require('smart-splits').resize_down()<CR>
 nmap <A-l> :lua require('smart-splits').resize_up()<CR>
@@ -129,12 +121,12 @@ nmap [y <plug>(YoinkRotateBack)
 nmap ]y <plug>(YoinkRotateForward)
 au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=150}
 
-nmap ( <Plug>Argumentative_MoveLeft
-nmap ) <Plug>Argumentative_MoveRight
-xmap ia <Plug>Argumentative_InnerTextObject
-xmap aa <Plug>Argumentative_OuterTextObject
-omap ia <Plug>Argumentative_OpPendingInnerTextObject
-omap aa <Plug>Argumentative_OpPendingOuterTextObject
+nmap ( <plug>argumentative_moveleft
+nmap ) <plug>argumentative_moveright
+xmap ia <plug>argumentative_innertextobject
+xmap aa <plug>argumentative_outertextobject
+omap ia <plug>argumentative_oppendinginnertextobject
+omap aa <plug>argumentative_oppendingoutertextobject
 
 nnoremap x d
 xnoremap x d
@@ -240,22 +232,14 @@ nnoremap TT <cmd>TagbarToggle<cr>
 imap <silent><expr> <C-a> '<Plug>luasnip-expand-or-jump'
 function! FindWorkspaceSymbols()
     let l:search_symbol = 'Telescope lsp_workspace_symbols query='.input("Search for symbol: ")
-    "let l:search_symbol = 'YcmCompleter GoToSymbol '.input("Search for symbol: ")
     execute l:search_symbol
 endfunction
 nnoremap ft :call FindWorkspaceSymbols()<CR>
-"nnoremap fi <cmd>YcmCompleter FixIt<cr>
-"nnoremap ft <cmd>Telescope lsp_workspace_symbols query=input()<cr>
-nmap gD <C-]> 
-nmap gd <cmd>lua vim.lsp.buf.definition()<CR> 
-"nmap <silent> gD :call GoToDefinition()<cr>
 nmap gt <cmd>tselect<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
-"nnoremap hh :call JumpToCorrespondingFile()<CR>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
-"nnoremap <silent> <leader>dd :lua vim.lsp.diagnostic.disable()<cr>
 nnoremap to <cmd>tabnew<cr>
 nnoremap tc <cmd>tabclose<cr>
 nnoremap t; <C-W><C-L>
