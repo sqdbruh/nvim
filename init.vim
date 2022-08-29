@@ -70,6 +70,16 @@ Plug 'mrjones2014/smart-splits.nvim'
 "Plug 'ycm-core/YouCompleteMe'
 Plug 'folke/todo-comments.nvim'
 call plug#end()
+mapclear
+nmapclear
+vmapclear
+xmapclear
+smapclear
+omapclear
+mapclear
+imapclear
+lmapclear
+cmapclear
 noremap ; l
 noremap l k
 noremap k j
@@ -77,7 +87,6 @@ noremap j h
 noremap k gj
 noremap l gk
 nnoremap <SPACE> <Nop>
-nnoremap <space>/ :nohlsearch<CR> 
 let mapleader=" "
 
 set formatoptions-=cro
@@ -147,11 +156,18 @@ map  N <Plug>(easymotion-prev)
 let g:Hexokinase_highlighters = ['virtual']
 let g:cursorhold_updatetime = 100
 set termguicolors
+colorscheme patatetoy
 set clipboard=unnamed,unnamedplus
 
 let g:terminator_split_location = 'vertical belowright'
 
-colorscheme patatetoy
+let g:ycm_key_invoke_completion = '<C-f>'
+let g:ycm_key_list_select_completion = ''
+
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_enable_diagnostic_signs = 0
+let g:ycm_auto_trigger = 1
+
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
@@ -215,6 +231,9 @@ nnoremap fb <cmd>Telescope buffers<cr>
 nnoremap fh <cmd>Telescope help_tags<cr>
 nnoremap fq <cmd>Telescope quickfix<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
+"nnoremap gr <cmd>YcmCompleter GoToReferences<cr><cmd>q<cr><cmd>Telescope quickfix<cr>
+"nnoremap gr <cmd>YcmCompleter GoToReferences<cr>
+"nnoremap <leader>rn <cmd>YcmCompleter RefactorRename<cr>
 nnoremap hl <cmd>Telescope harpoon marks<cr>
 nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
 nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>
@@ -231,16 +250,22 @@ nnoremap h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr>
 nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> 
 nnoremap tt <cmd>TagbarOpenAutoClose<cr>
 nnoremap TT <cmd>TagbarToggle<cr>
-
+imap <silent><expr> <C-a> '<Plug>luasnip-expand-or-jump'
 function! FindWorkspaceSymbols()
     let l:search_symbol = 'Telescope lsp_workspace_symbols query='.input("Search for symbol: ")
+    "let l:search_symbol = 'YcmCompleter GoToSymbol '.input("Search for symbol: ")
     execute l:search_symbol
 endfunction
 nnoremap ft :call FindWorkspaceSymbols()<CR>
+"nnoremap fi <cmd>YcmCompleter FixIt<cr>
 "nnoremap ft <cmd>Telescope lsp_workspace_symbols query=input()<cr>
 nmap gD <C-]> 
+nmap gd <cmd>lua vim.lsp.buf.definition()<CR> 
+"nmap <silent> gD :call GoToDefinition()<cr>
+nmap gt <cmd>tselect<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
+"nnoremap hh :call JumpToCorrespondingFile()<CR>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
 nnoremap <silent> <leader>dd :lua vim.lsp.diagnostic.disable()<cr>
@@ -284,6 +309,20 @@ map  N <Plug>(easymotion-prev)
 
 nnoremap <C-t> :NERDTreeToggle<CR>
 
+function! GoToDefinition()
+  try
+      exec 'YcmCompleter GoToDefinition'
+  catch
+      try
+          exec ':tag'
+      catch
+        echo "Can't go to definition"
+      endtry
+  finally
+  endtry
+
+endfunction
+
 let g:gutentags_add_default_project_roots = 0
 let g:gutentags_project_root = ['package.json', '.git']
 let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
@@ -294,7 +333,7 @@ let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
 let g:gutentags_ctags_extra_args = [
       \ '--tag-relative=yes',
-      \ '--fields=+ailmnS',
+      \ '-R --fields=+ailmnS --c-types=+l --extra=+f',
       \ ]
       let g:gutentags_ctags_exclude = [
       \ '*.git', '*.svg', '*.hg',
@@ -344,6 +383,24 @@ let g:gutentags_ctags_extra_args = [
       \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
       \ ]
 
+function! JumpToCorrespondingFile()
+  let l:extensions = { 'cpp': 'h', 'h': 'cpp' }
+  let l:fe = expand('%:e')
+  if has_key(l:extensions, l:fe)
+      execute ':tag ' . expand('%:t:r') . '.' . l:extensions[l:fe]
+  else
+      call PrintError(">>> Corresponding extension for '" . l:fe . "' is not specified") 
+  endif
+endfunct
+
+
+" Print error message.
+function! PrintError(msg) abort
+  execute 'normal! \<Esc>'
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl None
+endfunction
 
 set splitbelow
 set splitright
@@ -387,3 +444,78 @@ hi link EasyMotionShade  Comment
 tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <F1> :make<CR>
 nnoremap <silent> <F2> :!build\win32_handmade.exe<CR>
+
+
+" This is literally stolen from Vim help. The only changes are:
+" (1) if w != "" becomes if w =~ "\k"
+" (2) exe "silent! ptag " . w becomes exe "silent! psearch " . w
+" * The first change prevents PreviewWord of searching while cursor is on some
+" non-keyword characters, e.g. braces, asterisks, etc.
+function! PreviewWord()
+  if &previewwindow " don't do this in the preview window
+    return
+  endif
+  let w = expand("<cword>") " get the word under cursor
+  if w =~ '\i'
+    if w =~ '\<\v(for|while|if|else|continue|switch|return|break|case)\m\>'
+      return
+    endif
+    if w =~ '\<\v(int|char|double|long|static|unsigned|const|void|define|undef)\m\>'
+      return
+    endif
+    " if there is one ":ptag" to it
+    " Delete any existing highlight before showing another tag
+    silent! wincmd P " jump to preview window
+    if &previewwindow " if we really get there...
+      match none " delete existing highlight
+      wincmd p " back to old window
+    endif
+    " Try displaying a matching tag for the word under the cursor
+    let v:errmsg = ""
+    exe "silent! ptag " . w
+    if v:errmsg =~ "tag not found"
+      exe "silent! psearch " . w
+    endif
+    silent! wincmd P " jump to preview window
+    if &previewwindow " if we really get there...
+      if has("folding")
+        silent! .foldopen " don't want a closed fold
+      endif
+      call search("$", "b") " to end of previous line
+      let w = substitute(w, '', '\\', "")
+      call search('\<\V' . w . '\>') " position cursor on match
+      " Add a match highlight to the word at this position
+      hi previewWord term=bold ctermbg=green guibg=green
+      exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
+      wincmd p " back to old window
+    endif
+  endif
+endfunction
+
+" When you open a parenthesis after a function name, and at the
+" line end, that function's definition is previewed through PreviewWord().
+" This is inspired from Delphi's CodeInsight technology.
+" Something similar (PreviewClassMembers) could be written for
+" the C++ users, for previewing the class members when you type
+" a dot after an object name.
+" If somebody decides to write it, please, mail it to me.
+function! PreviewFunctionSignature()
+  let CharOnCursor = strpart( getline('.'), col('.')-2, 1)
+  if col(".") == col("$")-1
+    normal h
+    call PreviewWord()
+    normal l
+  endif
+endfunction
+
+function! Register(...)
+  let index=1
+  while index <= a:0
+    execute 'let ext=a:'.index
+    execute 'au! CursorHold '.ext.' nested call PreviewWord()'
+    execute 'au BufNewFile,BufRead '.ext.' nested inoremap <buffer> ( <Esc>:call PreviewFunctionSignature()<CR>a('
+    let index=index+1
+  endwhile
+endf
+"call Register('*.[ch]', '*.cc', '*.cpp')
+"call Register('*.[ch]0','*.cc0','*.cpp0')

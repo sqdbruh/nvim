@@ -44,8 +44,8 @@ cmp.setup({
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
+            --elseif luasnip.expand_or_jumpable() then
+                --luasnip.expand_or_jump()
             elseif has_words_before() then
                 cmp.complete({reason = cmp.ContextReason.Auto,})
                 --cmp.select_next_item()
@@ -99,15 +99,15 @@ cmp.setup.cmdline(':', {
         name = 'cmdline'
     }})
 })
- --cfg = {
-  --floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
-  --hint_enable = true, -- virtual hint enable
-  --hint_prefix = "",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
-  --hint_scheme = "String",
-  --always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
---}
----- recommended:
---require'lsp_signature'.setup(cfg) -- no need to specify bufnr if you don't use toggle_key
+ cfg = {
+  floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+  hint_enable = true, -- virtual hint enable
+  hint_prefix = "",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
+  hint_scheme = "String",
+  always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
+}
+-- recommended:
+require'lsp_signature'.setup(cfg) -- no need to specify bufnr if you don't use toggle_key
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
