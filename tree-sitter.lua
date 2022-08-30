@@ -93,3 +93,13 @@ require'treesitter-context'.setup{
     mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
     separator = nil, -- Separator between context and content. Should be a single character string, like '-'.
 }
+
+require('nvim-treesitter.configs').setup {
+    textsubjects = {
+        enable = true,
+        prev_selection = ',', -- (Optional) keymap to select the previous selection
+        keymaps = {
+            ['.'] = 'textsubjects-smart',
+        },
+    },
+}

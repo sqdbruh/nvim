@@ -26,10 +26,10 @@
   -- list of named colors where we try to extract the guifg from the
   -- list of hilight groups or use the hex color if hl not found as a fallback
   colors = {
-    error =  "#cc6666",
-    warning =  "##eda74c" ,
-    hint =   "#a9b85b" ,
-    performance =   "#58a7b7" ,
+    error =  "#b36a5d",
+    warning =  "#cea046" ,
+    hint =   "#7f9a59" ,
+    performance =   "#649792" ,
   },
   search = {
     command = "rg",
