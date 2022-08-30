@@ -226,6 +226,18 @@ nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr>
 nnoremap tt <cmd>TagbarOpenAutoClose<cr>
 nnoremap TT <cmd>TagbarToggle<cr>
 imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
+function! OpenHeaderInSideWindow()
+    if winnr('$') == 1 
+        execute 'keepjumps vsplit'
+    else
+        let currentBuf = bufname()
+        execute 'keepjumps wincmd w'
+        execute 'keepjumps e '.currentBuf
+    endif
+    execute 'keepjumps ClangdSwitchSourceHeader'
+    sleep 1m "Function above does not get called without it for some reason.
+    execute 'keepjumps wincmd p'
+endfunction 
 " Insert text at the current cursor position.
 function! InsertText(text)
     let cur_line_num = line('.')
@@ -257,6 +269,7 @@ nnoremap fg :call GrepWordUnderCursor()<CR>
 nmap gt <cmd>tselect<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
+nnoremap HH :call OpenHeaderInSideWindow()<cr>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
 nnoremap to <cmd>tabnew<cr>
@@ -415,7 +428,7 @@ highlight! EasyMotionTarget2Second guibg=NONE guifg=#cea046
 hi link EasyMotionShade  Comment
 tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <F1> :make<CR><cr>
-nnoremap <silent> <F2> :!run.bat<CR>
+nnoremap <silent> <F2> :!run.bat<CR><cr>
 
 
 let g:prettier#config#single_quote = 'true'
