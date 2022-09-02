@@ -99,15 +99,6 @@ cmp.setup.cmdline(':', {
         name = 'cmdline'
     }})
 })
- cfg = {
-  floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
-  hint_enable = true, -- virtual hint enable
-  hint_prefix = "",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
-  hint_scheme = "String",
-  always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
-}
--- recommended:
-require'lsp_signature'.setup(cfg) -- no need to specify bufnr if you don't use toggle_key
 
 --local capabilities = vim.lsp.protocol.make_client_capabilities()
 --capabilities.textDocument.completion.completionItem.snippetSupport = true

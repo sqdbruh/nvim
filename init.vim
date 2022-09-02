@@ -15,7 +15,6 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-Plug 'ray-x/lsp_signature.nvim'
 "Plug 'hrsh7th/cmp-path'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
