@@ -114,12 +114,12 @@ nmap [y <plug>(YoinkRotateBack)
 nmap ]y <plug>(YoinkRotateForward)
 au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=150}
 
-nmap ( <plug>argumentative_moveleft
-nmap ) <plug>argumentative_moveright
-xmap ia <plug>argumentative_innertextobject
-xmap aa <plug>argumentative_outertextobject
-omap ia <plug>argumentative_oppendinginnertextobject
-omap aa <plug>argumentative_oppendingoutertextobject
+nmap ( <plug>Argumentative_MoveLeft
+nmap ) <plug>Argumentative_MoveRight
+xmap ia <plug>Argumentative_InnerTextObject
+xmap aa <plug>Argumentative_OuterTextObject
+omap ia <plug>Argumentative_OpPendingInnerTextObject
+omap aa <plug>Argumentative_OpPendingOuterTextObject
 
 nnoremap x d
 xnoremap x d
@@ -269,7 +269,7 @@ nnoremap fg :call GrepWordUnderCursor()<CR>
 nmap gt <cmd>tselect<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
-nnoremap HH :call OpenHeaderInSideWindow()<cr>
+nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
 nnoremap to <cmd>tabnew<cr>
