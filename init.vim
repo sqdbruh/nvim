@@ -8,13 +8,13 @@ noremap l gk
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 call plug#begin()
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+"Plug 'neovim/nvim-lspconfig'
+"Plug 'hrsh7th/cmp-nvim-lsp'
+"Plug 'hrsh7th/cmp-buffer'
+"Plug 'hrsh7th/cmp-cmdline'
+"Plug 'hrsh7th/nvim-cmp'
+"Plug 'saadparwaiz1/cmp_luasnip'
+"Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 "Plug 'hrsh7th/cmp-path'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
@@ -76,9 +76,28 @@ Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 Plug 'erietz/vim-terminator'
 Plug 'lifepillar/vim-colortemplate'
-" post install (yarn install | npm install) then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'exvim/ex-tags'
+Plug 'exvim/ex-utility'
+Plug 'Shougo/echodoc.vim'
+Plug 'vim-scripts/taglist.vim'
+Plug 'deoplete-plugins/deoplete-tag'
+Plug 'deoplete-plugins/deoplete-lsp'
+Plug 'deoplete-plugins/deoplete-clang'
+Plug 'Shougo/neoinclude.vim'
 call plug#end()
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#clang#sort_algo = 'priority'
+let g:deoplete#sources#clang#flags = ['-x', 'c']
+let g:deoplete#disable_auto_complete = 1
+let g:deoplete#sources#clang#filter_availability_kinds = ['NotAvailable', 'NotAccessible']
+inoremap <expr> <C-n>  deoplete#manual_complete() 
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'floating'
+highlight link EchoDocFloat Pmenu
 
 function! MarkAndDo()
    execute "normal! m" . nr2char(getchar())
@@ -149,13 +168,16 @@ let g:terminator_split_location = 'vertical belowright'
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
-    luafile ~\AppData\Local\nvim\luasnip.lua
-    luafile ~\AppData\Local\nvim\lsp.lua
-    luafile ~\AppData\Local\nvim\nvim-cmp.lua
+    "luafile ~\AppData\Local\nvim\luasnip.lua
+    "luafile ~\AppData\Local\nvim\lsp.lua
+    "luafile ~\AppData\Local\nvim\nvim-cmp.lua
+    let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
+    let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
     luafile ~\AppData\Local\nvim\tree-sitter.lua
     luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
+    let g:python3_host_prog = 'C:\Python310\python.exe'
 elseif has('macunix')
     luafile ~/.config/nvim/luasnip.lua
     luafile ~/.config/nvim/lsp.lua
@@ -164,6 +186,7 @@ elseif has('macunix')
     luafile ~/.config/nvim/telescope.lua
     luafile ~/.config/nvim/todo-comments.lua
     luafile ~/.config/nvim/lua/lsp-ext.lua
+    
 endif
 
 set encoding=utf-8
@@ -265,7 +288,8 @@ endfunction
 nnoremap fs :call SearchWorkspaceSymbol()<CR>
 nnoremap gs :call FindSymbolUnderCursor()<CR>
 nnoremap fg :call GrepWordUnderCursor()<CR>
-nmap gt <cmd>tselect<cr>
+"nmap gt <cmd>tselect<cr>
+nmap gt <cmd>EXTagsCWord<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
 nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>
@@ -336,7 +360,7 @@ let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
 let g:gutentags_ctags_extra_args = [
       \ '--tag-relative=yes',
-      \ '-R --fields=+ailmnS --c-types=+l --extra=+f',
+      \ '-R --fields=+ailmnS --c-types=+l --extra=+fq --c++-kinds=+pl',
       \ ]
       let g:gutentags_ctags_exclude = [
       \ '*.git', '*.svg', '*.hg',
@@ -435,3 +459,5 @@ let g:prettier#config#trailing_comma = 'all'
 set formatoptions-=cro
 
 hi! NormalNC guibg=#101010
+
+au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
