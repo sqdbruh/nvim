@@ -8,27 +8,11 @@ noremap l gk
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 call plug#begin()
-"Plug 'neovim/nvim-lspconfig'
-"Plug 'hrsh7th/cmp-nvim-lsp'
-"Plug 'hrsh7th/cmp-buffer'
-"Plug 'hrsh7th/cmp-cmdline'
-"Plug 'hrsh7th/nvim-cmp'
-"Plug 'saadparwaiz1/cmp_luasnip'
-"Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-"Plug 'hrsh7th/cmp-path'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
 Plug 'L3MON4D3/LuaSnip'
-Plug 'kyazdani42/nvim-web-devicons'
 
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
-Plug 'tpope/vim-unimpaired'
-
-"Themes
-Plug 'loliee/vim-patatetoy'
-
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
 Plug 'rhysd/vim-clang-format'
 
@@ -38,18 +22,15 @@ Plug 'valloric/MatchTagAlways'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-surround'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'nvim-treesitter/nvim-treesitter-context'
-Plug 'RRethy/nvim-treesitter-textsubjects'
 
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+"Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+"Plug 'nvim-treesitter/nvim-treesitter-context'
+"Plug 'RRethy/nvim-treesitter-textsubjects'
+"Plug 'dense-analysis/ale'
+Plug 'sheerun/vim-polyglot'
 Plug 'dhruvasagar/vim-markify'
 
-Plug 'bkad/CamelCaseMotion'
-
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'skywind3000/vim-preview'
 Plug 'ludovicchabant/vim-gutentags'
 
@@ -58,37 +39,52 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'svermeulen/vim-cutlass'
-Plug 'https://github.com/svermeulen/vim-yoink'
+Plug 'svermeulen/vim-yoink'
 Plug 'svermeulen/vim-subversive'
+Plug 'bkad/CamelCaseMotion'
 Plug 'dbakker/vim-paragraph-motion'
 Plug 'michaeljsmith/vim-indent-object'
 
 Plug 'ThePrimeagen/git-worktree.nvim'
 Plug 'ThePrimeagen/harpoon'
 Plug 'rafamadriz/friendly-snippets'
-Plug 'glts/vim-radical'
+
 Plug 'glts/vim-magnum'
+Plug 'glts/vim-radical'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-telescope/telescope-project.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
-Plug 'erietz/vim-terminator'
-Plug 'lifepillar/vim-colortemplate'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-Plug 'exvim/ex-tags'
-Plug 'exvim/ex-utility'
 Plug 'Shougo/echodoc.vim'
-Plug 'vim-scripts/taglist.vim'
 Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
+
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-shell'
+Plug 'xolox/vim-easytags'
+
 call plug#end()
+let g:easytags_python_enabled = 1
+let g:easytags_on_cursorhold = 0
+let g:easytags_async = 1
+let g:easytags_syntax_keyword = 'always'
+let g:easytags_events = ['BufEnter', 'BufRead', 'BufWritePost']
+let g:easytags_auto_update = 0
+
 function! HeaderToggle()
     let filename = expand("%:t")
     if filename =~ ".cpp"
@@ -115,10 +111,10 @@ nnoremap <silent> <leader>a :call MarkAndDo()<CR>
 
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
-nmap <A-j> :lua require('smart-splits').resize_left()<CR>
-nmap <A-k> :lua require('smart-splits').resize_down()<CR>
-nmap <A-l> :lua require('smart-splits').resize_up()<CR>
-nmap <A-;> :lua require('smart-splits').resize_right()<CR>
+nmap <silent> <A-j> :lua require('smart-splits').resize_left()<CR>
+nmap <silent> <A-k> :lua require('smart-splits').resize_down()<CR>
+nmap <silent> <A-l> :lua require('smart-splits').resize_up()<CR>
+nmap <silent> <A-;> :lua require('smart-splits').resize_right()<CR>
 
 let g:yoinkIncludeDeleteOperations=1 
 nmap m <plug>(SubversiveSubstitute)
@@ -176,16 +172,16 @@ let g:terminator_split_location = 'vertical belowright'
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
+    let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
+    let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
+    let g:python3_host_prog = 'C:\Python310\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
     "luafile ~\AppData\Local\nvim\lsp.lua
     "luafile ~\AppData\Local\nvim\nvim-cmp.lua
-    let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
-    let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
-    luafile ~\AppData\Local\nvim\tree-sitter.lua
+    "luafile ~\AppData\Local\nvim\tree-sitter.lua
     luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
-    let g:python3_host_prog = 'C:\Python310\python.exe'
 elseif has('macunix')
     luafile ~/.config/nvim/luasnip.lua
     "luafile ~/.config/nvim/lsp.lua
@@ -296,8 +292,7 @@ endfunction
 nnoremap fs :call SearchWorkspaceSymbol()<CR>
 nnoremap gs :call FindSymbolUnderCursor()<CR>
 nnoremap fg :call GrepWordUnderCursor()<CR>
-"nmap gt <cmd>tselect<cr>
-nmap gt <cmd>EXTagsCWord<cr>
+nmap gt <cmd>tselect<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 nnoremap hh <cmd>call HeaderToggle()<cr>
 nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>
