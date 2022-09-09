@@ -176,7 +176,7 @@ let g:terminator_split_location = 'vertical belowright'
 let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
-    "luafile ~\AppData\Local\nvim\luasnip.lua
+    luafile ~\AppData\Local\nvim\luasnip.lua
     "luafile ~\AppData\Local\nvim\lsp.lua
     "luafile ~\AppData\Local\nvim\nvim-cmp.lua
     let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
@@ -188,8 +188,8 @@ if has('win32')
     let g:python3_host_prog = 'C:\Python310\python.exe'
 elseif has('macunix')
     luafile ~/.config/nvim/luasnip.lua
-    luafile ~/.config/nvim/lsp.lua
-    luafile ~/.config/nvim/nvim-cmp.lua
+    "luafile ~/.config/nvim/lsp.lua
+    "luafile ~/.config/nvim/nvim-cmp.lua
     luafile ~/.config/nvim/tree-sitter.lua
     luafile ~/.config/nvim/telescope.lua
     luafile ~/.config/nvim/todo-comments.lua
