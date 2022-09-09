@@ -89,12 +89,20 @@ Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
 call plug#end()
+function! HeaderToggle()
+    let filename = expand("%:t")
+    if filename =~ ".cpp"
+        execute "e %:r.h"
+    else
+        execute "e %:r.cpp"
+    endif
+endfunction
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#clang#sort_algo = 'priority'
 let g:deoplete#sources#clang#flags = ['-x', 'c']
 let g:deoplete#disable_auto_complete = 1
 let g:deoplete#sources#clang#filter_availability_kinds = ['NotAvailable', 'NotAccessible']
-inoremap <expr> <C-n>  deoplete#manual_complete() 
+inoremap <expr> <C-n>  deoplete#manual_complete()
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'floating'
 highlight link EchoDocFloat Pmenu
@@ -256,7 +264,7 @@ function! OpenHeaderInSideWindow()
         execute 'keepjumps wincmd w'
         execute 'keepjumps e '.currentBuf
     endif
-    execute 'keepjumps ClangdSwitchSourceHeader'
+    execute 'keepjumps call HeaderToggle()'
     sleep 1m "Function above does not get called without it for some reason.
     execute 'keepjumps wincmd p'
 endfunction 
@@ -291,7 +299,7 @@ nnoremap fg :call GrepWordUnderCursor()<CR>
 "nmap gt <cmd>tselect<cr>
 nmap gt <cmd>EXTagsCWord<cr>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
-nnoremap hh <cmd>ClangdSwitchSourceHeader<cr>
+nnoremap hh <cmd>call HeaderToggle()<cr>
 nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
