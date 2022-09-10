@@ -84,6 +84,7 @@ let g:easytags_async = 1
 let g:easytags_syntax_keyword = 'always'
 let g:easytags_events = ['BufEnter', 'BufRead', 'BufWritePost']
 let g:easytags_auto_update = 0
+command! TselectCword execute 'tselect' expand('<cword>')
 
 function! HeaderToggle()
     let filename = expand("%:t")
@@ -292,9 +293,11 @@ endfunction
 nnoremap fs :call SearchWorkspaceSymbol()<CR>
 nnoremap gs :call FindSymbolUnderCursor()<CR>
 nnoremap fg :call GrepWordUnderCursor()<CR>
-nmap gt <cmd>tselect<cr>
+nmap gt <cmd>TselectCword<cr>
+nnoremap tp <cmd>tp<CR>
+nnoremap tn <cmd>tn<CR>
 nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
-nnoremap hh <cmd>call HeaderToggle()<cr>
+nnoremap <silent> hh <cmd>call HeaderToggle()<cr>
 nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>
 nnoremap gp <cmd>PreviewTag<cr>
 nnoremap gP <cmd>PreviewClose<cr>
@@ -363,7 +366,7 @@ let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
 let g:gutentags_ctags_extra_args = [
       \ '--tag-relative=yes',
-      \ '-R --fields=+ailmnS --c-types=+l --extra=+fq --c++-kinds=+pl',
+      \ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl',
       \ ]
       let g:gutentags_ctags_exclude = [
       \ '*.git', '*.svg', '*.hg',

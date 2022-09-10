@@ -28,12 +28,12 @@ let s:palette = {'gui' : {} , 'cterm' : {}}
   let s:gui_comment    = "#606060"
 
 let s:palette.gui.background = { 'dark' : s:gui_background , 'light' : "#e4e4e4" }
-let s:palette.gui.foreground = { 'dark' : "#b99468"        , 'light' : "#000000" }
+let s:palette.gui.foreground = { 'dark' : "#bf9d73"        , 'light' : "#000000" }
 let s:palette.gui.selection  = { 'dark' : s:gui_selection  , 'light' : "#bcbcbc" }
 let s:palette.gui.line       = { 'dark' : s:gui_line       , 'light' : "#d0d0d0" }
 let s:palette.gui.comment    = { 'dark' : s:gui_comment    , 'light' : "#5f5f5f" }
-let s:palette.gui.red        = { 'dark' : "#b36a5d"        , 'light' : "#5f0000" }
-let s:palette.gui.orange     = { 'dark' : "#a88239"        , 'light' : "#875f00" }
+let s:palette.gui.red        = { 'dark' : "#ca7768"        , 'light' : "#5f0000" }
+let s:palette.gui.orange     = { 'dark' : "#8f723d"        , 'light' : "#875f00" }
 let s:palette.gui.yellow     = { 'dark' : "#cea046"        , 'light' : "#5f5f00" }
 let s:palette.gui.green      = { 'dark' : "#7f9a59"        , 'light' : "#005f00" }
 let s:palette.gui.aqua       = { 'dark' : "#649792"        , 'light' : "#005f5f" }
@@ -294,9 +294,10 @@ exe "hi! Keyword"        .s:fg_orange        .s:bg_none        .s:fmt_none
 exe "hi! cPreCondit"        .s:fg_aqua        .s:bg_none        .s:fmt_none
 "   Exception"
 
-exe "hi! PreProc"         .s:fg_red        .s:bg_none        .s:fmt_none
+exe "hi! PreProc"         .s:fg_aqua        .s:bg_none        .s:fmt_none
 exe "hi! Macro"         .s:fg_aqua        .s:bg_none        .s:fmt_none
 exe "hi! PreCondit"         .s:fg_aqua        .s:bg_none        .s:fmt_none
+exe "hi! Define"         .s:fg_aqua        .s:bg_none        .s:fmt_none
 "   Include"
 "   Define"
 "   Macro"
