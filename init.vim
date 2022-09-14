@@ -27,7 +27,6 @@ Plug 'itchyny/lightline.vim'
 "Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 "Plug 'nvim-treesitter/nvim-treesitter-context'
 "Plug 'RRethy/nvim-treesitter-textsubjects'
-"Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'dhruvasagar/vim-markify'
 
@@ -73,9 +72,9 @@ Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
 
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-shell'
-Plug 'xolox/vim-easytags'
+"Plug 'xolox/vim-misc'
+"Plug 'xolox/vim-shell'
+"Plug 'xolox/vim-easytags'
 
 call plug#end()
 let g:easytags_python_enabled = 1
@@ -184,10 +183,13 @@ if has('win32')
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
+    let g:deoplete#sources#clang#libclang_path = ~/Library/Developer/CommandLineTools/usr/lib/libclang.dylib
+    let g:deoplete#sources#clang#clang_header = ~/Library/Developer/CommandLineTools/usr/lib/clang
+    let g:python3_host_prog = ~/opt/homebrew/bin/python3
     luafile ~/.config/nvim/luasnip.lua
     "luafile ~/.config/nvim/lsp.lua
     "luafile ~/.config/nvim/nvim-cmp.lua
-    luafile ~/.config/nvim/tree-sitter.lua
+    "luafile ~/.config/nvim/tree-sitter.lua
     luafile ~/.config/nvim/telescope.lua
     luafile ~/.config/nvim/todo-comments.lua
     luafile ~/.config/nvim/lua/lsp-ext.lua
@@ -232,10 +234,10 @@ nnoremap <Leader>h <cmd>split<cr>
 nnoremap ff <cmd>Telescope find_files<cr>
 nnoremap fl <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
-nnoremap fh <cmd>Telescope help_tags<cr>
+nnoremap fh <cmd>Telescope tags<cr>
 nnoremap fq <cmd>Telescope quickfix<cr>
 nnoremap gr <cmd>Telescope lsp_references<cr>
-nnoremap hl <cmd>Telescope harpoon marks<cr>
+nnoremap fh <cmd>Telescope harpoon marks<cr>
 nnoremap fr <cmd>Telescope resume<cr>
 nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
 nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>
@@ -281,14 +283,6 @@ function! InsertText(text)
 endfunction
 function! GrepWordUnderCursor()
     execute 'Telescope grep_string search='.expand("<cword>")
-endfunction
-function! FindSymbolUnderCursor()
-    let l:search_symbol = 'Telescope lsp_workspace_symbols query='.expand("<cword>")
-    execute l:search_symbol
-endfunction
-function! SearchWorkspaceSymbol()
-    let l:search_symbol = 'Telescope lsp_workspace_symbols query='.input("Search for symbol: ")
-    execute l:search_symbol
 endfunction
 nnoremap fs :call SearchWorkspaceSymbol()<CR>
 nnoremap gs :call FindSymbolUnderCursor()<CR>
@@ -356,7 +350,6 @@ let g:EasyMotion_smartcase = 1
 
 
 nnoremap <C-t> :NERDTreeToggle<CR>
-let g:gutentags_add_default_project_roots = 0
 let g:gutentags_project_root = ['package.json', '.git']
 let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
 command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
@@ -456,7 +449,7 @@ highlight! EasyMotionTarget2First guibg=NONE guifg=#cea046
 highlight! EasyMotionTarget2Second guibg=NONE guifg=#cea046
 hi link EasyMotionShade  Comment
 tnoremap <Esc> <C-\><C-n>
-nnoremap <silent> <F1> :make<CR><cr>
+nnoremap <silent> <F1> :make!<CR><cr>
 nnoremap <silent> <F2> :!run.bat<CR><cr>
 
 
