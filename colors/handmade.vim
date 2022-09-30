@@ -285,14 +285,6 @@ exe "hi! Number"          .s:fg_green       .s:bg_none        .s:fmt_none
 exe "hi! Identifier"      .s:fg_foreground      .s:bg_none        .s:fmt_none
 exe "hi! Function"        .s:fg_red      .s:bg_none        .s:fmt_none
 
-exe "hi! Statement"       .s:fg_orange        .s:bg_none        .s:fmt_none
-"   Conditional"
-"   Repeat"
-"   Label"
-exe "hi! Operator"        .s:fg_red        .s:bg_none        .s:fmt_none
-exe "hi! Keyword"        .s:fg_orange        .s:bg_none        .s:fmt_none
-exe "hi! cPreCondit"        .s:fg_aqua        .s:bg_none        .s:fmt_none
-"   Exception"
 
 exe "hi! PreProc"         .s:fg_aqua        .s:bg_none        .s:fmt_none
 exe "hi! Macro"         .s:fg_aqua        .s:bg_none        .s:fmt_none
@@ -306,7 +298,7 @@ exe "hi! Define"         .s:fg_aqua        .s:bg_none        .s:fmt_none
 exe "hi! Type"            .s:fg_yellow      .s:bg_none        .s:fmt_none
 "   StorageClass"
 exe "hi! Structure"       .s:fg_yellow        .s:bg_none        .s:fmt_none
-exe "hi! Typedef"       .s:fg_aqua        .s:bg_none        .s:fmt_none
+exe "hi! Typedef"       .s:fg_aqua       .s:bg_none        .s:fmt_none
 
 exe "hi! Special"         .s:fg_red       .s:bg_none         .s:fmt_none
 exe "hi! Tag"         .s:fg_aqua       .s:bg_none         .s:fmt_none
@@ -330,6 +322,14 @@ exe "hi! qfLineNr"        .s:fg_yellow      .s:bg_none        .s:fmt_none
 "   qfFileName"
 "   qfLineNr"
 "   qfError"
+exe "hi! Statement"       .s:fg_orange        .s:bg_none        .s:fmt_none
+"   Conditional"
+"   Repeat"
+"   Label"
+exe "hi! Operator"        .s:fg_red        .s:bg_none        .s:fmt_none
+exe "hi! Keyword"        .s:fg_orange        .s:bg_none        .s:fmt_none
+exe "hi! cPreCondit"        .s:fg_aqua        .s:bg_none        .s:fmt_none
+"   Exception"
 
 "}}}
 " Diff Syntax Highlighting:"{{{

@@ -7,6 +7,9 @@ noremap k gj
 noremap l gk
 nnoremap <SPACE> <Nop>
 let mapleader=" "
+command! ClearQuickfixList cexpr []
+nmap <leader>cq :ClearQuickfixList<cr>
+autocmd VimEnter * :clearjumps
 call plug#begin()
 Plug 'antoinemadec/FixCursorHold.nvim'
 
@@ -71,12 +74,96 @@ Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
-
-"Plug 'xolox/vim-misc'
-"Plug 'xolox/vim-shell'
-"Plug 'xolox/vim-easytags'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'BurntSushi/ripgrep'
+Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
+function! SetCSSettings()
+    "let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
+    "let g:OmniSharp_selector_findusages = 'fzf'
+    nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
+    nmap <silent> <buffer> <Leader>osfu <Plug>(omnisharp_fix_usings)
+    nmap <silent> <buffer> cf <Plug>(omnisharp_code_format)
+    nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+    imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+
+    nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
+    xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
+
+    nmap <silent> <buffer> <Leader>. <Plug>(omnisharp_code_action_repeat)
+    xmap <silent> <buffer> <Leader>. <Plug>(omnisharp_code_action_repeat)
+
+    nmap <silent> <buffer> <Leader>tl <Plug>(omnisharp_type_lookup)
+
+    nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
+    nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
+    nmap <silent> <buffer> gr <Plug>(omnisharp_find_usages)
+    " Find all code errors/warnings for the current solution and populate the quickfix window
+    nmap <silent> <buffer> <F1> <Plug>(omnisharp_global_code_check)
+    let g:OmniSharp_open_quickfix = 0
+    let g:omnicomplete_fetch_full_documentation = 0
+    let g:OmniSharp_popup_mappings = {
+                \ 'sigNext': '<C-k>',
+                \ 'sigPrev': '<C-l>',
+                \ 'sigParamPrev': '<C-j>',
+                \ 'sigParamNext': '<C-;>',
+                \}
+    let g:OmniSharp_diagnostic_showid = 1
+    let g:OmniSharp_highlight_groups = {
+                \ 'ClassName': 'Type',
+                \ 'StructName': 'Type',
+                \ 'DelegateName': 'Type',
+                \ 'EnumName': 'Type',
+                \ 'InterfaceName': 'Type',
+                \ 'Keyword': 'Keyword',
+                \ 'Operator': 'Operator',
+                \ 'Comment': 'Comment',
+                \}
+    let g:OmniSharp_diagnostic_exclude_paths = [
+                \ 'obj\\',
+                \ '[Tt]emp\\',
+                \ '\.nuget\\',
+                \ 'Library\\',
+                \ '\<AssemblyInfo\.cs\>'
+                \]
+    let g:OmniSharp_diagnostic_overrides = {
+                \ 'CS8019': {'type': 'None'},
+                \ 'RemoveUnnecessaryImportsFixable': {'type': 'None'}
+                \}
+    "exe ":ALEEnable"
+    " Use deoplete.
+    call deoplete#enable()
+    call echodoc#disable()
+
+    " Use smartcase.
+    call deoplete#custom#option('smart_case', v:true)
+
+    call deoplete#custom#option('sources', {
+                \ 'cs': ['omnisharp'],
+                \ })
+    " Use OmniSharp-vim omnifunc 
+    call deoplete#custom#source('omni', 'functions', { 'cs':  'OmniSharp#Complete' })
+
+    " Set how Deoplete filters omnifunc output.
+    call deoplete#custom#var('omni', 'input_patterns', {
+                \ 'cs': '[^. *\t]\.\w*',
+                \})
+
+    "nnoremap <C-k> :ALENext<cr>
+    "nnoremap <C-l> :ALEPrevious<cr>
+    " ... then goes your mappings for :OmniSharp* functions, see its doc
+endfunction
+
+augroup csharp_commands
+    autocmd!
+
+    " Use smartcase.
+    " call deoplete#custom#option('smart_case', v:true) 
+    autocmd FileType cs call SetCSSettings()
+
+augroup END
+let g:OmniSharp_server_stdio = 1
 let g:easytags_python_enabled = 1
 let g:easytags_on_cursorhold = 0
 let g:easytags_async = 1
@@ -96,7 +183,7 @@ endfunction
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#clang#sort_algo = 'priority'
 let g:deoplete#sources#clang#flags = ['-x', 'c']
-let g:deoplete#disable_auto_complete = 1
+"let g:deoplete#disable_auto_complete = 1
 let g:deoplete#sources#clang#filter_availability_kinds = ['NotAvailable', 'NotAccessible']
 inoremap <expr> <C-n>  deoplete#manual_complete()
 let g:echodoc#enable_at_startup = 1
@@ -227,7 +314,7 @@ set smartindent
 set ignorecase
 set smartcase
 let g:compiler = 'msvc'
-set pumheight=10
+set pumheight=8
 
 nnoremap <Leader>v <cmd>vsplit<cr>
 nnoremap <Leader>h <cmd>split<cr>
@@ -236,7 +323,6 @@ nnoremap fl <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
 nnoremap fh <cmd>Telescope tags<cr>
 nnoremap fq <cmd>Telescope quickfix<cr>
-nnoremap gr <cmd>Telescope lsp_references<cr>
 nnoremap fh <cmd>Telescope harpoon marks<cr>
 nnoremap fr <cmd>Telescope resume<cr>
 nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
@@ -284,8 +370,6 @@ endfunction
 function! GrepWordUnderCursor()
     execute 'Telescope grep_string search='.expand("<cword>")
 endfunction
-nnoremap fs :call SearchWorkspaceSymbol()<CR>
-nnoremap gs :call FindSymbolUnderCursor()<CR>
 nnoremap fg :call GrepWordUnderCursor()<CR>
 nmap gt <cmd>TselectCword<cr>
 nnoremap tp <cmd>tp<CR>
@@ -460,3 +544,5 @@ set formatoptions-=cro
 hi! NormalNC guibg=#101010
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
+nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
+nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>

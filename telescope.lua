@@ -7,7 +7,7 @@ require('telescope').setup {
         },
     },
     defaults = {
-        file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "tags" },
+        file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "tags", "%.meta", "TextMesh Pro", "Plugins"},
 
         -- Default configuration for telescope goes here:
         -- config_key = value,
