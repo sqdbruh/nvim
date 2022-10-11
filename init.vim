@@ -12,6 +12,7 @@ nmap <leader>cq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
 Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'vim-utils/vim-man'
 
 Plug 'L3MON4D3/LuaSnip'
 
@@ -243,6 +244,10 @@ map <Leader>l <Plug>(easymotion-k)
 map <Leader>k <Plug>(easymotion-j)
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
+nmap xX ^xg_
+nmap dD ^dg_
+nmap cC ^cg_
+nmap yY ^yg_
 "map  n <Plug>(easymotion-next)
 "map  N <Plug>(easymotion-prev)
 
