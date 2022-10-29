@@ -8,7 +8,7 @@ noremap l gk
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 command! ClearQuickfixList cexpr []
-nmap <leader>cq :ClearQuickfixList<cr>
+nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
 Plug 'antoinemadec/FixCursorHold.nvim'
@@ -84,10 +84,12 @@ function! SetCSSettings()
     "let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
     "let g:OmniSharp_selector_findusages = 'fzf'
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
+    nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
     nmap <silent> <buffer> <Leader>osfu <Plug>(omnisharp_fix_usings)
     nmap <silent> <buffer> cf <Plug>(omnisharp_code_format)
     nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
+    nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
 
     nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
     xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
@@ -138,7 +140,7 @@ function! SetCSSettings()
     call echodoc#disable()
 
     " Use smartcase.
-    call deoplete#custom#option('smart_case', v:true)
+    call deoplete#custom#source('_', 'smart_case', v:true)
 
     call deoplete#custom#option('sources', {
                 \ 'cs': ['omnisharp'],
@@ -159,8 +161,6 @@ endfunction
 augroup csharp_commands
     autocmd!
 
-    " Use smartcase.
-    " call deoplete#custom#option('smart_case', v:true) 
     autocmd FileType cs call SetCSSettings()
 
 augroup END
@@ -186,10 +186,13 @@ let g:deoplete#sources#clang#sort_algo = 'priority'
 let g:deoplete#sources#clang#flags = ['-x', 'c']
 "let g:deoplete#disable_auto_complete = 1
 let g:deoplete#sources#clang#filter_availability_kinds = ['NotAvailable', 'NotAccessible']
+let g:deoplete#smart_case = v:true
 inoremap <expr> <C-n>  deoplete#manual_complete()
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'floating'
 highlight link EchoDocFloat Pmenu
+map <Home> ^
+map <End> $
 
 function! MarkAndDo()
    execute "normal! m" . nr2char(getchar())
@@ -551,3 +554,4 @@ hi! NormalNC guibg=#101010
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
 nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>
+let g:OmniSharp_highlighting = 0
