@@ -409,20 +409,6 @@ nnoremap t8 8gt
 nnoremap t9 9gt
 nnoremap tm <cmd>bprev<cr>
 nnoremap t/ <cmd>bnext<cr>
-nnoremap <leader>ss :CheckHighlightUnderCursor<cr>
-
-com! CheckHighlightUnderCursor echo {l,c,n ->
-        \   'hi<'    . synIDattr(synID(l, c, 1), n)             . '> '
-        \  .'trans<' . synIDattr(synID(l, c, 0), n)             . '> '
-        \  .'lo<'    . synIDattr(synIDtrans(synID(l, c, 1)), n) . '> '
-        \ }(line("."), col("."), "name")
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
 
 function! ToggleQuickFix()
     if empty(filter(getwininfo(), 'v:val.quickfix'))
@@ -518,24 +504,6 @@ let g:clang_format#style_options = {
 autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer>cf :ClangFormat<CR>
 
-:highlight Normal ctermfg=grey ctermbg=black
-"Autocomplete popup icons color
-" gray
-"highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
-"" blue
-"highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
-"highlight! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
-"" light blue
-"highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
-"highlight! CmpItemKindInterface guibg=NONE guifg=#9CDCFE
-"highlight! CmpItemKindText guibg=NONE guifg=#9CDCFE
-"" pink
-"highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
-"highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0
-"" front
-"highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
-"highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
-"highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
 highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
 highlight! EasyMotionTarget2First guibg=NONE guifg=#cea046
 highlight! EasyMotionTarget2Second guibg=NONE guifg=#cea046
@@ -544,9 +512,6 @@ tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <F1> :make!<CR><cr>
 nnoremap <silent> <F2> :!run.bat<CR><cr>
 
-
-let g:prettier#config#single_quote = 'true'
-let g:prettier#config#trailing_comma = 'all'
 set formatoptions-=cro
 
 hi! NormalNC guibg=#101010
