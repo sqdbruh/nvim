@@ -336,7 +336,7 @@ if has('win32')
 elseif has('macunix')
     let g:deoplete#sources#clang#libclang_path = '~/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
     let g:deoplete#sources#clang#clang_header = '~/Library/Developer/CommandLineTools/usr/lib/clang'
-    let g:python3_host_prog = ~/opt/homebrew/bin/python3'
+    let g:python3_host_prog = ~/opt/homebrew/bin/python3
     luafile ~/.config/nvim/luasnip.lua
     luafile ~/.config/nvim/telescope.lua
     luafile ~/.config/nvim/todo-comments.lua
