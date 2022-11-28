@@ -80,6 +80,67 @@ Plug 'BurntSushi/ripgrep'
 Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
+function! SetCSettings()
+    let g:gutentags_project_root = ['package.json', '.git']
+    let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+    command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+    let g:gutentags_generate_on_new = 1
+    let g:gutentags_generate_on_missing = 1
+    let g:gutentags_generate_on_write = 1
+    let g:gutentags_generate_on_empty_buffer = 0
+    let g:gutentags_ctags_extra_args = [
+                \ '--tag-relative=yes',
+                \ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no',
+                \ ]
+    let g:gutentags_ctags_exclude = [
+                \ '*.git', '*.svg', '*.hg',
+                \ '*/tests/*',
+                \ 'build',
+                \ 'dist',
+                \ '*sites/*/files/*',
+                \ 'bin',
+                \ 'node_modules',
+                \ 'bower_components',
+                \ 'cache',
+                \ 'compiled',
+                \ 'docs',
+                \ 'example',
+                \ 'bundle',
+                \ 'vendor',
+                \ '*.md',
+                \ '*-lock.json',
+                \ '*.lock',
+                \ '*bundle*.js',
+                \ '*build*.js',
+                \ '.*rc*',
+                \ '*.json',
+                \ '*.min.*',
+                \ '*.map',
+                \ '*.bak',
+                \ '*.zip',
+                \ '*.pyc',
+                \ '*.class',
+                \ '*.sln',
+                \ '*.Master',
+                \ '*.csproj',
+                \ '*.tmp',
+                \ '*.csproj.user',
+                \ '*.cache',
+                \ '*.pdb',
+                \ 'tags*',
+                \ 'cscope.*',
+                \ '*.css',
+                \ '*.less',
+                \ '*.scss',
+                \ '*.exe', '*.dll',
+                \ '*.mp3', '*.ogg', '*.flac',
+                \ '*.swp', '*.swo',
+                \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+                \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+                \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+                \ ]
+endfunction
+
 function! SetCSSettings()
     "let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
     "let g:OmniSharp_selector_findusages = 'fzf'
@@ -160,17 +221,13 @@ endfunction
 
 augroup csharp_commands
     autocmd!
-
     autocmd FileType cs call SetCSSettings()
-
+augroup END
+augroup c_commands
+    autocmd!
+    autocmd FileType c,cpp call SetCSettings()
 augroup END
 let g:OmniSharp_server_stdio = 1
-let g:easytags_python_enabled = 1
-let g:easytags_on_cursorhold = 0
-let g:easytags_async = 1
-let g:easytags_syntax_keyword = 'always'
-let g:easytags_events = ['BufEnter', 'BufRead', 'BufWritePost']
-let g:easytags_auto_update = 0
 command! TselectCword execute 'tselect' expand('<cword>')
 
 function! HeaderToggle()
@@ -191,11 +248,13 @@ inoremap <expr> <C-n>  deoplete#manual_complete()
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'floating'
 highlight link EchoDocFloat Pmenu
+inoremap <Home> <C-o>^
 map <Home> ^
+inoremap <End> <C-o>$
 map <End> $
 
 function! MarkAndDo()
-   execute "normal! m" . nr2char(getchar())
+    execute "normal! m" . nr2char(getchar())
 endfunction
 
 nnoremap <silent> <leader>a :call MarkAndDo()<CR>
@@ -271,9 +330,6 @@ if has('win32')
     let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
     let g:python3_host_prog = 'C:\Python310\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
-    "luafile ~\AppData\Local\nvim\lsp.lua
-    "luafile ~\AppData\Local\nvim\nvim-cmp.lua
-    "luafile ~\AppData\Local\nvim\tree-sitter.lua
     luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
@@ -282,13 +338,9 @@ elseif has('macunix')
     let g:deoplete#sources#clang#clang_header = ~/Library/Developer/CommandLineTools/usr/lib/clang
     let g:python3_host_prog = ~/opt/homebrew/bin/python3
     luafile ~/.config/nvim/luasnip.lua
-    "luafile ~/.config/nvim/lsp.lua
-    "luafile ~/.config/nvim/nvim-cmp.lua
-    "luafile ~/.config/nvim/tree-sitter.lua
     luafile ~/.config/nvim/telescope.lua
     luafile ~/.config/nvim/todo-comments.lua
     luafile ~/.config/nvim/lua/lsp-ext.lua
-    
 endif
 
 set encoding=utf-8
@@ -367,9 +419,9 @@ function! InsertText(text)
     let cur_col_num = col('.')
     let orig_line = getline('.')
     let modified_line =
-        \ strpart(orig_line, 0, cur_col_num - 1)
-        \ . a:text
-        \ . strpart(orig_line, cur_col_num - 1)
+                \ strpart(orig_line, 0, cur_col_num - 1)
+                \ . a:text
+                \ . strpart(orig_line, cur_col_num - 1)
     " Replace the current line with the modified line.
     call setline(cur_line_num, modified_line)
     " Place cursor on the last character of the inserted text.
@@ -428,64 +480,6 @@ let g:EasyMotion_smartcase = 1
 
 
 nnoremap <C-t> :NERDTreeToggle<CR>
-let g:gutentags_project_root = ['package.json', '.git']
-let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
-command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
-let g:gutentags_generate_on_new = 1
-let g:gutentags_generate_on_missing = 1
-let g:gutentags_generate_on_write = 1
-let g:gutentags_generate_on_empty_buffer = 0
-let g:gutentags_ctags_extra_args = [
-      \ '--tag-relative=yes',
-      \ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl',
-      \ ]
-      let g:gutentags_ctags_exclude = [
-      \ '*.git', '*.svg', '*.hg',
-      \ '*/tests/*',
-      \ 'build',
-      \ 'dist',
-      \ '*sites/*/files/*',
-      \ 'bin',
-      \ 'node_modules',
-      \ 'bower_components',
-      \ 'cache',
-      \ 'compiled',
-      \ 'docs',
-      \ 'example',
-      \ 'bundle',
-      \ 'vendor',
-      \ '*.md',
-      \ '*-lock.json',
-      \ '*.lock',
-      \ '*bundle*.js',
-      \ '*build*.js',
-      \ '.*rc*',
-      \ '*.json',
-      \ '*.min.*',
-      \ '*.map',
-      \ '*.bak',
-      \ '*.zip',
-      \ '*.pyc',
-      \ '*.class',
-      \ '*.sln',
-      \ '*.Master',
-      \ '*.csproj',
-      \ '*.tmp',
-      \ '*.csproj.user',
-      \ '*.cache',
-      \ '*.pdb',
-      \ 'tags*',
-      \ 'cscope.*',
-      \ '*.css',
-      \ '*.less',
-      \ '*.scss',
-      \ '*.exe', '*.dll',
-      \ '*.mp3', '*.ogg', '*.flac',
-      \ '*.swp', '*.swo',
-      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
-      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
-      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
-      \ ]
 
 set splitbelow
 set splitright
@@ -514,7 +508,8 @@ nnoremap <silent> <F2> :!run.bat<CR><cr>
 
 set formatoptions-=cro
 
-hi! NormalNC guibg=#101010
+" Inactive tab highlight
+hi! NormalNC guibg=#000000
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>

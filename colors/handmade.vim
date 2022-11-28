@@ -26,6 +26,7 @@ let s:palette = {'gui' : {} , 'cterm' : {}}
   let s:gui_selection  = "#373b41"
   let s:gui_line       = "#282a2e"
   let s:gui_comment    = "#606060"
+  let s:gui_black    = "#000000"
 
 let s:palette.gui.background = { 'dark' : s:gui_background , 'light' : "#e4e4e4" }
 let s:palette.gui.foreground = { 'dark' : "#bf9d73"        , 'light' : "#000000" }
@@ -40,7 +41,7 @@ let s:palette.gui.aqua       = { 'dark' : "#649792"        , 'light' : "#005f5f"
 let s:palette.gui.blue       = { 'dark' : "#649792"        , 'light' : "#00005f" }
 let s:palette.gui.purple     = { 'dark' : "#b294bb"        , 'light' : "#5f005f" }
 let s:palette.gui.window     = { 'dark' : "#303030"        , 'light' : "#9e9e9e" }
-let s:palette.gui.darkcolumn = { 'dark' : "#1c1c1c"        , 'light' : "#808080" }
+let s:palette.gui.darkcolumn = { 'dark' : "#000000"        , 'light' : "#808080" }
 let s:palette.gui.addbg      = { 'dark' : "#5F875F"        , 'light' : "#d7ffd7" }
 let s:palette.gui.addfg      = { 'dark' : "#d7ffaf"        , 'light' : "#005f00" }
 let s:palette.gui.changebg   = { 'dark' : "#5F5F87"        , 'light' : "#d7d7ff" }
@@ -248,8 +249,8 @@ exe "hi! SpellCap"      .s:fg_blue        .s:bg_darkblue    .s:fmt_undr
 exe "hi! SpellLocal"    .s:fg_aqua        .s:bg_darkcyan    .s:fmt_undr
 exe "hi! SpellBad"      .s:fg_red         .s:bg_none        .s:fmt_none
 exe "hi! SpellRare"     .s:fg_purple      .s:bg_none        .s:fmt_none
-exe "hi! StatusLine"    .s:fg_comment     .s:bg_none        .s:fmt_revr
-exe "hi! StatusLineNC"  .s:fg_comment      .s:bg_comment     .s:fmt_revr
+"exe "hi! StatusLine"    .s:gui_black     .s:bg_none        .s:fmt_revr
+"exe "hi! StatusLineNC"  .s:gui_black      .s:bg_comment     .s:fmt_revr
 exe "hi! TabLine"       .s:fg_foreground  .s:bg_none        .s:fmt_revr
 "   TabLineFill"
 "   TabLineSel"
