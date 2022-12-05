@@ -35,7 +35,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'dhruvasagar/vim-markify'
 
 Plug 'skywind3000/vim-preview'
-Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'lukas-reineke/indent-blankline.nvim'
 
@@ -74,6 +73,7 @@ Plug 'Shougo/echodoc.vim'
 Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
+"Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Shougo/neoinclude.vim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
@@ -81,6 +81,7 @@ Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
 function! SetCSettings()
+    Plug 'ludovicchabant/vim-gutentags'
     let g:gutentags_project_root = ['package.json', '.git']
     let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
     command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
@@ -238,6 +239,7 @@ function! HeaderToggle()
         execute "e %:r.cpp"
     endif
 endfunction
+let g:deoplete#sources#jedi#show_docstring = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#clang#sort_algo = 'priority'
 let g:deoplete#sources#clang#flags = ['-x', 'c']
@@ -516,3 +518,16 @@ au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
 nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>
 let g:OmniSharp_highlighting = 0
+
+"Disable deoplete in Telescope
+autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
+
+"smart indent when entering insert mode with i on empty lines
+function! IndentWithI()
+    if len(getline('.')) == 0
+        return "\"_cc"
+    else
+        return "i"
+    endif
+endfunction
+nnoremap <expr> i IndentWithI()
