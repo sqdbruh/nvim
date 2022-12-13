@@ -505,6 +505,8 @@ highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
 highlight! EasyMotionTarget2First guibg=NONE guifg=#cea046
 highlight! EasyMotionTarget2Second guibg=NONE guifg=#cea046
 hi link EasyMotionShade  Comment
+hi Cursor guifg=white guibg=white
+hi Cursor2 guifg=white guibg=white
 tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <F1> :make!<CR><cr>
 nnoremap <silent> <F2> :!run.bat<CR><cr>
