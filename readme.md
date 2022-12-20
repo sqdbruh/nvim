@@ -19,4 +19,5 @@ My neovim config, that im using with Wezterm terminal.
 2. Reload nvim and type `:UpdateRemotePlugins`
 3. If errors still persist `:checkhealth` and try to resolve it yourself
 ### Wezterm (Optional)
-1. Download Wezterm and create wezterm.lua settings in .exe location folder ([my settings](https://gist.github.com/sqdrck/d9d6b21e9e039d26b0fb0f4b56f0b5a5))
+1. `choco install wezterm`
+1. Create wezterm.lua settings in .exe location folder ([my settings](https://gist.github.com/sqdrck/d9d6b21e9e039d26b0fb0f4b56f0b5a5))
