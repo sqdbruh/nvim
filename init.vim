@@ -13,6 +13,7 @@ autocmd VimEnter * :clearjumps
 call plug#begin()
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'vim-utils/vim-man'
+Plug 'normen/vim-pio'
 
 Plug 'L3MON4D3/LuaSnip'
 
@@ -26,6 +27,7 @@ Plug 'valloric/MatchTagAlways'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
+Plug 'kshenoy/vim-signature'
 
 "Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 "Plug 'nvim-treesitter/nvim-treesitter-textobjects'
@@ -58,16 +60,21 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-pathogen'
+Plug 'tpope/vim-speeddating'
 
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 Plug 'deoplete-plugins/deoplete-tag'
@@ -226,7 +233,7 @@ augroup csharp_commands
 augroup END
 augroup c_commands
     autocmd!
-    autocmd FileType c,cpp call SetCSettings()
+    autocmd FileType c,cpp,h call SetCSettings()
 augroup END
 let g:OmniSharp_server_stdio = 1
 command! TselectCword execute 'tselect' expand('<cword>')
@@ -255,11 +262,11 @@ map <Home> ^
 inoremap <End> <C-o>$
 map <End> $
 
-function! MarkAndDo()
-    execute "normal! m" . nr2char(getchar())
-endfunction
+"function! MarkAndDo()
+    "execute "normal! m" . nr2char(getchar())
+"endfunction
 
-nnoremap <silent> <leader>a :call MarkAndDo()<CR>
+"nnoremap <silent> <leader>a :call MarkAndDo()<CR>
 
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
@@ -269,13 +276,13 @@ nmap <silent> <A-l> :lua require('smart-splits').resize_up()<CR>
 nmap <silent> <A-;> :lua require('smart-splits').resize_right()<CR>
 
 let g:yoinkIncludeDeleteOperations=1 
-nmap m <plug>(SubversiveSubstitute)
-nmap mm <plug>(SubversiveSubstituteLine)
-nmap M <plug>(SubversiveSubstituteToEndOfLine)
-xmap m <plug>(SubversiveSubstitute)
-nmap <leader>m <plug>(SubversiveSubstituteRange)
-xmap <leader>m <plug>(SubversiveSubstituteRange)
-nmap <leader>MM <plug>(SubversiveSubstituteWordRange)
+nmap s <plug>(SubversiveSubstitute)
+nmap ss <plug>(SubversiveSubstituteLine)
+nmap S <plug>(SubversiveSubstituteToEndOfLine)
+xmap s <plug>(SubversiveSubstitute)
+nmap <leader>s <plug>(SubversiveSubstituteRange)
+xmap <leader>s <plug>(SubversiveSubstituteRange)
+nmap <leader>SS <plug>(SubversiveSubstituteWordRange)
 
 nmap <c-n> <plug>(YoinkPostPasteSwapBack)
 nmap <c-p> <plug>(YoinkPostPasteSwapForward)
@@ -294,14 +301,13 @@ xmap ia <plug>Argumentative_InnerTextObject
 xmap aa <plug>Argumentative_OuterTextObject
 omap ia <plug>Argumentative_OpPendingInnerTextObject
 omap aa <plug>Argumentative_OpPendingOuterTextObject
-
 nnoremap x d
 xnoremap x d
 nnoremap xx dd
 nnoremap X D
 
 " JK motions: Line motions
-map s <Plug>(easymotion-overwin-f2)
+"map s <Plug>(easymotion-overwin-f2)
 map <Leader>j <Plug>(easymotion-linebackward)
 map <Leader>; <Plug>(easymotion-lineforward)
 map <Leader>l <Plug>(easymotion-k)
@@ -330,7 +336,7 @@ set completeopt=menu,menuone
 if has('win32')
     let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
     let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
-    let g:python3_host_prog = 'C:\Python310\python.exe'
+    let g:python3_host_prog = 'C:\Program Files\Python311\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
     luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
@@ -493,6 +499,7 @@ let g:clang_format#style_options = {
             \ "AccessModifierOffset" : -4,
             \ "BasedOnStyle" : "Microsoft",
             \ "PointerAlignment" : "Left",
+            \ "SortIncludes" : "Never",
             \ "AllowShortIfStatementsOnASingleLine" : "false",
             \ "AlwaysBreakTemplateDeclarations" : "true",
             \ "AlignConsecutiveAssignments  " : "Consecutive",
@@ -507,11 +514,23 @@ highlight! EasyMotionTarget2Second guibg=NONE guifg=#cea046
 hi link EasyMotionShade  Comment
 hi Cursor guifg=white guibg=white
 hi Cursor2 guifg=white guibg=white
-tnoremap <Esc> <C-\><C-n>
-nnoremap <silent> <F1> :make!<CR><cr>
-nnoremap <silent> <F2> :!run.bat<CR><cr>
+nnoremap <Esc> <C-\><C-n>
+nnoremap <silent> <F1> :w <bar> Make f1<CR><cr>
+nnoremap <silent> <F2> :w <bar> Make f2<CR><cr>
+nnoremap <silent> <F3> :w <bar> Make f3<CR><cr>
+nnoremap <silent> <F4> :w <bar> Make f4<CR><cr>
+nnoremap <silent> <F5> :w <bar> Make f5<CR><cr>
+nnoremap <silent> <F6> :w <bar> Make f6<CR><cr>
+nnoremap <silent> <F7> :w <bar> Make f7<CR><cr>
+nnoremap <silent> <F8> :w <bar> Make f8<CR><cr>
+nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>
+nnoremap <silent> <F10> :w <bar> Make f10<CR><cr>
+nnoremap <silent> <F11> :w <bar> Make f11<CR><cr>
+nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>
+" filename(line) : error|warning|fatal error C0000: message
 
-set formatoptions-=cro
+"set errorformat=\ %#%f(%l)\ :\ %#%t%[A-z]%#\ %[A-Z\ ]%#%n:\ %m
+
 
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
@@ -533,3 +552,10 @@ function! IndentWithI()
     endif
 endfunction
 nnoremap <expr> i IndentWithI()
+
+autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
+
+nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9<cr>
+nnoremap <silent> dam :delm! <cr>
+map <silent> K `]
+map <silent> L `[
