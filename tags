@@ -27,8 +27,19 @@
 <C-t>	init.vim	/^nnoremap <C-t> :NERDTreeToggle<CR>$/;"	m
 <End>	init.vim	/^inoremap <End> <C-o>\$$/;"	m
 <End>	init.vim	/^map <End> \$$/;"	m
-<F1>	init.vim	/^nnoremap <silent> <F1> :make!<CR><cr>$/;"	m
-<F2>	init.vim	/^nnoremap <silent> <F2> :!run.bat<CR><cr>$/;"	m
+<Esc>	init.vim	/^nnoremap <Esc> <C-\\><C-n>$/;"	m
+<F10>	init.vim	/^nnoremap <silent> <F10> :w <bar> Make f10<CR><cr>$/;"	m
+<F11>	init.vim	/^nnoremap <silent> <F11> :w <bar> Make f11<CR><cr>$/;"	m
+<F12>	init.vim	/^nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>$/;"	m
+<F1>	init.vim	/^nnoremap <silent> <F1> :w <bar> Make f1<CR><cr>$/;"	m
+<F2>	init.vim	/^nnoremap <silent> <F2> :w <bar> Make f2<CR><cr>$/;"	m
+<F3>	init.vim	/^nnoremap <silent> <F3> :w <bar> Make f3<CR><cr>$/;"	m
+<F4>	init.vim	/^nnoremap <silent> <F4> :w <bar> Make f4<CR><cr>$/;"	m
+<F5>	init.vim	/^nnoremap <silent> <F5> :w <bar> Make f5<CR><cr>$/;"	m
+<F6>	init.vim	/^nnoremap <silent> <F6> :w <bar> Make f6<CR><cr>$/;"	m
+<F7>	init.vim	/^nnoremap <silent> <F7> :w <bar> Make f7<CR><cr>$/;"	m
+<F8>	init.vim	/^nnoremap <silent> <F8> :w <bar> Make f8<CR><cr>$/;"	m
+<F9>	init.vim	/^nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>$/;"	m
 <Home>	init.vim	/^inoremap <Home> <C-o>^$/;"	m
 <Home>	init.vim	/^map <Home> ^$/;"	m
 <Leader>;	init.vim	/^map <Leader>; <Plug>(easymotion-lineforward)$/;"	m
@@ -44,9 +55,9 @@
 <c-p>	init.vim	/^nmap <c-p> <plug>(YoinkPostPasteSwapForward)$/;"	m
 <leader>/	init.vim	/^nnoremap <leader>\/ <cmd>nohlsearch<CR> $/;"	m
 <leader><cr>	init.vim	/^map <leader><cr> i<cr><ESC>$/;"	m
-<leader>MM	init.vim	/^nmap <leader>MM <plug>(SubversiveSubstituteWordRange)$/;"	m
-<leader>a	init.vim	/^nnoremap <silent> <leader>a :call MarkAndDo()<CR>$/;"	m
-<leader>m	init.vim	/^nmap <leader>m <plug>(SubversiveSubstituteRange)$/;"	m
+<leader>SS	init.vim	/^nmap <leader>SS <plug>(SubversiveSubstituteWordRange)$/;"	m
+<leader>dam	init.vim	/^nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>$/;"	m
+<leader>s	init.vim	/^nmap <leader>s <plug>(SubversiveSubstituteRange)$/;"	m
 <leader>tq	init.vim	/^nmap <leader>tq :ClearQuickfixList<cr>$/;"	m
 B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
@@ -55,17 +66,19 @@ GetTagIndxUnderCursor	.\tagselect.vim	/^function! s:GetTagIndxUnderCursor() " {{
 GrepWordUnderCursor	init.vim	/^function! GrepWordUnderCursor()$/;"	f
 HH	init.vim	/^nnoremap <silent> HH :call OpenHeaderInSideWindow()<cr>$/;"	m
 HeaderToggle	init.vim	/^function! HeaderToggle()$/;"	f
+IndentWithI	init.vim	/^function! IndentWithI()$/;"	f
 InputTagIndex	.\tagselect.vim	/^function! s:InputTagIndex()$/;"	f
 InsertText	init.vim	/^function! InsertText(text)$/;"	f
-M	init.vim	/^nmap M <plug>(SubversiveSubstituteToEndOfLine)$/;"	m
+K	init.vim	/^map <silent> K `]$/;"	m
+L	init.vim	/^map <silent> L `[$/;"	m
 M.peek_definition	.\lua\lsp-ext.lua	/^function M.peek_definition()$/;"	f
 M.preview_location	.\lua\lsp-ext.lua	/^function M.preview_location(location, context, before_context)$/;"	f
 M.preview_location_callback	.\lua\lsp-ext.lua	/^function M.preview_location_callback(_, method, result)$/;"	f
-MarkAndDo	init.vim	/^function! MarkAndDo()$/;"	f
 OpenHeaderInSideWindow	init.vim	/^function! OpenHeaderInSideWindow()$/;"	f
 P	init.vim	/^nmap P <plug>(YoinkPaste_P)$/;"	m
 Prompt	.\tagselect.vim	/^function! s:Prompt(bufNr)$/;"	f
 Quit	.\tagselect.vim	/^function! s:Quit()$/;"	f
+S	init.vim	/^nmap S <plug>(SubversiveSubstituteToEndOfLine)$/;"	m
 SelectTag	.\tagselect.vim	/^function! s:SelectTag(cmd, tagCount, bang)$/;"	f
 SelectTagCount	.\tagselect.vim	/^function! s:SelectTagCount(tagCount, bang)$/;"	f
 SelectTagUnderCursor	.\tagselect.vim	/^function! s:SelectTagUnderCursor(bang)$/;"	f
@@ -94,11 +107,12 @@ X	init.vim	/^nnoremap X D$/;"	m
 [y	init.vim	/^nmap [y <plug>(YoinkRotateBack)$/;"	m
 ]y	init.vim	/^nmap ]y <plug>(YoinkRotateForward)$/;"	m
 aa	init.vim	/^omap aa <plug>Argumentative_OpPendingOuterTextObject$/;"	m
-build_prim	.\colors\handmade.vim	/^function! s:build_prim(hi_elem, field)$/;"	f
+build_prim	colors\handmade.vim	/^function! s:build_prim(hi_elem, field)$/;"	f
 cC	init.vim	/^nmap cC ^cg_$/;"	m
 c_commands	init.vim	/^augroup c_commands$/;"	a
 csharp_commands	init.vim	/^augroup csharp_commands$/;"	a
 dD	init.vim	/^nmap dD ^dg_$/;"	m
+dam	init.vim	/^nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>$/;"	m
 enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
 expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
 fb	init.vim	/^nnoremap fb <cmd>Telescope buffers<cr>$/;"	m
@@ -116,7 +130,7 @@ g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']
 g:OmniSharp_highlighting	init.vim	/^let g:OmniSharp_highlighting = 0$/;"	v
 g:OmniSharp_server_stdio	init.vim	/^let g:OmniSharp_server_stdio = 1$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
-g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
+g:colors_name	colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
 g:cursorhold_updatetime	init.vim	/^let g:cursorhold_updatetime = 100$/;"	v
 g:deoplete#enable_at_startup	init.vim	/^let g:deoplete#enable_at_startup = 1$/;"	v
@@ -129,7 +143,7 @@ g:deoplete#sources#clang#sort_algo	init.vim	/^let g:deoplete#sources#clang#sort_
 g:deoplete#sources#jedi#show_docstring	init.vim	/^let g:deoplete#sources#jedi#show_docstring = 1$/;"	v
 g:echodoc#enable_at_startup	init.vim	/^let g:echodoc#enable_at_startup = 1$/;"	v
 g:echodoc#type	init.vim	/^let g:echodoc#type = 'floating'$/;"	v
-g:python3_host_prog	init.vim	/^    let g:python3_host_prog = 'C:\\Python310\\python.exe'$/;"	v
+g:python3_host_prog	init.vim	/^    let g:python3_host_prog = 'C:\\Program Files\\Python311\\python.exe'$/;"	v
 g:tagbar_foldlevel	init.vim	/^let g:tagbar_foldlevel = 0$/;"	v
 g:tagbar_map_togglesort	init.vim	/^let g:tagbar_map_togglesort = ''$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
@@ -162,6 +176,7 @@ ha	init.vim	/^nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>$/;"	m
 hh	init.vim	/^nnoremap <silent> hh <cmd>call HeaderToggle()<cr>$/;"	m
 hn	init.vim	/^nnoremap hn <cmd>lua require("harpoon.ui").nav_next()<cr> $/;"	m
 hp	init.vim	/^nnoremap hp <cmd>lua require("harpoon.ui").nav_prev()<cr> $/;"	m
+i	init.vim	/^nnoremap <expr> i IndentWithI()$/;"	m
 ia	init.vim	/^omap ia <plug>Argumentative_OpPendingInnerTextObject$/;"	m
 j	init.vim	/^noremap j h$/;"	m
 k	init.vim	/^noremap k gj$/;"	m
@@ -173,104 +188,102 @@ local f 	.\luasnip.lua	/^local f = ls.function_node$/;"	f
 local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
 local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
 local on_attach 	.\lsp.lua	/^local on_attach = function(client, bufnr)$/;"	f
-m	init.vim	/^nmap m <plug>(SubversiveSubstitute)$/;"	m
 mapleader	init.vim	/^let mapleader=" "$/;"	v
-mm	init.vim	/^nmap mm <plug>(SubversiveSubstituteLine)$/;"	m
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
-s	init.vim	/^map s <Plug>(easymotion-overwin-f2)$/;"	m
-s:b	.\colors\handmade.vim	/^let s:b      = ",bold"$/;"	v
-s:bg_none	.\colors\handmade.vim	/^let s:bg_none = ' guibg=NONE ctermbg=NONE'$/;"	v
-s:bg_normal	.\colors\handmade.vim	/^  let s:bg_normal = s:bg_background$/;"	v
-s:bg_normal	.\colors\handmade.vim	/^  let s:bg_normal = s:bg_none$/;"	v
-s:c	.\colors\handmade.vim	/^let s:c      = ",undercurl"$/;"	v
-s:cterm_aqua	.\colors\handmade.vim	/^  let s:cterm_aqua       = "109"$/;"	v
-s:cterm_aqua	.\colors\handmade.vim	/^  let s:cterm_aqua       = "14"  " LightCyan$/;"	v
-s:cterm_blue	.\colors\handmade.vim	/^  let s:cterm_blue       = "110"$/;"	v
-s:cterm_blue	.\colors\handmade.vim	/^  let s:cterm_blue       = "12"  " LightBlue$/;"	v
-s:cterm_comment	.\colors\handmade.vim	/^  let s:cterm_comment    = "243"$/;"	v
-s:cterm_comment	.\colors\handmade.vim	/^  let s:cterm_comment    = "8"   " LightGrey$/;"	v
-s:cterm_delbg	.\colors\handmade.vim	/^  let s:cterm_delbg      = "167"$/;"	v
-s:cterm_delbg	.\colors\handmade.vim	/^  let s:cterm_delbg      = "9"   " LightRed$/;"	v
-s:cterm_foreground	.\colors\handmade.vim	/^  let s:cterm_foreground = "250"$/;"	v
-s:cterm_foreground	.\colors\handmade.vim	/^  let s:cterm_foreground = "7"   " White$/;"	v
-s:cterm_green	.\colors\handmade.vim	/^  let s:cterm_green      = "10"  " LightGreen$/;"	v
-s:cterm_green	.\colors\handmade.vim	/^  let s:cterm_green      = "143"$/;"	v
-s:cterm_line	.\colors\handmade.vim	/^  let s:cterm_line       = "0"   " Black$/;"	v
-s:cterm_line	.\colors\handmade.vim	/^  let s:cterm_line       = "235"$/;"	v
-s:cterm_orange	.\colors\handmade.vim	/^  let s:cterm_orange     = "173"$/;"	v
-s:cterm_orange	.\colors\handmade.vim	/^  let s:cterm_orange     = "3"   " DarkYellow$/;"	v
-s:cterm_purple	.\colors\handmade.vim	/^  let s:cterm_purple     = "13"  " LightMagenta$/;"	v
-s:cterm_purple	.\colors\handmade.vim	/^  let s:cterm_purple     = "139"$/;"	v
-s:cterm_red	.\colors\handmade.vim	/^  let s:cterm_red        = "167"$/;"	v
-s:cterm_red	.\colors\handmade.vim	/^  let s:cterm_red        = "9"   " LightRed$/;"	v
-s:cterm_selection	.\colors\handmade.vim	/^  let s:cterm_selection  = "237"$/;"	v
-s:cterm_selection	.\colors\handmade.vim	/^  let s:cterm_selection  = "8"   " DarkGrey$/;"	v
-s:cterm_yellow	.\colors\handmade.vim	/^  let s:cterm_yellow     = "11"  " LightYellow$/;"	v
-s:cterm_yellow	.\colors\handmade.vim	/^  let s:cterm_yellow     = "221"$/;"	v
+s	init.vim	/^nmap s <plug>(SubversiveSubstitute)$/;"	m
+s:b	colors\handmade.vim	/^let s:b      = ",bold"$/;"	v
+s:bg_none	colors\handmade.vim	/^let s:bg_none = ' guibg=NONE ctermbg=NONE'$/;"	v
+s:bg_normal	colors\handmade.vim	/^  let s:bg_normal = s:bg_background$/;"	v
+s:bg_normal	colors\handmade.vim	/^  let s:bg_normal = s:bg_none$/;"	v
+s:c	colors\handmade.vim	/^let s:c      = ",undercurl"$/;"	v
+s:cterm_aqua	colors\handmade.vim	/^  let s:cterm_aqua       = "109"$/;"	v
+s:cterm_aqua	colors\handmade.vim	/^  let s:cterm_aqua       = "14"  " LightCyan$/;"	v
+s:cterm_blue	colors\handmade.vim	/^  let s:cterm_blue       = "110"$/;"	v
+s:cterm_blue	colors\handmade.vim	/^  let s:cterm_blue       = "12"  " LightBlue$/;"	v
+s:cterm_comment	colors\handmade.vim	/^  let s:cterm_comment    = "243"$/;"	v
+s:cterm_comment	colors\handmade.vim	/^  let s:cterm_comment    = "8"   " LightGrey$/;"	v
+s:cterm_delbg	colors\handmade.vim	/^  let s:cterm_delbg      = "167"$/;"	v
+s:cterm_delbg	colors\handmade.vim	/^  let s:cterm_delbg      = "9"   " LightRed$/;"	v
+s:cterm_foreground	colors\handmade.vim	/^  let s:cterm_foreground = "250"$/;"	v
+s:cterm_foreground	colors\handmade.vim	/^  let s:cterm_foreground = "7"   " White$/;"	v
+s:cterm_green	colors\handmade.vim	/^  let s:cterm_green      = "10"  " LightGreen$/;"	v
+s:cterm_green	colors\handmade.vim	/^  let s:cterm_green      = "143"$/;"	v
+s:cterm_line	colors\handmade.vim	/^  let s:cterm_line       = "0"   " Black$/;"	v
+s:cterm_line	colors\handmade.vim	/^  let s:cterm_line       = "235"$/;"	v
+s:cterm_orange	colors\handmade.vim	/^  let s:cterm_orange     = "173"$/;"	v
+s:cterm_orange	colors\handmade.vim	/^  let s:cterm_orange     = "3"   " DarkYellow$/;"	v
+s:cterm_purple	colors\handmade.vim	/^  let s:cterm_purple     = "13"  " LightMagenta$/;"	v
+s:cterm_purple	colors\handmade.vim	/^  let s:cterm_purple     = "139"$/;"	v
+s:cterm_red	colors\handmade.vim	/^  let s:cterm_red        = "167"$/;"	v
+s:cterm_red	colors\handmade.vim	/^  let s:cterm_red        = "9"   " LightRed$/;"	v
+s:cterm_selection	colors\handmade.vim	/^  let s:cterm_selection  = "237"$/;"	v
+s:cterm_selection	colors\handmade.vim	/^  let s:cterm_selection  = "8"   " DarkGrey$/;"	v
+s:cterm_yellow	colors\handmade.vim	/^  let s:cterm_yellow     = "11"  " LightYellow$/;"	v
+s:cterm_yellow	colors\handmade.vim	/^  let s:cterm_yellow     = "221"$/;"	v
 s:curTagName	.\tagselect.vim	/^let s:curTagName = ''$/;"	v
-s:fg_none	.\colors\handmade.vim	/^let s:fg_none = ' guifg=NONE ctermfg=NONE'$/;"	v
-s:gui_background	.\colors\handmade.vim	/^  let s:gui_background = "#0c0c0c"$/;"	v
-s:gui_black	.\colors\handmade.vim	/^  let s:gui_black    = "#000000"$/;"	v
-s:gui_comment	.\colors\handmade.vim	/^  let s:gui_comment    = "#606060"$/;"	v
-s:gui_line	.\colors\handmade.vim	/^  let s:gui_line       = "#282a2e"$/;"	v
-s:gui_selection	.\colors\handmade.vim	/^  let s:gui_selection  = "#373b41"$/;"	v
-s:i	.\colors\handmade.vim	/^let s:i      = ",italic"$/;"	v
+s:fg_none	colors\handmade.vim	/^let s:fg_none = ' guifg=NONE ctermfg=NONE'$/;"	v
+s:gui_background	colors\handmade.vim	/^  let s:gui_background = "#0c0c0c"$/;"	v
+s:gui_black	colors\handmade.vim	/^  let s:gui_black    = "#000000"$/;"	v
+s:gui_comment	colors\handmade.vim	/^  let s:gui_comment    = "#606060"$/;"	v
+s:gui_line	colors\handmade.vim	/^  let s:gui_line       = "#282a2e"$/;"	v
+s:gui_selection	colors\handmade.vim	/^  let s:gui_selection  = "#373b41"$/;"	v
+s:i	colors\handmade.vim	/^let s:i      = ",italic"$/;"	v
 s:l	.\Session.vim	/^let s:l = 280 - ((19 * winheight(0) + 33) \/ 67)$/;"	v
 s:l	.\Session.vim	/^let s:l = 38 - ((21 * winheight(0) + 33) \/ 67)$/;"	v
 s:l	.\Session.vim	/^let s:l = 64 - ((28 * winheight(0) + 33) \/ 67)$/;"	v
 s:myBufNum	.\tagselect.vim	/^let s:myBufNum = -1$/;"	v
-s:n	.\colors\handmade.vim	/^let s:n      = "NONE"$/;"	v
+s:n	colors\handmade.vim	/^let s:n      = "NONE"$/;"	v
 s:nextTagPat	.\tagselect.vim	/^let s:nextTagPat = '^\\s\\{0,2}\\d\\+'$/;"	v
-s:none	.\colors\handmade.vim	/^let s:none   = "NONE"$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette = {'gui' : {} , 'cterm' : {}}$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.addbg      = { 'dark' : "65"               , 'light' : "194" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.addfg      = { 'dark' : "193"              , 'light' : "22"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.aqua       = { 'dark' : s:cterm_aqua       , 'light' : "23"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.background = { 'dark' : "234"              , 'light' : "254" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.blue       = { 'dark' : s:cterm_blue       , 'light' : "17"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.changebg   = { 'dark' : "60"               , 'light' : "189" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.changefg   = { 'dark' : "189"              , 'light' : "53"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.comment    = { 'dark' : s:cterm_comment    , 'light' : "59"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.darkblue   = { 'dark' : "17"               , 'light' : "194" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.darkcolumn = { 'dark' : "234"              , 'light' : "244" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.darkcyan   = { 'dark' : "24"               , 'light' : "22"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.darkpurple = { 'dark' : "53"               , 'light' : "53"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.darkred    = { 'dark' : "52"               , 'light' : "189" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.delbg      = { 'dark' : s:cterm_delbg      , 'light' : "224" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.foreground = { 'dark' : s:cterm_foreground , 'light' : "16"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.green      = { 'dark' : s:cterm_green      , 'light' : "22"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.line       = { 'dark' : s:cterm_line       , 'light' : "252" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.orange     = { 'dark' : s:cterm_orange     , 'light' : "94"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.purple     = { 'dark' : s:cterm_purple     , 'light' : "53"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.red        = { 'dark' : s:cterm_red        , 'light' : "52"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.selection  = { 'dark' : s:cterm_selection  , 'light' : "250" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.window     = { 'dark' : "236"              , 'light' : "247" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.cterm.yellow     = { 'dark' : s:cterm_yellow     , 'light' : "58"  }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.addbg      = { 'dark' : "#5F875F"        , 'light' : "#d7ffd7" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.addfg      = { 'dark' : "#d7ffaf"        , 'light' : "#005f00" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.aqua       = { 'dark' : "#649792"        , 'light' : "#005f5f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.background = { 'dark' : s:gui_background , 'light' : "#e4e4e4" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.blue       = { 'dark' : "#649792"        , 'light' : "#00005f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.changebg   = { 'dark' : "#5F5F87"        , 'light' : "#d7d7ff" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.changefg   = { 'dark' : "#d7d7ff"        , 'light' : "#5f005f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.comment    = { 'dark' : s:gui_comment    , 'light' : "#5f5f5f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.darkblue   = { 'dark' : "#00005f"        , 'light' : "#d7ffd7" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.darkcolumn = { 'dark' : "#000000"        , 'light' : "#808080" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.darkcyan   = { 'dark' : "#005f5f"        , 'light' : "#005f00" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.darkpurple = { 'dark' : "#5f005f"        , 'light' : "#5f005f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.darkred    = { 'dark' : "#5f0000"        , 'light' : "#d7d7ff" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.delbg      = { 'dark' : "#cc6666"        , 'light' : "#ffd7d7" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.foreground = { 'dark' : "#bf9d73"        , 'light' : "#000000" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.green      = { 'dark' : "#7f9a59"        , 'light' : "#005f00" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.line       = { 'dark' : s:gui_line       , 'light' : "#d0d0d0" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.orange     = { 'dark' : "#8f723d"        , 'light' : "#875f00" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.purple     = { 'dark' : "#b294bb"        , 'light' : "#5f005f" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.red        = { 'dark' : "#ca7768"        , 'light' : "#5f0000" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.selection  = { 'dark' : s:gui_selection  , 'light' : "#bcbcbc" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.window     = { 'dark' : "#303030"        , 'light' : "#9e9e9e" }$/;"	v
-s:palette	.\colors\handmade.vim	/^let s:palette.gui.yellow     = { 'dark' : "#cea046"        , 'light' : "#5f5f00" }$/;"	v
-s:r	.\colors\handmade.vim	/^let s:r      = ",reverse"$/;"	v
-s:s	.\colors\handmade.vim	/^let s:s      = ",standout"$/;"	v
+s:none	colors\handmade.vim	/^let s:none   = "NONE"$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette = {'gui' : {} , 'cterm' : {}}$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.addbg      = { 'dark' : "65"               , 'light' : "194" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.addfg      = { 'dark' : "193"              , 'light' : "22"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.aqua       = { 'dark' : s:cterm_aqua       , 'light' : "23"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.background = { 'dark' : "234"              , 'light' : "254" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.blue       = { 'dark' : s:cterm_blue       , 'light' : "17"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.changebg   = { 'dark' : "60"               , 'light' : "189" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.changefg   = { 'dark' : "189"              , 'light' : "53"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.comment    = { 'dark' : s:cterm_comment    , 'light' : "59"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.darkblue   = { 'dark' : "17"               , 'light' : "194" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.darkcolumn = { 'dark' : "234"              , 'light' : "244" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.darkcyan   = { 'dark' : "24"               , 'light' : "22"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.darkpurple = { 'dark' : "53"               , 'light' : "53"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.darkred    = { 'dark' : "52"               , 'light' : "189" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.delbg      = { 'dark' : s:cterm_delbg      , 'light' : "224" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.foreground = { 'dark' : s:cterm_foreground , 'light' : "16"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.green      = { 'dark' : s:cterm_green      , 'light' : "22"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.line       = { 'dark' : s:cterm_line       , 'light' : "252" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.orange     = { 'dark' : s:cterm_orange     , 'light' : "94"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.purple     = { 'dark' : s:cterm_purple     , 'light' : "53"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.red        = { 'dark' : s:cterm_red        , 'light' : "52"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.selection  = { 'dark' : s:cterm_selection  , 'light' : "250" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.window     = { 'dark' : "236"              , 'light' : "247" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.cterm.yellow     = { 'dark' : s:cterm_yellow     , 'light' : "58"  }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.addbg      = { 'dark' : "#5F875F"        , 'light' : "#d7ffd7" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.addfg      = { 'dark' : "#d7ffaf"        , 'light' : "#005f00" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.aqua       = { 'dark' : "#649792"        , 'light' : "#005f5f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.background = { 'dark' : s:gui_background , 'light' : "#e4e4e4" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.blue       = { 'dark' : "#649792"        , 'light' : "#00005f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.changebg   = { 'dark' : "#5F5F87"        , 'light' : "#d7d7ff" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.changefg   = { 'dark' : "#d7d7ff"        , 'light' : "#5f005f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.comment    = { 'dark' : s:gui_comment    , 'light' : "#5f5f5f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.darkblue   = { 'dark' : "#00005f"        , 'light' : "#d7ffd7" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.darkcolumn = { 'dark' : "#000000"        , 'light' : "#808080" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.darkcyan   = { 'dark' : "#005f5f"        , 'light' : "#005f00" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.darkpurple = { 'dark' : "#5f005f"        , 'light' : "#5f005f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.darkred    = { 'dark' : "#5f0000"        , 'light' : "#d7d7ff" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.delbg      = { 'dark' : "#cc6666"        , 'light' : "#ffd7d7" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.foreground = { 'dark' : "#bf9d73"        , 'light' : "#000000" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.green      = { 'dark' : "#7f9a59"        , 'light' : "#005f00" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.line       = { 'dark' : s:gui_line       , 'light' : "#d0d0d0" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.orange     = { 'dark' : "#8f723d"        , 'light' : "#875f00" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.purple     = { 'dark' : "#b294bb"        , 'light' : "#5f005f" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.red        = { 'dark' : "#ca7768"        , 'light' : "#5f0000" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.selection  = { 'dark' : s:gui_selection  , 'light' : "#bcbcbc" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.window     = { 'dark' : "#303030"        , 'light' : "#9e9e9e" }$/;"	v
+s:palette	colors\handmade.vim	/^let s:palette.gui.yellow     = { 'dark' : "#cea046"        , 'light' : "#5f5f00" }$/;"	v
+s:r	colors\handmade.vim	/^let s:r      = ",reverse"$/;"	v
+s:s	colors\handmade.vim	/^let s:s      = ",standout"$/;"	v
 s:save_cpo	.\tagselect.vim	/^let s:save_cpo = &cpo$/;"	v
 s:save_splitbelow	.\Session.vim	/^let s:save_splitbelow = &splitbelow$/;"	v
 s:save_splitright	.\Session.vim	/^let s:save_splitright = &splitright$/;"	v
@@ -278,12 +291,13 @@ s:save_winminheight	.\Session.vim	/^let s:save_winminheight = &winminheight$/;"	
 s:save_winminwidth	.\Session.vim	/^let s:save_winminwidth = &winminwidth$/;"	v
 s:shortmess_save	.\Session.vim	/^let s:shortmess_save = &shortmess$/;"	v
 s:so_save	.\Session.vim	/^let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1$/;"	v
-s:style	.\colors\handmade.vim	/^let s:style = &background$/;"	v
+s:style	colors\handmade.vim	/^let s:style = &background$/;"	v
 s:sx	.\Session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
-s:t_none	.\colors\handmade.vim	/^let s:t_none = "NONE"$/;"	v
+s:t_none	colors\handmade.vim	/^let s:t_none = "NONE"$/;"	v
 s:title	.\tagselect.vim	/^let s:title = '[Tag Select]'$/;"	v
-s:u	.\colors\handmade.vim	/^let s:u      = ",underline"$/;"	v
+s:u	colors\handmade.vim	/^let s:u      = ",underline"$/;"	v
 s:wipebuf	.\Session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
+ss	init.vim	/^nmap ss <plug>(SubversiveSubstituteLine)$/;"	m
 t/	init.vim	/^nnoremap t\/ <cmd>bnext<cr>$/;"	m
 t1	init.vim	/^nnoremap t1 1gt$/;"	m
 t2	init.vim	/^nnoremap t2 2gt$/;"	m

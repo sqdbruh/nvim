@@ -34,7 +34,7 @@ Plug 'kshenoy/vim-signature'
 "Plug 'nvim-treesitter/nvim-treesitter-context'
 "Plug 'RRethy/nvim-treesitter-textsubjects'
 Plug 'sheerun/vim-polyglot'
-Plug 'dhruvasagar/vim-markify'
+"Plug 'dhruvasagar/vim-markify'
 
 Plug 'skywind3000/vim-preview'
 
@@ -85,10 +85,13 @@ Plug 'Shougo/neoinclude.vim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'OmniSharp/omnisharp-vim'
+Plug 'ludovicchabant/vim-gutentags'
 
 call plug#end()
+autocmd VimLeave * wshada!
 function! SetCSettings()
-    Plug 'ludovicchabant/vim-gutentags'
+    let g:gutentags_enabled = 1
+    let g:gutentags_add_default_project_roots = 0
     let g:gutentags_project_root = ['package.json', '.git']
     let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
     command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
@@ -100,56 +103,10 @@ function! SetCSettings()
                 \ '--tag-relative=yes',
                 \ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no',
                 \ ]
-    let g:gutentags_ctags_exclude = [
-                \ '*.git', '*.svg', '*.hg',
-                \ '*/tests/*',
-                \ 'build',
-                \ 'dist',
-                \ '*sites/*/files/*',
-                \ 'bin',
-                \ 'node_modules',
-                \ 'bower_components',
-                \ 'cache',
-                \ 'compiled',
-                \ 'docs',
-                \ 'example',
-                \ 'bundle',
-                \ 'vendor',
-                \ '*.md',
-                \ '*-lock.json',
-                \ '*.lock',
-                \ '*bundle*.js',
-                \ '*build*.js',
-                \ '.*rc*',
-                \ '*.json',
-                \ '*.min.*',
-                \ '*.map',
-                \ '*.bak',
-                \ '*.zip',
-                \ '*.pyc',
-                \ '*.class',
-                \ '*.sln',
-                \ '*.Master',
-                \ '*.csproj',
-                \ '*.tmp',
-                \ '*.csproj.user',
-                \ '*.cache',
-                \ '*.pdb',
-                \ 'tags*',
-                \ 'cscope.*',
-                \ '*.css',
-                \ '*.less',
-                \ '*.scss',
-                \ '*.exe', '*.dll',
-                \ '*.mp3', '*.ogg', '*.flac',
-                \ '*.swp', '*.swo',
-                \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
-                \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
-                \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
-                \ ]
 endfunction
 
 function! SetCSSettings()
+    let g:gutentags_enabled = 0
     "let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
     "let g:OmniSharp_selector_findusages = 'fzf'
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
@@ -502,7 +459,7 @@ let g:clang_format#style_options = {
             \ "SortIncludes" : "Never",
             \ "AllowShortIfStatementsOnASingleLine" : "false",
             \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "AlignConsecutiveAssignments  " : "Consecutive",
+            \ "SpaceBeforeParens " : "Never",
             \ "Standard" : "C++11"}
 
 autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
@@ -534,6 +491,7 @@ nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>
 
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
+hi! SignatureMarkText guifg=#bf9d73
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
@@ -555,7 +513,7 @@ nnoremap <expr> i IndentWithI()
 
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
-nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9<cr>
-nnoremap <silent> dam :delm! <cr>
+nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>
+nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>
 map <silent> K `]
 map <silent> L `[
