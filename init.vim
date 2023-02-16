@@ -34,7 +34,7 @@ Plug 'kshenoy/vim-signature'
 "Plug 'nvim-treesitter/nvim-treesitter-context'
 "Plug 'RRethy/nvim-treesitter-textsubjects'
 Plug 'sheerun/vim-polyglot'
-"Plug 'dhruvasagar/vim-markify'
+Plug 'dhruvasagar/vim-markify'
 
 Plug 'skywind3000/vim-preview'
 
