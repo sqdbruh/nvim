@@ -86,8 +86,8 @@ Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'ludovicchabant/vim-gutentags'
-
 call plug#end()
+
 autocmd VimLeave * wshada!
 function! SetCSettings()
     let g:gutentags_enabled = 1
@@ -105,10 +105,40 @@ function! SetCSettings()
                 \ ]
 endfunction
 
+set grepprg=rg\ --vimgrep
+
+function! Grep(...)
+	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+endfunction
+
+command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
+
+cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
+cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
+
+augroup quickfix
+	autocmd!
+    autocmd QuickFixCmdPost cgetexpr cwindow
+    autocmd QuickFixCmdPost lgetexpr lwindow
+augroup END
+
+"lol
+"lol
+
+function! Demo()
+    let cword = expand("<cword>")
+    execute 'Grep '.cword
+
+    let command = 'cdo s/'.cword.'/'.input("New name: ").'/g'
+    exe command
+    "cexpr []
+    "cclose
+endfunction
+nmap <silent> <Leader>rn :call Demo() <cr>
+
 function! SetCSSettings()
     let g:gutentags_enabled = 0
-    "let g:OmniSharp_selector_ui = 'fzf'    " Use fzf
-    "let g:OmniSharp_selector_findusages = 'fzf'
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
     nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
     nmap <silent> <buffer> <Leader>osfu <Plug>(omnisharp_fix_usings)
@@ -464,6 +494,7 @@ let g:clang_format#style_options = {
 
 autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer>cf :ClangFormat<CR>
+
 
 highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
 highlight! EasyMotionTarget2First guibg=NONE guifg=#cea046
