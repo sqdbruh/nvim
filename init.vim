@@ -117,25 +117,55 @@ command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
-augroup quickfix
-	autocmd!
-    autocmd QuickFixCmdPost cgetexpr cwindow
-    autocmd QuickFixCmdPost lgetexpr lwindow
-augroup END
+"augroup quickfix
+	"autocmd!
+    "autocmd QuickFixCmdPost cgetexpr cwindow
+    "autocmd QuickFixCmdPost lgetexpr lwindow
+"augroup END
 
+"kek
+"kek
 "lol
 "lol
+"lol
+"lol
+"kek
+"lol
 
-function! Demo()
+nnoremap gr gd[{V%::s/<C-R>///ge<left><left><left>
+
+function! ReplaceWordInAllFilesWithPrompt()
     let cword = expand("<cword>")
+    if len(cword) < 1
+        return
+    endif
     execute 'Grep '.cword
 
-    let command = 'cdo s/'.cword.'/'.input("New name: ").'/g'
+    let command = 'cdo s/\<'.cword.'\>/'.input("Replace '".cword."' with: ").'/gec'
+    echo command
     exe command
-    "cexpr []
-    "cclose
+    cexpr []
+    cclose
+    update
+    redraw
 endfunction
-nmap <silent> <Leader>rn :call Demo() <cr>
+function! ReplaceWordInAllFiles()
+    let cword = expand("<cword>")
+    if len(cword) < 1
+        return
+    endif
+    execute 'Grep '.cword
+
+    let command = 'cdo s/\<'.cword.'\>/'.input("Replace '".cword."' with: ").'/ge'
+    echo command
+    exe command
+    cexpr []
+    cclose
+    update
+    redraw
+endfunction
+nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
+nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
 
 function! SetCSSettings()
     let g:gutentags_enabled = 0

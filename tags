@@ -49,7 +49,8 @@
 <Leader>j	init.vim	/^map <Leader>j <Plug>(easymotion-linebackward)$/;"	m
 <Leader>k	init.vim	/^map <Leader>k <Plug>(easymotion-j)$/;"	m
 <Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
-<Leader>rn	init.vim	/^nmap <silent> <Leader>rn :call Demo() <cr>$/;"	m
+<Leader>rnc	init.vim	/^nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>$/;"	m
+<Leader>rng	init.vim	/^nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>$/;"	m
 <Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
 <SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
 <c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m
@@ -62,7 +63,6 @@
 <leader>tq	init.vim	/^nmap <leader>tq :ClearQuickfixList<cr>$/;"	m
 B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
-Demo	init.vim	/^function! Demo()$/;"	f
 E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
 GetTagIndxUnderCursor	.\tagselect.vim	/^function! s:GetTagIndxUnderCursor() " {{{$/;"	f
 Grep	init.vim	/^command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)$/;"	c
@@ -83,6 +83,8 @@ OpenHeaderInSideWindow	init.vim	/^function! OpenHeaderInSideWindow()$/;"	f
 P	init.vim	/^nmap P <plug>(YoinkPaste_P)$/;"	m
 Prompt	.\tagselect.vim	/^function! s:Prompt(bufNr)$/;"	f
 Quit	.\tagselect.vim	/^function! s:Quit()$/;"	f
+ReplaceWordInAllFiles	init.vim	/^function! ReplaceWordInAllFiles()$/;"	f
+ReplaceWordInAllFilesWithPrompt	init.vim	/^function! ReplaceWordInAllFilesWithPrompt()$/;"	f
 S	init.vim	/^nmap S <plug>(SubversiveSubstituteToEndOfLine)$/;"	m
 SelectTag	.\tagselect.vim	/^function! s:SelectTag(cmd, tagCount, bang)$/;"	f
 SelectTagCount	.\tagselect.vim	/^function! s:SelectTagCount(tagCount, bang)$/;"	f
@@ -166,6 +168,7 @@ g]	.\tagselect.vim	/^  vnoremap <silent> g] :<C-U>call <SID>TagSelectVisual('tse
 ge	init.vim	/^map <silent> ge <Plug>CamelCaseMotion_ge$/;"	m
 gp	init.vim	/^nmap gp <plug>(YoinkPaste_gp)$/;"	m
 gp	init.vim	/^nnoremap gp <cmd>PreviewTag<cr>$/;"	m
+gr	init.vim	/^nnoremap gr gd[{V%::s\/<C-R>\/\/\/ge<left><left><left>$/;"	m
 grep	init.vim	/^cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'$/;"	m
 gt	init.vim	/^nmap gt <cmd>TselectCword<cr>$/;"	m
 h1	init.vim	/^nnoremap h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> $/;"	m
@@ -197,7 +200,6 @@ local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"
 local on_attach 	.\lsp.lua	/^local on_attach = function(client, bufnr)$/;"	f
 mapleader	init.vim	/^let mapleader=" "$/;"	v
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
-quickfix	init.vim	/^augroup quickfix$/;"	a
 s	init.vim	/^nmap s <plug>(SubversiveSubstitute)$/;"	m
 s:b	.\colors\handmade.vim	/^let s:b      = ",bold"$/;"	v
 s:bg_none	.\colors\handmade.vim	/^let s:bg_none = ' guibg=NONE ctermbg=NONE'$/;"	v
