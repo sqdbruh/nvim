@@ -1,4 +1,6 @@
 set nocompatible
+set backupdir=~/vimtmp//,.
+set directory=~/vimtmp//,.
 noremap ; l
 noremap l k
 noremap k j
@@ -11,6 +13,10 @@ command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
+Plug 'sharkdp/fd'
+Plug 'sharkdp/bat'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'vim-utils/vim-man'
 Plug 'normen/vim-pio'
@@ -29,10 +35,6 @@ Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
 Plug 'kshenoy/vim-signature'
 
-"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-"Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-"Plug 'nvim-treesitter/nvim-treesitter-context'
-"Plug 'RRethy/nvim-treesitter-textsubjects'
 Plug 'sheerun/vim-polyglot'
 Plug 'dhruvasagar/vim-markify'
 
@@ -90,19 +92,19 @@ call plug#end()
 
 autocmd VimLeave * wshada!
 function! SetCSettings()
-    let g:gutentags_enabled = 1
-    let g:gutentags_add_default_project_roots = 0
-    let g:gutentags_project_root = ['package.json', '.git']
-    let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
-    command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
-    let g:gutentags_generate_on_new = 1
-    let g:gutentags_generate_on_missing = 1
-    let g:gutentags_generate_on_write = 1
-    let g:gutentags_generate_on_empty_buffer = 0
-    let g:gutentags_ctags_extra_args = [
-                \ '--tag-relative=yes',
-                \ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no',
-                \ ]
+    "let g:gutentags_enabled = 1
+    "let g:gutentags_add_default_project_roots = 0
+    "let g:gutentags_project_root = ['package.json', '.git']
+    "let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+    "command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+    "let g:gutentags_generate_on_new = 1
+    "let g:gutentags_generate_on_missing = 1
+    "let g:gutentags_generate_on_write = 1
+    "let g:gutentags_generate_on_empty_buffer = 0
+    "let g:gutentags_ctags_extra_args = [
+                "\ '--tag-relative=yes',
+                "\ '-R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no',
+                "\ ]
 endfunction
 
 set grepprg=rg\ --vimgrep
@@ -407,7 +409,9 @@ nnoremap <Leader>h <cmd>split<cr>
 nnoremap ff <cmd>Telescope find_files<cr>
 nnoremap fl <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
-nnoremap fh <cmd>Telescope tags<cr>
+"nnoremap ft <cmd>Telescope tags<cr>
+nnoremap ft <cmd>call fzf#vim#tags('', {'options': '--no-preview'})<cr>
+
 nnoremap fq <cmd>Telescope quickfix<cr>
 nnoremap fh <cmd>Telescope harpoon marks<cr>
 nnoremap fr <cmd>Telescope resume<cr>
@@ -550,6 +554,7 @@ nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>
 "set errorformat=\ %#%f(%l)\ :\ %#%t%[A-z]%#\ %[A-Z\ ]%#%n:\ %m
 
 
+let $BAT_THEME='gruvbox'
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73

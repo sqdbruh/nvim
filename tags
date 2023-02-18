@@ -4,6 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+$BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 (	init.vim	/^nmap ( <plug>Argumentative_MoveLeft$/;"	m
 )	init.vim	/^nmap ) <plug>Argumentative_MoveRight$/;"	m
 /	init.vim	/^map  \/ <Plug>(easymotion-sn)$/;"	m
@@ -107,10 +108,6 @@ W	init.vim	/^map <silent> W <Plug>CamelCaseMotion_w$/;"	m
 X	init.vim	/^nnoremap X D$/;"	m
 ["<S-Tab>"] 	.\nvim-cmp.lua	/^        ["<S-Tab>"] = cmp.mapping(function()$/;"	f
 ["<Tab>"] 	.\nvim-cmp.lua	/^        ["<Tab>"] = cmp.mapping(function(fallback)$/;"	f
-["Kf"] 	.\tree-sitter.lua	/^          ["Kf"] = "@function.outer",$/;"	f
-["af"] 	.\tree-sitter.lua	/^        ["af"] = "@function.outer",$/;"	f
-["if"] 	.\tree-sitter.lua	/^        ["if"] = "@function.inner",$/;"	f
-['@function.outer'] 	.\tree-sitter.lua	/^        ['@function.outer'] = 'V', -- linewise$/;"	f
 [y	init.vim	/^nmap [y <plug>(YoinkRotateBack)$/;"	m
 ]y	init.vim	/^nmap ]y <plug>(YoinkRotateForward)$/;"	m
 aa	init.vim	/^omap aa <plug>Argumentative_OpPendingOuterTextObject$/;"	m
@@ -126,11 +123,11 @@ fb	init.vim	/^nnoremap fb <cmd>Telescope buffers<cr>$/;"	m
 ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
 fg	init.vim	/^nnoremap fg :call GrepWordUnderCursor()<CR>$/;"	m
 fh	init.vim	/^nnoremap fh <cmd>Telescope harpoon marks<cr>$/;"	m
-fh	init.vim	/^nnoremap fh <cmd>Telescope tags<cr>$/;"	m
 fl	init.vim	/^nnoremap fl <cmd>Telescope live_grep<cr>$/;"	m
 fp	init.vim	/^nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
 fq	init.vim	/^nnoremap fq <cmd>Telescope quickfix<cr>$/;"	m
 fr	init.vim	/^nnoremap fr <cmd>Telescope resume<cr>$/;"	m
+ft	init.vim	/^nnoremap ft <cmd>call fzf#vim#tags('', {'options': '--no-preview'})<cr>$/;"	m
 g:EasyMotion_do_mapping	init.vim	/^let g:EasyMotion_do_mapping = 0 " Disable default mappings$/;"	v
 g:EasyMotion_smartcase	init.vim	/^let g:EasyMotion_smartcase = 1$/;"	v
 g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']$/;"	v
