@@ -1,6 +1,7 @@
 set nocompatible
 set backupdir=~/vimtmp//,.
 set directory=~/vimtmp//,.
+set noswapfile
 noremap ; l
 noremap l k
 noremap k j
@@ -13,6 +14,8 @@ command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
+Plug 'krfl/fleetish-vim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'sharkdp/fd'
 Plug 'sharkdp/bat'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -71,6 +74,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-pathogen'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-fugitive'
 
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
@@ -92,6 +96,9 @@ call plug#end()
 
 autocmd VimLeave * wshada!
 function! SetCSettings()
+    nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
+    nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
+
     "let g:gutentags_enabled = 1
     "let g:gutentags_add_default_project_roots = 0
     "let g:gutentags_project_root = ['package.json', '.git']
@@ -166,8 +173,6 @@ function! ReplaceWordInAllFiles()
     update
     redraw
 endfunction
-nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
-nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
 
 function! SetCSSettings()
     let g:gutentags_enabled = 0
@@ -415,6 +420,7 @@ nnoremap ft <cmd>call fzf#vim#tags('', {'options': '--no-preview'})<cr>
 nnoremap fq <cmd>Telescope quickfix<cr>
 nnoremap fh <cmd>Telescope harpoon marks<cr>
 nnoremap fr <cmd>Telescope resume<cr>
+nnoremap fm <cmd>Telescope marks<cr>
 nnoremap h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
 nnoremap ha <cmd>lua require("harpoon.mark").add_file()<cr>
 nnoremap hp <cmd>lua require("harpoon.ui").nav_prev()<cr> 
@@ -583,3 +589,4 @@ nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr
 nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>
 map <silent> K `]
 map <silent> L `[
+

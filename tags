@@ -50,8 +50,6 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <Leader>j	init.vim	/^map <Leader>j <Plug>(easymotion-linebackward)$/;"	m
 <Leader>k	init.vim	/^map <Leader>k <Plug>(easymotion-j)$/;"	m
 <Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
-<Leader>rnc	init.vim	/^nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>$/;"	m
-<Leader>rng	init.vim	/^nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>$/;"	m
 <Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
 <SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
 <c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m
@@ -124,6 +122,7 @@ ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
 fg	init.vim	/^nnoremap fg :call GrepWordUnderCursor()<CR>$/;"	m
 fh	init.vim	/^nnoremap fh <cmd>Telescope harpoon marks<cr>$/;"	m
 fl	init.vim	/^nnoremap fl <cmd>Telescope live_grep<cr>$/;"	m
+fm	init.vim	/^nnoremap fm <cmd>Telescope marks<cr>$/;"	m
 fp	init.vim	/^nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
 fq	init.vim	/^nnoremap fq <cmd>Telescope quickfix<cr>$/;"	m
 fr	init.vim	/^nnoremap fr <cmd>Telescope resume<cr>$/;"	m
