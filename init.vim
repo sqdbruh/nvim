@@ -14,6 +14,7 @@ command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
+Plug 'jbyuki/quickmath.nvim'
 Plug 'krfl/fleetish-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'sharkdp/fd'
@@ -34,7 +35,7 @@ Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'valloric/MatchTagAlways'
 Plug 'preservim/nerdcommenter'
-Plug 'preservim/tagbar'
+"Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
 Plug 'kshenoy/vim-signature'
 
@@ -43,7 +44,8 @@ Plug 'dhruvasagar/vim-markify'
 
 Plug 'skywind3000/vim-preview'
 
-Plug 'lukas-reineke/indent-blankline.nvim'
+"Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'Yggdroot/indentLine'
 
 Plug 'easymotion/vim-easymotion'
 Plug 'PeterRincker/vim-argumentative'
@@ -355,7 +357,7 @@ set clipboard=unnamed,unnamedplus
 
 let g:terminator_split_location = 'vertical belowright'
 
-let g:tagbar_map_togglesort = ''
+"let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
     let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
@@ -434,8 +436,8 @@ nnoremap h6 <cmd>lua require("harpoon.ui").nav_file(6)<cr>
 nnoremap h7 <cmd>lua require("harpoon.ui").nav_file(7)<cr> 
 nnoremap h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr> 
 nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> 
-nnoremap tt <cmd>TagbarOpenAutoClose<cr>
-nnoremap TT <cmd>TagbarToggle<cr>
+"nnoremap tt <cmd>TagbarOpenAutoClose<cr>
+"nnoremap TT <cmd>TagbarToggle<cr>
 imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
 function! OpenHeaderInSideWindow()
     if winnr('$') == 1 
@@ -510,9 +512,14 @@ nnoremap <silent> tq :call ToggleQuickFix()<cr>
 
 map <leader><cr> i<cr><ESC>
 
-let g:tagbar_foldlevel = 0
+"let g:tagbar_foldlevel = 0
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1
+
+"let g:indentLine_char = '|'
+let g:indentLine_color_gui = '#262626'
+let g:indentLine_leadingSpaceEnabled = 1
+let g:indentLine_leadingSpaceChar = "•"
 
 
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -520,7 +527,7 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 set splitbelow
 set splitright
 
-lua require("indent_blankline").setup {  }
+"lua require("indent_blankline").setup {  }
 
 let g:clang_format#style_options = {
             \ "AccessModifierOffset" : -4,

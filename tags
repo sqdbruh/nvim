@@ -94,7 +94,6 @@ SetCSettings	init.vim	/^function! SetCSettings()$/;"	f
 SetupBuf	.\tagselect.vim	/^function! s:SetupBuf() " {{{$/;"	f
 Stjump	.\tagselect.vim	/^command! -nargs=? -complete=tag Stjump :call <SID>TagSelectMain('stjump',$/;"	c
 Stselect	.\tagselect.vim	/^command! -nargs=? -complete=tag Stselect :call <SID>TagSelectMain('stselect',$/;"	c
-TT	init.vim	/^nnoremap TT <cmd>TagbarToggle<cr>$/;"	m
 TagSelectMain	.\tagselect.vim	/^function! s:TagSelectMain(cmd, ...) " {{{$/;"	f
 TagSelectVisual	.\tagselect.vim	/^function! s:TagSelectVisual(tagCmd) " {{{$/;"	f
 Tags	.\tagselect.vim	/^command! -nargs=0 Tags :call <SID>TagSelectMain('tags')$/;"	c
@@ -146,9 +145,10 @@ g:deoplete#sources#clang#sort_algo	init.vim	/^let g:deoplete#sources#clang#sort_
 g:deoplete#sources#jedi#show_docstring	init.vim	/^let g:deoplete#sources#jedi#show_docstring = 1$/;"	v
 g:echodoc#enable_at_startup	init.vim	/^let g:echodoc#enable_at_startup = 1$/;"	v
 g:echodoc#type	init.vim	/^let g:echodoc#type = 'floating'$/;"	v
+g:indentLine_color_gui	init.vim	/^let g:indentLine_color_gui = '#262626'$/;"	v
+g:indentLine_leadingSpaceChar	init.vim	/^let g:indentLine_leadingSpaceChar = "•"$/;"	v
+g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 1$/;"	v
 g:python3_host_prog	init.vim	/^    let g:python3_host_prog = 'C:\\Program Files\\Python311\\python.exe'$/;"	v
-g:tagbar_foldlevel	init.vim	/^let g:tagbar_foldlevel = 0$/;"	v
-g:tagbar_map_togglesort	init.vim	/^let g:tagbar_map_togglesort = ''$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
 g:tagselectWinSize	.\tagselect.vim	/^  let g:tagselectWinSize = -1$/;"	v
 g:terminator_split_location	init.vim	/^let g:terminator_split_location = 'vertical belowright'$/;"	v
@@ -329,7 +329,6 @@ tp	init.vim	/^nnoremap tp <cmd>tabnext<cr>$/;"	m
 tp	init.vim	/^nnoremap tp <cmd>tp<CR>$/;"	m
 tq	init.vim	/^nnoremap <silent> tq :call ToggleQuickFix()<cr>$/;"	m
 ts	init.vim	/^nnoremap ts <C-W>r $/;"	m
-tt	init.vim	/^nnoremap tt <cmd>TagbarOpenAutoClose<cr>$/;"	m
 tu	init.vim	/^nnoremap tu <cmd>tabprevious<cr>$/;"	m
 vim.lsp.handlers["textDocument/publishDiagnostics"] 	.\lsp.lua	/^vim.lsp.handlers["textDocument\/publishDiagnostics"] = function() end$/;"	f
 x	init.vim	/^nnoremap x d$/;"	m
