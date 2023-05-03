@@ -21,11 +21,13 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <C-W>g<C-]>	.\tagselect.vim	/^  vnoremap <silent> <C-W>g<C-]> :<C-U>call <SID>TagSelectVisual('stjump')<CR>$/;"	m
 <C-W>g]	.\tagselect.vim	/^  nnoremap <silent> <C-W>g] :Stselect <cword><CR>$/;"	m
 <C-W>g]	.\tagselect.vim	/^  vnoremap <silent> <C-W>g] :<C-U>call <SID>TagSelectVisual('stselect')<CR>$/;"	m
+<C-d>	init.vim	/^nnoremap <C-d> <C-d>zz$/;"	m
 <C-f>	init.vim	/^imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'$/;"	m
-<C-k>	init.vim	/^map <C-k> :cn<CR>$/;"	m
-<C-l>	init.vim	/^map <C-l> :cp<CR>$/;"	m
+<C-k>	init.vim	/^map <C-k> :cn<CR>zz$/;"	m
+<C-l>	init.vim	/^map <C-l> :cp<CR>zz$/;"	m
 <C-n>	init.vim	/^inoremap <expr> <C-n>  deoplete#manual_complete()$/;"	m
 <C-t>	init.vim	/^nnoremap <C-t> :NERDTreeToggle<CR>$/;"	m
+<C-u>	init.vim	/^nnoremap <C-u> <C-u>zz$/;"	m
 <End>	init.vim	/^inoremap <End> <C-o>\$$/;"	m
 <End>	init.vim	/^map <End> \$$/;"	m
 <Esc>	init.vim	/^nnoremap <Esc> <C-\\><C-n>$/;"	m
@@ -60,6 +62,7 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <leader>dam	init.vim	/^nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>$/;"	m
 <leader>s	init.vim	/^nmap <leader>s <plug>(SubversiveSubstituteRange)$/;"	m
 <leader>tq	init.vim	/^nmap <leader>tq :ClearQuickfixList<cr>$/;"	m
+<leader>u	init.vim	/^nnoremap <leader>u :UndotreeToggle<CR>$/;"	m
 B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
 E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
@@ -72,12 +75,13 @@ HeaderToggle	init.vim	/^function! HeaderToggle()$/;"	f
 IndentWithI	init.vim	/^function! IndentWithI()$/;"	f
 InputTagIndex	.\tagselect.vim	/^function! s:InputTagIndex()$/;"	f
 InsertText	init.vim	/^function! InsertText(text)$/;"	f
-K	init.vim	/^map <silent> K `]$/;"	m
-L	init.vim	/^map <silent> L `[$/;"	m
+K	init.vim	/^map <silent> K `]zz$/;"	m
+L	init.vim	/^map <silent> L `[zz$/;"	m
 LGrep	init.vim	/^command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)$/;"	c
 M.peek_definition	.\lua\lsp-ext.lua	/^function M.peek_definition()$/;"	f
 M.preview_location	.\lua\lsp-ext.lua	/^function M.preview_location(location, context, before_context)$/;"	f
 M.preview_location_callback	.\lua\lsp-ext.lua	/^function M.preview_location_callback(_, method, result)$/;"	f
+N	init.vim	/^nnoremap N Nzzzv$/;"	m
 OpenHeaderInSideWindow	init.vim	/^function! OpenHeaderInSideWindow()$/;"	f
 P	init.vim	/^nmap P <plug>(YoinkPaste_P)$/;"	m
 Prompt	.\tagselect.vim	/^function! s:Prompt(bufNr)$/;"	f
@@ -125,7 +129,7 @@ fm	init.vim	/^nnoremap fm <cmd>Telescope marks<cr>$/;"	m
 fp	init.vim	/^nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
 fq	init.vim	/^nnoremap fq <cmd>Telescope quickfix<cr>$/;"	m
 fr	init.vim	/^nnoremap fr <cmd>Telescope resume<cr>$/;"	m
-ft	init.vim	/^nnoremap ft <cmd>call fzf#vim#tags('', {'options': '--no-preview'})<cr>$/;"	m
+ft	init.vim	/^nnoremap ft <cmd>Telescope tags<cr>$/;"	m
 g:EasyMotion_do_mapping	init.vim	/^let g:EasyMotion_do_mapping = 0 " Disable default mappings$/;"	v
 g:EasyMotion_smartcase	init.vim	/^let g:EasyMotion_smartcase = 1$/;"	v
 g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']$/;"	v
@@ -134,6 +138,12 @@ g:OmniSharp_server_stdio	init.vim	/^let g:OmniSharp_server_stdio = 1$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
 g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
+g:context_highlight_border	init.vim	/^let g:context_highlight_border = 'Comment'$/;"	v
+g:context_highlight_normal	init.vim	/^let g:context_highlight_normal = 'Normal'$/;"	v
+g:context_highlight_tag	init.vim	/^let g:context_highlight_tag    = 'Special'$/;"	v
+g:context_max_height	init.vim	/^let g:context_max_height = 2$/;"	v
+g:context_max_join_parts	init.vim	/^let g:context_max_join_parts = 0$/;"	v
+g:context_max_per_indent	init.vim	/^let g:context_max_per_indent = 1$/;"	v
 g:cursorhold_updatetime	init.vim	/^let g:cursorhold_updatetime = 100$/;"	v
 g:deoplete#enable_at_startup	init.vim	/^let g:deoplete#enable_at_startup = 1$/;"	v
 g:deoplete#smart_case	init.vim	/^let g:deoplete#smart_case = v:true$/;"	v
@@ -146,8 +156,7 @@ g:deoplete#sources#jedi#show_docstring	init.vim	/^let g:deoplete#sources#jedi#sh
 g:echodoc#enable_at_startup	init.vim	/^let g:echodoc#enable_at_startup = 1$/;"	v
 g:echodoc#type	init.vim	/^let g:echodoc#type = 'floating'$/;"	v
 g:indentLine_color_gui	init.vim	/^let g:indentLine_color_gui = '#262626'$/;"	v
-g:indentLine_leadingSpaceChar	init.vim	/^let g:indentLine_leadingSpaceChar = "•"$/;"	v
-g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 1$/;"	v
+g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 0$/;"	v
 g:python3_host_prog	init.vim	/^    let g:python3_host_prog = 'C:\\Program Files\\Python311\\python.exe'$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
 g:tagselectWinSize	.\tagselect.vim	/^  let g:tagselectWinSize = -1$/;"	v
@@ -195,6 +204,7 @@ local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
 local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
 local on_attach 	.\lsp.lua	/^local on_attach = function(client, bufnr)$/;"	f
 mapleader	init.vim	/^let mapleader=" "$/;"	v
+n	init.vim	/^nnoremap n nzzzv$/;"	m
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
 s	init.vim	/^nmap s <plug>(SubversiveSubstitute)$/;"	m
 s:b	.\colors\handmade.vim	/^let s:b      = ",bold"$/;"	v

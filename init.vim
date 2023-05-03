@@ -17,6 +17,7 @@ call plug#begin()
 Plug 'jbyuki/quickmath.nvim'
 Plug 'krfl/fleetish-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'sharkdp/fd'
 Plug 'sharkdp/bat'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -63,6 +64,9 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'glts/vim-magnum'
 Plug 'glts/vim-radical'
 
+Plug 'dhananjaylatkar/cscope_maps.nvim' " cscope keymaps
+Plug 'folke/which-key.nvim' " optional
+
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-telescope/telescope-project.nvim'
@@ -92,23 +96,45 @@ Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
-Plug 'OmniSharp/omnisharp-vim'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'mbbill/undotree'
+"Plug 'wellle/context.vim'
 call plug#end()
+
+lua << EOF
+EOF
+
+lua << EOF
+require'treesitter-context'.setup{
+enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+max_lines = 5, -- How many lines the window should span. Values <= 0 mean no limit.
+min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+line_numbers = true,
+trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+}
+EOF
+nnoremap <leader>u :UndotreeToggle<CR>
+
+let g:context_max_height = 2
+let g:context_max_per_indent = 1
+let g:context_max_join_parts = 0
+let g:context_highlight_normal = 'Normal'
+let g:context_highlight_border = 'Comment'
+let g:context_highlight_tag    = 'Special'
 
 autocmd VimLeave * wshada!
 function! SetCSettings()
+    exe 'TSContextEnable'
     nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
     nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
-
-    "let g:gutentags_enabled = 1
-    "let g:gutentags_add_default_project_roots = 0
+    let g:gutentags_enabled = 1
+    let g:gutentags_add_default_project_roots = ['Makefile', '.git']
     "let g:gutentags_project_root = ['package.json', '.git']
     "let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
     "command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
-    "let g:gutentags_generate_on_new = 1
+    let g:gutentags_generate_on_new = 1
     "let g:gutentags_generate_on_missing = 1
-    "let g:gutentags_generate_on_write = 1
+    let g:gutentags_generate_on_write = 1
     "let g:gutentags_generate_on_empty_buffer = 0
     "let g:gutentags_ctags_extra_args = [
                 "\ '--tag-relative=yes',
@@ -177,6 +203,8 @@ function! ReplaceWordInAllFiles()
 endfunction
 
 function! SetCSSettings()
+
+    exe 'TSContextDisable'
     let g:gutentags_enabled = 0
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
     nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
@@ -387,8 +415,8 @@ set number
 set relativenumber
 set backspace=indent,eol,start
 
-map <C-k> :cn<CR>
-map <C-l> :cp<CR>
+map <C-k> :cn<CR>zz
+map <C-l> :cp<CR>zz
 
 map <silent> W <Plug>CamelCaseMotion_w
 map <silent> B <Plug>CamelCaseMotion_b
@@ -417,7 +445,7 @@ nnoremap ff <cmd>Telescope find_files<cr>
 nnoremap fl <cmd>Telescope live_grep<cr>
 nnoremap fb <cmd>Telescope buffers<cr>
 "nnoremap ft <cmd>Telescope tags<cr>
-nnoremap ft <cmd>call fzf#vim#tags('', {'options': '--no-preview'})<cr>
+nnoremap ft <cmd>Telescope tags<cr>
 
 nnoremap fq <cmd>Telescope quickfix<cr>
 nnoremap fh <cmd>Telescope harpoon marks<cr>
@@ -518,8 +546,8 @@ let g:EasyMotion_smartcase = 1
 
 "let g:indentLine_char = '|'
 let g:indentLine_color_gui = '#262626'
-let g:indentLine_leadingSpaceEnabled = 1
-let g:indentLine_leadingSpaceChar = "•"
+let g:indentLine_leadingSpaceEnabled = 0
+"let g:indentLine_leadingSpaceChar = "•"
 
 
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -571,6 +599,7 @@ let $BAT_THEME='gruvbox'
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73
+hi! TreesitterContext  guibg=#000000
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
 nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
@@ -594,6 +623,11 @@ autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
 nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>
 nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>
-map <silent> K `]
-map <silent> L `[
+map <silent> K `]zz
+map <silent> L `[zz
 
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
