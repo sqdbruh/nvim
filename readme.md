@@ -3,6 +3,7 @@ My neovim config, that im using with Wezterm terminal.
 - [ ] Omnisharp signature help is conflicting with deoplete.
 - [x] Starts slowing down after a couple of hours. FIXED (Switched from WiNdOwS TeRmInAl to Wezterm terminal)
 - [ ] Omnisharp server needs to be restarted after adding .cs files from Unity.
+- [ ] cnext and cprev doesn't work when there is only one item in quickfix list.
 
 ## Instalation ([Choco](https://chocolatey.org/) on Windows)
 1. `choco install neovim`

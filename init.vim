@@ -14,6 +14,8 @@ command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'Shougo/vimproc.vim'
 Plug 'jbyuki/quickmath.nvim'
 Plug 'krfl/fleetish-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -203,8 +205,8 @@ function! ReplaceWordInAllFiles()
 endfunction
 
 function! SetCSSettings()
-
     exe 'TSContextDisable'
+    exe 'TSDisable c_sharp'
     let g:gutentags_enabled = 0
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
     nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
