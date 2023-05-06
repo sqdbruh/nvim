@@ -14,6 +14,7 @@ command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
+Plug 'rhysd/clever-f.vim'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'jbyuki/quickmath.nvim'
@@ -127,6 +128,7 @@ let g:context_highlight_tag    = 'Special'
 autocmd VimLeave * wshada!
 function! SetCSettings()
     exe 'TSContextEnable'
+    nmap <silent> <buffer> gd <C-]>
     nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
     nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
     let g:gutentags_enabled = 1
@@ -155,23 +157,6 @@ command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
 
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
 cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
-
-"augroup quickfix
-	"autocmd!
-    "autocmd QuickFixCmdPost cgetexpr cwindow
-    "autocmd QuickFixCmdPost lgetexpr lwindow
-"augroup END
-
-"kek
-"kek
-"lol
-"lol
-"lol
-"lol
-"kek
-"lol
-
-nnoremap gr gd[{V%::s/<C-R>///ge<left><left><left>
 
 function! ReplaceWordInAllFilesWithPrompt()
     let cword = expand("<cword>")
@@ -215,6 +200,7 @@ function! SetCSSettings()
     nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
+    nmap <silent> <buffer> <leader>gi <Plug>(omnisharp_find_implementations)
 
     nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
     xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
@@ -363,7 +349,7 @@ nnoremap xx dd
 nnoremap X D
 
 " JK motions: Line motions
-"map s <Plug>(easymotion-overwin-f2)
+map <Leader><Leader> <Plug>(easymotion-s2)
 map <Leader>j <Plug>(easymotion-linebackward)
 map <Leader>; <Plug>(easymotion-lineforward)
 map <Leader>l <Plug>(easymotion-k)
@@ -628,8 +614,22 @@ nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>
 map <silent> K `]zz
 map <silent> L `[zz
 
-
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 nnoremap n nzzzv
 nnoremap N Nzzzv
+
+" Go to previous file
+nnoremap fd :e#<CR>
+nnoremap 2fd :e#2<CR>
+nnoremap 3fd :e#3<CR>
+nnoremap 4fd :e#4<CR>
+nnoremap 5fd :e#5<CR>
+nnoremap 6fd :e#6<CR>
+nnoremap 7fd :e#7<CR>
+nnoremap 8fd :e#8<CR>
+nnoremap 9fd :e#9<CR>
+map . <Plug>(clever-f-repeat-forward)
+let g:clever_f_mark_cursor = 0
+let g:clever_f_mark_char = 0
+let g:clever_f_smart_case = 1

@@ -7,11 +7,20 @@
 $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 (	init.vim	/^nmap ( <plug>Argumentative_MoveLeft$/;"	m
 )	init.vim	/^nmap ) <plug>Argumentative_MoveRight$/;"	m
+.	init.vim	/^map . <Plug>(clever-f-repeat-forward)$/;"	m
 /	init.vim	/^map  \/ <Plug>(easymotion-sn)$/;"	m
 /	init.vim	/^omap \/ <Plug>(easymotion-tn)$/;"	m
 030|	.\Session.vim	/^normal! 030|$/;"	m
 046|	.\Session.vim	/^normal! 046|$/;"	m
 09|	.\Session.vim	/^normal! 09|$/;"	m
+2fd	init.vim	/^nnoremap 2fd :e#2<CR>$/;"	m
+3fd	init.vim	/^nnoremap 3fd :e#3<CR>$/;"	m
+4fd	init.vim	/^nnoremap 4fd :e#4<CR>$/;"	m
+5fd	init.vim	/^nnoremap 5fd :e#5<CR>$/;"	m
+6fd	init.vim	/^nnoremap 6fd :e#6<CR>$/;"	m
+7fd	init.vim	/^nnoremap 7fd :e#7<CR>$/;"	m
+8fd	init.vim	/^nnoremap 8fd :e#8<CR>$/;"	m
+9fd	init.vim	/^nnoremap 9fd :e#9<CR>$/;"	m
 ;	init.vim	/^noremap ; l$/;"	m
 <A-;>	init.vim	/^nmap <silent> <A-;> :lua require('smart-splits').resize_right()<CR>$/;"	m
 <A-j>	init.vim	/^nmap <silent> <A-j> :lua require('smart-splits').resize_left()<CR>$/;"	m
@@ -46,6 +55,7 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <Home>	init.vim	/^inoremap <Home> <C-o>^$/;"	m
 <Home>	init.vim	/^map <Home> ^$/;"	m
 <Leader>;	init.vim	/^map <Leader>; <Plug>(easymotion-lineforward)$/;"	m
+<Leader><Leader>	init.vim	/^map <Leader><Leader> <Plug>(easymotion-s2)$/;"	m
 <Leader>ff	init.vim	/^nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>$/;"	m
 <Leader>fl	init.vim	/^nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>$/;"	m
 <Leader>h	init.vim	/^nnoremap <Leader>h <cmd>split<cr>$/;"	m
@@ -121,6 +131,7 @@ dam	init.vim	/^nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>$/;"	m
 enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
 expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
 fb	init.vim	/^nnoremap fb <cmd>Telescope buffers<cr>$/;"	m
+fd	init.vim	/^nnoremap fd :e#<CR>$/;"	m
 ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
 fg	init.vim	/^nnoremap fg :call GrepWordUnderCursor()<CR>$/;"	m
 fh	init.vim	/^nnoremap fh <cmd>Telescope harpoon marks<cr>$/;"	m
@@ -136,6 +147,9 @@ g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']
 g:OmniSharp_highlighting	init.vim	/^let g:OmniSharp_highlighting = 0$/;"	v
 g:OmniSharp_server_stdio	init.vim	/^let g:OmniSharp_server_stdio = 1$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
+g:clever_f_mark_char	init.vim	/^let g:clever_f_mark_char = 0$/;"	v
+g:clever_f_mark_cursor	init.vim	/^let g:clever_f_mark_cursor = 0$/;"	v
+g:clever_f_smart_case	init.vim	/^let g:clever_f_smart_case = 1$/;"	v
 g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
 g:context_highlight_border	init.vim	/^let g:context_highlight_border = 'Comment'$/;"	v
@@ -173,7 +187,6 @@ g]	.\tagselect.vim	/^  vnoremap <silent> g] :<C-U>call <SID>TagSelectVisual('tse
 ge	init.vim	/^map <silent> ge <Plug>CamelCaseMotion_ge$/;"	m
 gp	init.vim	/^nmap gp <plug>(YoinkPaste_gp)$/;"	m
 gp	init.vim	/^nnoremap gp <cmd>PreviewTag<cr>$/;"	m
-gr	init.vim	/^nnoremap gr gd[{V%::s\/<C-R>\/\/\/ge<left><left><left>$/;"	m
 grep	init.vim	/^cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'$/;"	m
 gt	init.vim	/^nmap gt <cmd>TselectCword<cr>$/;"	m
 h1	init.vim	/^nnoremap h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> $/;"	m
