@@ -7,7 +7,6 @@
 $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 (	init.vim	/^nmap ( <plug>Argumentative_MoveLeft$/;"	m
 )	init.vim	/^nmap ) <plug>Argumentative_MoveRight$/;"	m
-.	init.vim	/^map . <Plug>(clever-f-repeat-forward)$/;"	m
 /	init.vim	/^map  \/ <Plug>(easymotion-sn)$/;"	m
 /	init.vim	/^omap \/ <Plug>(easymotion-tn)$/;"	m
 030|	.\Session.vim	/^normal! 030|$/;"	m
@@ -21,7 +20,9 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 7fd	init.vim	/^nnoremap 7fd :e#7<CR>$/;"	m
 8fd	init.vim	/^nnoremap 8fd :e#8<CR>$/;"	m
 9fd	init.vim	/^nnoremap 9fd :e#9<CR>$/;"	m
+;	init.vim	/^nnoremap ; <tab>| nnoremap <tab> ;$/;"	m
 ;	init.vim	/^noremap ; l$/;"	m
+;	init.vim	/^vnoremap ; <tab>| vnoremap <tab> ;$/;"	m
 <A-;>	init.vim	/^nmap <silent> <A-;> :lua require('smart-splits').resize_right()<CR>$/;"	m
 <A-j>	init.vim	/^nmap <silent> <A-j> :lua require('smart-splits').resize_left()<CR>$/;"	m
 <A-k>	init.vim	/^nmap <silent> <A-k> :lua require('smart-splits').resize_down()<CR>$/;"	m
@@ -54,25 +55,30 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <F9>	init.vim	/^nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>$/;"	m
 <Home>	init.vim	/^inoremap <Home> <C-o>^$/;"	m
 <Home>	init.vim	/^map <Home> ^$/;"	m
-<Leader>;	init.vim	/^map <Leader>; <Plug>(easymotion-lineforward)$/;"	m
 <Leader><Leader>	init.vim	/^map <Leader><Leader> <Plug>(easymotion-s2)$/;"	m
-<Leader>ff	init.vim	/^nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>$/;"	m
-<Leader>fl	init.vim	/^nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>$/;"	m
 <Leader>h	init.vim	/^nnoremap <Leader>h <cmd>split<cr>$/;"	m
-<Leader>j	init.vim	/^map <Leader>j <Plug>(easymotion-linebackward)$/;"	m
 <Leader>k	init.vim	/^map <Leader>k <Plug>(easymotion-j)$/;"	m
 <Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
 <Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
 <SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
+<bs>	init.vim	/^nnoremap <bs> <Plug>Sneak_,$/;"	m
+<bs>	init.vim	/^vnoremap <bs> <Plug>Sneak_,$/;"	m
 <c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m
 <c-p>	init.vim	/^nmap <c-p> <plug>(YoinkPostPasteSwapForward)$/;"	m
 <leader>/	init.vim	/^nnoremap <leader>\/ <cmd>nohlsearch<CR> $/;"	m
+<leader>:	init.vim	/^map <leader>: <Plug>Sneak_t$/;"	m
+<leader>;	init.vim	/^map <leader>; <Plug>Sneak_f$/;"	m
 <leader><cr>	init.vim	/^map <leader><cr> i<cr><ESC>$/;"	m
+<leader>J	init.vim	/^map <leader>J <Plug>Sneak_T$/;"	m
 <leader>SS	init.vim	/^nmap <leader>SS <plug>(SubversiveSubstituteWordRange)$/;"	m
 <leader>dam	init.vim	/^nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>$/;"	m
+<leader>j	init.vim	/^map <leader>j <Plug>Sneak_F$/;"	m
 <leader>s	init.vim	/^nmap <leader>s <plug>(SubversiveSubstituteRange)$/;"	m
+<leader>td	init.vim	/^nmap <leader>td :bdelete<cr>$/;"	m
 <leader>tq	init.vim	/^nmap <leader>tq :ClearQuickfixList<cr>$/;"	m
 <leader>u	init.vim	/^nnoremap <leader>u :UndotreeToggle<CR>$/;"	m
+<tab>	init.vim	/^nnoremap <tab> <Plug>Sneak_;$/;"	m
+<tab>	init.vim	/^vnoremap <tab> <Plug>Sneak_;$/;"	m
 B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
 E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
@@ -132,9 +138,11 @@ enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
 expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
 fb	init.vim	/^nnoremap fb <cmd>Telescope buffers<cr>$/;"	m
 fd	init.vim	/^nnoremap fd :e#<CR>$/;"	m
+ff	init.vim	/^nmap <silent> ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>$/;"	m
 ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
 fg	init.vim	/^nnoremap fg :call GrepWordUnderCursor()<CR>$/;"	m
 fh	init.vim	/^nnoremap fh <cmd>Telescope harpoon marks<cr>$/;"	m
+fl	init.vim	/^nmap <silent> fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>$/;"	m
 fl	init.vim	/^nnoremap fl <cmd>Telescope live_grep<cr>$/;"	m
 fm	init.vim	/^nnoremap fm <cmd>Telescope marks<cr>$/;"	m
 fp	init.vim	/^nnoremap fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
@@ -147,9 +155,6 @@ g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']
 g:OmniSharp_highlighting	init.vim	/^let g:OmniSharp_highlighting = 0$/;"	v
 g:OmniSharp_server_stdio	init.vim	/^let g:OmniSharp_server_stdio = 1$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
-g:clever_f_mark_char	init.vim	/^let g:clever_f_mark_char = 0$/;"	v
-g:clever_f_mark_cursor	init.vim	/^let g:clever_f_mark_cursor = 0$/;"	v
-g:clever_f_smart_case	init.vim	/^let g:clever_f_smart_case = 1$/;"	v
 g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
 g:context_highlight_border	init.vim	/^let g:context_highlight_border = 'Comment'$/;"	v
@@ -172,6 +177,7 @@ g:echodoc#type	init.vim	/^let g:echodoc#type = 'floating'$/;"	v
 g:indentLine_color_gui	init.vim	/^let g:indentLine_color_gui = '#262626'$/;"	v
 g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 0$/;"	v
 g:python3_host_prog	init.vim	/^    let g:python3_host_prog = 'C:\\Program Files\\Python311\\python.exe'$/;"	v
+g:sneak#use_ic_scs	init.vim	/^let g:sneak#use_ic_scs = 1$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
 g:tagselectWinSize	.\tagselect.vim	/^  let g:tagselectWinSize = -1$/;"	v
 g:terminator_split_location	init.vim	/^let g:terminator_split_location = 'vertical belowright'$/;"	v
@@ -187,6 +193,7 @@ g]	.\tagselect.vim	/^  vnoremap <silent> g] :<C-U>call <SID>TagSelectVisual('tse
 ge	init.vim	/^map <silent> ge <Plug>CamelCaseMotion_ge$/;"	m
 gp	init.vim	/^nmap gp <plug>(YoinkPaste_gp)$/;"	m
 gp	init.vim	/^nnoremap gp <cmd>PreviewTag<cr>$/;"	m
+gr	init.vim	/^nnoremap gr gd[{V%::s\/<C-R>\/\/\/gc<left><left><left>$/;"	m
 grep	init.vim	/^cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'$/;"	m
 gt	init.vim	/^nmap gt <cmd>TselectCword<cr>$/;"	m
 h1	init.vim	/^nnoremap h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> $/;"	m
@@ -341,7 +348,6 @@ t;	init.vim	/^nnoremap t; <C-W><C-L>$/;"	m
 tP	init.vim	/^nnoremap tP <cmd>tabm +1<cr>$/;"	m
 tU	init.vim	/^nnoremap tU <cmd>tabm -1<cr>$/;"	m
 tc	init.vim	/^nnoremap tc <cmd>tabclose<cr>$/;"	m
-td	init.vim	/^nmap td :bdelete<cr>$/;"	m
 tj	init.vim	/^nnoremap tj <C-W><C-H>$/;"	m
 tk	init.vim	/^nnoremap tk <C-W><C-J>$/;"	m
 tl	init.vim	/^nnoremap tl <C-W><C-K>$/;"	m

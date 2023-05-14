@@ -1,7 +1,12 @@
+" TODO(sqdrck): Clean this up and probably make init.lua out of this.
 set nocompatible
 set backupdir=~/vimtmp//,.
 set directory=~/vimtmp//,.
 set noswapfile
+let mapleader=" "
+nnoremap ; <tab>| nnoremap <tab> ;
+vnoremap ; <tab>| vnoremap <tab> ;
+
 noremap ; l
 noremap l k
 noremap k j
@@ -9,16 +14,14 @@ noremap j h
 noremap k gj
 noremap l gk
 nnoremap <SPACE> <Nop>
-let mapleader=" "
 command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
 call plug#begin()
-Plug 'rhysd/clever-f.vim'
+"Plug 'rhysd/clever-f.vim'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'jbyuki/quickmath.nvim'
-Plug 'krfl/fleetish-vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'sharkdp/fd'
@@ -39,7 +42,6 @@ Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'valloric/MatchTagAlways'
 Plug 'preservim/nerdcommenter'
-"Plug 'preservim/tagbar'
 Plug 'itchyny/lightline.vim'
 Plug 'kshenoy/vim-signature'
 
@@ -48,7 +50,6 @@ Plug 'dhruvasagar/vim-markify'
 
 Plug 'skywind3000/vim-preview'
 
-"Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'Yggdroot/indentLine'
 
 Plug 'easymotion/vim-easymotion'
@@ -67,7 +68,6 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'glts/vim-magnum'
 Plug 'glts/vim-radical'
 
-Plug 'dhananjaylatkar/cscope_maps.nvim' " cscope keymaps
 Plug 'folke/which-key.nvim' " optional
 
 Plug 'nvim-lua/plenary.nvim'
@@ -95,17 +95,14 @@ Plug 'Shougo/echodoc.vim'
 Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
-"Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Shougo/neoinclude.vim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
-"Plug 'wellle/context.vim'
+Plug 'justinmk/vim-sneak'
 call plug#end()
 
-lua << EOF
-EOF
 
 lua << EOF
 require'treesitter-context'.setup{
@@ -128,7 +125,7 @@ let g:context_highlight_tag    = 'Special'
 autocmd VimLeave * wshada!
 function! SetCSettings()
     exe 'TSContextEnable'
-    nmap <silent> <buffer> gd <C-]>
+    "nmap <silent> <buffer> gd <C-]>
     nmap <silent> <Leader>rng :call ReplaceWordInAllFiles() <cr>
     nmap <silent> <Leader>rnc :call ReplaceWordInAllFilesWithPrompt() <cr>
     let g:gutentags_enabled = 1
@@ -199,7 +196,7 @@ function! SetCSSettings()
     nmap <silent> <buffer> cf <Plug>(omnisharp_code_format)
     nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-    nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
+    nmap <silent> <buffer> <C-]> <Plug>(omnisharp_go_to_definition)
     nmap <silent> <buffer> <leader>gi <Plug>(omnisharp_find_implementations)
 
     nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
@@ -348,22 +345,15 @@ xnoremap x d
 nnoremap xx dd
 nnoremap X D
 
-" JK motions: Line motions
-map <Leader><Leader> <Plug>(easymotion-s2)
-map <Leader>j <Plug>(easymotion-linebackward)
-map <Leader>; <Plug>(easymotion-lineforward)
-map <Leader>l <Plug>(easymotion-k)
-map <Leader>k <Plug>(easymotion-j)
+
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 nmap xX ^xg_
 nmap dD ^dg_
 nmap cC ^cg_
 nmap yY ^yg_
-"map  n <Plug>(easymotion-next)
-"map  N <Plug>(easymotion-prev)
 
-nmap td :bdelete<cr>
+nmap <leader>td :bdelete<cr>
 
 let g:Hexokinase_highlighters = ['virtual']
 let g:cursorhold_updatetime = 100
@@ -373,7 +363,6 @@ set clipboard=unnamed,unnamedplus
 
 let g:terminator_split_location = 'vertical belowright'
 
-"let g:tagbar_map_togglesort = ''
 set completeopt=menu,menuone
 if has('win32')
     let g:deoplete#sources#clang#libclang_path = 'C:\\Program Files\\LLVM\\bin\\libclang.dll'
@@ -384,6 +373,7 @@ if has('win32')
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
+    " TODO(sqdrck): Fix this.
     "let g:deoplete#sources#clang#libclang_path = ~/Library/Developer/CommandLineTools/usr/lib/libclang.dylib
     "let g:deoplete#sources#clang#clang_header = ~/Library/Developer/CommandLineTools/usr/lib/clang
     "let g:python3_host_prog = ~/opt/homebrew/bin/python3
@@ -452,8 +442,6 @@ nnoremap h6 <cmd>lua require("harpoon.ui").nav_file(6)<cr>
 nnoremap h7 <cmd>lua require("harpoon.ui").nav_file(7)<cr> 
 nnoremap h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr> 
 nnoremap h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> 
-"nnoremap tt <cmd>TagbarOpenAutoClose<cr>
-"nnoremap TT <cmd>TagbarToggle<cr>
 imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
 function! OpenHeaderInSideWindow()
     if winnr('$') == 1 
@@ -580,8 +568,9 @@ nnoremap <silent> <F11> :w <bar> Make f11<CR><cr>
 nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>
 " filename(line) : error|warning|fatal error C0000: message
 
-"set errorformat=\ %#%f(%l)\ :\ %#%t%[A-z]%#\ %[A-Z\ ]%#%n:\ %m
-
+set errorformat=%f(%l):\ %trror\ C%n:\ %m
+" For local replace
+nnoremap gr gd[{V%::s/<C-R>///gc<left><left><left>
 
 let $BAT_THEME='gruvbox'
 " Inactive tab highlight
@@ -590,8 +579,8 @@ hi! SignatureMarkText guifg=#bf9d73
 hi! TreesitterContext  guibg=#000000
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
-nmap <silent> <Leader>fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
-nmap <silent> <Leader>ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>
+nmap <silent> fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
+nmap <silent> ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>
 let g:OmniSharp_highlighting = 0
 
 "Disable deoplete in Telescope
@@ -629,7 +618,22 @@ nnoremap 6fd :e#6<CR>
 nnoremap 7fd :e#7<CR>
 nnoremap 8fd :e#8<CR>
 nnoremap 9fd :e#9<CR>
-map . <Plug>(clever-f-repeat-forward)
-let g:clever_f_mark_cursor = 0
-let g:clever_f_mark_char = 0
-let g:clever_f_smart_case = 1
+
+map <Leader><Leader> <Plug>(easymotion-s2)
+"map <Leader>j <Plug>(easymotion-linebackward)
+"map <Leader>; <Plug>(easymotion-lineforward)
+map <Leader>l <Plug>(easymotion-k)
+map <Leader>k <Plug>(easymotion-j)
+map <leader>; <Plug>Sneak_f
+map <leader>j <Plug>Sneak_F
+map <leader>: <Plug>Sneak_t
+map <leader>J <Plug>Sneak_T
+nnoremap <tab> <Plug>Sneak_;
+vnoremap <tab> <Plug>Sneak_;
+nnoremap <bs> <Plug>Sneak_,
+vnoremap <bs> <Plug>Sneak_,
+
+let g:sneak#use_ic_scs = 1
+highlight link Sneak None
+" Needed if a plugin sets the colorscheme dynamically:
+autocmd User SneakLeave highlight clear Sneak
