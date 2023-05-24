@@ -1,5 +1,7 @@
 My neovim config, that im using with Wezterm terminal.
 
+![](https://github.com/sqdrck/nvim/blob/master/images/Screenshot%202023-05-14%20231737.png)
+
 ## Current bugs:
 - [x] Starts slowing down after a couple of hours. FIXED (Switched from WiNdOwS TeRmInAl to Wezterm terminal)
 - [x] Error parser for C parsing "note: see declaration"
