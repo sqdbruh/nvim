@@ -1,11 +1,13 @@
 " TODO(sqdrck): Clean this up and probably make init.lua out of this.
+set nobackup
+nnoremap <SPACE> <Nop>
 set nocompatible
 set backupdir=~/vimtmp//,.
 set directory=~/vimtmp//,.
 set noswapfile
 let mapleader=" "
-nnoremap ; <tab>| nnoremap <tab> ;
-vnoremap ; <tab>| vnoremap <tab> ;
+"nnoremap ; <tab>| nnoremap <tab> ;
+"vnoremap ; <tab>| vnoremap <tab> ;
 
 noremap ; l
 noremap l k
@@ -13,10 +15,10 @@ noremap k j
 noremap j h
 noremap k gj
 noremap l gk
-nnoremap <SPACE> <Nop>
 command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
+
 call plug#begin()
 "Plug 'rhysd/clever-f.vim'
 Plug 'OmniSharp/omnisharp-vim'
@@ -538,9 +540,14 @@ let g:clang_format#style_options = {
             \ "BasedOnStyle" : "Microsoft",
             \ "PointerAlignment" : "Left",
             \ "SortIncludes" : "Never",
+            \ "BreakBeforeBraces" : "Allman",
             \ "AllowShortIfStatementsOnASingleLine" : "false",
+            \ "BinPackArguments" : "false",
+            \ "BinPackParameters" : "false",
             \ "AlwaysBreakTemplateDeclarations" : "true",
             \ "SpaceBeforeParens " : "Never",
+            \ "BreakBeforeTernaryOperators" : "true",
+            \ "AlignAfterOpenBracket" : "AlwaysBreak",
             \ "Standard" : "C++11"}
 
 autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
@@ -628,12 +635,13 @@ map <leader>; <Plug>Sneak_f
 map <leader>j <Plug>Sneak_F
 map <leader>: <Plug>Sneak_t
 map <leader>J <Plug>Sneak_T
-nnoremap <tab> <Plug>Sneak_;
-vnoremap <tab> <Plug>Sneak_;
-nnoremap <bs> <Plug>Sneak_,
-vnoremap <bs> <Plug>Sneak_,
+nnoremap <right> <Plug>Sneak_;
+vnoremap <right> <Plug>Sneak_;
+nnoremap <left> <Plug>Sneak_,
+vnoremap <left> <Plug>Sneak_,
 
 let g:sneak#use_ic_scs = 1
 highlight link Sneak None
 " Needed if a plugin sets the colorscheme dynamically:
 autocmd User SneakLeave highlight clear Sneak
+" 2-character Sneak (default)

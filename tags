@@ -20,9 +20,7 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 7fd	init.vim	/^nnoremap 7fd :e#7<CR>$/;"	m
 8fd	init.vim	/^nnoremap 8fd :e#8<CR>$/;"	m
 9fd	init.vim	/^nnoremap 9fd :e#9<CR>$/;"	m
-;	init.vim	/^nnoremap ; <tab>| nnoremap <tab> ;$/;"	m
 ;	init.vim	/^noremap ; l$/;"	m
-;	init.vim	/^vnoremap ; <tab>| vnoremap <tab> ;$/;"	m
 <A-;>	init.vim	/^nmap <silent> <A-;> :lua require('smart-splits').resize_right()<CR>$/;"	m
 <A-j>	init.vim	/^nmap <silent> <A-j> :lua require('smart-splits').resize_left()<CR>$/;"	m
 <A-k>	init.vim	/^nmap <silent> <A-k> :lua require('smart-splits').resize_down()<CR>$/;"	m
@@ -61,8 +59,6 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
 <Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
 <SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
-<bs>	init.vim	/^nnoremap <bs> <Plug>Sneak_,$/;"	m
-<bs>	init.vim	/^vnoremap <bs> <Plug>Sneak_,$/;"	m
 <c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m
 <c-p>	init.vim	/^nmap <c-p> <plug>(YoinkPostPasteSwapForward)$/;"	m
 <leader>/	init.vim	/^nnoremap <leader>\/ <cmd>nohlsearch<CR> $/;"	m
@@ -77,8 +73,10 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <leader>td	init.vim	/^nmap <leader>td :bdelete<cr>$/;"	m
 <leader>tq	init.vim	/^nmap <leader>tq :ClearQuickfixList<cr>$/;"	m
 <leader>u	init.vim	/^nnoremap <leader>u :UndotreeToggle<CR>$/;"	m
-<tab>	init.vim	/^nnoremap <tab> <Plug>Sneak_;$/;"	m
-<tab>	init.vim	/^vnoremap <tab> <Plug>Sneak_;$/;"	m
+<left>	init.vim	/^nnoremap <left> <Plug>Sneak_,$/;"	m
+<left>	init.vim	/^vnoremap <left> <Plug>Sneak_,$/;"	m
+<right>	init.vim	/^nnoremap <right> <Plug>Sneak_;$/;"	m
+<right>	init.vim	/^vnoremap <right> <Plug>Sneak_;$/;"	m
 B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
 E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
