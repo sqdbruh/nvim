@@ -1,9 +1,11 @@
 " TODO(sqdrck): Clean this up and probably make init.lua out of this.
-set nobackup
+set nobackup nowritebackup
+set noswapfile
+set noundofile
 nnoremap <SPACE> <Nop>
 set nocompatible
-set backupdir=~/vimtmp//,.
-set directory=~/vimtmp//,.
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
 set noswapfile
 let mapleader=" "
 "nnoremap ; <tab>| nnoremap <tab> ;
@@ -514,8 +516,6 @@ function! ToggleQuickFix()
     endif
 endfunction
 
-nnoremap <silent> tq :call ToggleQuickFix()<cr>
-
 map <leader><cr> i<cr><ESC>
 
 "let g:tagbar_foldlevel = 0
@@ -645,3 +645,5 @@ highlight link Sneak None
 " Needed if a plugin sets the colorscheme dynamically:
 autocmd User SneakLeave highlight clear Sneak
 " 2-character Sneak (default)
+
+nnoremap <silent> tq :call ToggleQuickFix()<cr>
