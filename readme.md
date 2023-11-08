@@ -8,7 +8,7 @@ My neovim config, that im using with Wezterm terminal.
 - [ ] Omnisharp signature help is conflicting with deoplete.
 - [ ] Omnisharp server needs to be restarted after adding .cs files from Unity.
 - [ ] cnext and cprev doesn't work when there is only one item in quickfix list.
-- [ ] Sometimes after VISUAL mode start cursor jumps the fuck away after pressing j or k
+- [x] Sometimes after VISUAL mode start cursor jumps the fuck away after pressing j or k (it was my keyboard)
 
 ## Instalation ([Choco](https://chocolatey.org/) on Windows)
 1. `choco install neovim`
