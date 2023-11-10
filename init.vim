@@ -75,7 +75,7 @@ Plug 'glts/vim-radical'
 Plug 'folke/which-key.nvim' " optional
 
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'tpope/vim-repeat'
@@ -83,7 +83,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-dispatch'
+"Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-pathogen'
 Plug 'tpope/vim-speeddating'
@@ -100,7 +100,7 @@ Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
-Plug 'nvim-telescope/telescope-file-browser.nvim'
+"Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
@@ -117,6 +117,7 @@ line_numbers = true,
 trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 }
 EOF
+
 nnoremap <leader>u :UndotreeToggle<CR>
 
 let g:context_max_height = 2
@@ -373,7 +374,7 @@ if has('win32')
     let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
     let g:python3_host_prog = 'C:\Program Files\Python311\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
-    luafile ~\AppData\Local\nvim\telescope.lua
+    "luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
@@ -536,8 +537,8 @@ set splitright
 "lua require("indent_blankline").setup {  }
 
 let g:clang_format#style_options = {
+            "\ "BasedOnStyle" : "Microsoft", FIX THIS!
             \ "AccessModifierOffset" : -4,
-            \ "BasedOnStyle" : "Microsoft",
             \ "PointerAlignment" : "Left",
             \ "SortIncludes" : "Never",
             \ "BreakBeforeBraces" : "Allman",
@@ -626,11 +627,6 @@ nnoremap 7fd :e#7<CR>
 nnoremap 8fd :e#8<CR>
 nnoremap 9fd :e#9<CR>
 
-map <Leader><Leader> <Plug>(easymotion-s2)
-"map <Leader>j <Plug>(easymotion-linebackward)
-"map <Leader>; <Plug>(easymotion-lineforward)
-map <Leader>l <Plug>(easymotion-k)
-map <Leader>k <Plug>(easymotion-j)
 map <leader>; <Plug>Sneak_f
 map <leader>j <Plug>Sneak_F
 map <leader>: <Plug>Sneak_t

@@ -53,10 +53,7 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <F9>	init.vim	/^nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>$/;"	m
 <Home>	init.vim	/^inoremap <Home> <C-o>^$/;"	m
 <Home>	init.vim	/^map <Home> ^$/;"	m
-<Leader><Leader>	init.vim	/^map <Leader><Leader> <Plug>(easymotion-s2)$/;"	m
 <Leader>h	init.vim	/^nnoremap <Leader>h <cmd>split<cr>$/;"	m
-<Leader>k	init.vim	/^map <Leader>k <Plug>(easymotion-j)$/;"	m
-<Leader>l	init.vim	/^map <Leader>l <Plug>(easymotion-k)$/;"	m
 <Leader>v	init.vim	/^nnoremap <Leader>v <cmd>vsplit<cr>$/;"	m
 <SPACE>	init.vim	/^nnoremap <SPACE> <Nop>$/;"	m
 <c-n>	init.vim	/^nmap <c-n> <plug>(YoinkPostPasteSwapBack)$/;"	m

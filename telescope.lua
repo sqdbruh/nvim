@@ -45,15 +45,15 @@ require("telescope").load_extension("git_worktree")
 require("telescope").load_extension('harpoon')
 require("telescope").load_extension('project')
 
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    disable = {"c_sharp"},
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
+--require'nvim-treesitter.configs'.setup {
+  --highlight = {
+    --enable = true,
+    --disable = {"c_sharp"},
+    ---- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    ---- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    ---- Using this option may slow down your editor, and you may see some duplicate highlights.
+    ---- Instead of true it can also be a list of languages
+    --additional_vim_regex_highlighting = false,
+  --},
+--}
 
