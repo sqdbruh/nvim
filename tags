@@ -39,18 +39,18 @@ $BAT_THEME	init.vim	/^let $BAT_THEME='gruvbox'$/;"	v
 <End>	init.vim	/^inoremap <End> <C-o>\$$/;"	m
 <End>	init.vim	/^map <End> \$$/;"	m
 <Esc>	init.vim	/^nnoremap <Esc> <C-\\><C-n>$/;"	m
-<F10>	init.vim	/^nnoremap <silent> <F10> :w <bar> Make f10<CR><cr>$/;"	m
-<F11>	init.vim	/^nnoremap <silent> <F11> :w <bar> Make f11<CR><cr>$/;"	m
-<F12>	init.vim	/^nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>$/;"	m
-<F1>	init.vim	/^nnoremap <silent> <F1> :w <bar> Make f1<CR><cr>$/;"	m
-<F2>	init.vim	/^nnoremap <silent> <F2> :w <bar> Make f2<CR><cr>$/;"	m
-<F3>	init.vim	/^nnoremap <silent> <F3> :w <bar> Make f3<CR><cr>$/;"	m
-<F4>	init.vim	/^nnoremap <silent> <F4> :w <bar> Make f4<CR><cr>$/;"	m
-<F5>	init.vim	/^nnoremap <silent> <F5> :w <bar> Make f5<CR><cr>$/;"	m
-<F6>	init.vim	/^nnoremap <silent> <F6> :w <bar> Make f6<CR><cr>$/;"	m
-<F7>	init.vim	/^nnoremap <silent> <F7> :w <bar> Make f7<CR><cr>$/;"	m
-<F8>	init.vim	/^nnoremap <silent> <F8> :w <bar> Make f8<CR><cr>$/;"	m
-<F9>	init.vim	/^nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>$/;"	m
+<F10>	init.vim	/^nnoremap <silent> <F10> <cmd>w <bar> make f10<cr><cr>$/;"	m
+<F11>	init.vim	/^nnoremap <silent> <F11> <cmd>w <bar> make f11<cr><cr>$/;"	m
+<F12>	init.vim	/^nnoremap <silent> <F12> <cmd>w <bar> make f12<cr><cr>$/;"	m
+<F1>	init.vim	/^nnoremap <silent> <F1> <cmd>w <bar> make f1<cr><cr>$/;"	m
+<F2>	init.vim	/^nnoremap <silent> <F2> <cmd>w <bar> make f2<cr><cr>$/;"	m
+<F3>	init.vim	/^nnoremap <silent> <F3> <cmd>w <bar> make f3<cr><cr>$/;"	m
+<F4>	init.vim	/^nnoremap <silent> <F4> <cmd>w <bar> make f4<cr><cr>$/;"	m
+<F5>	init.vim	/^nnoremap <silent> <F5> <cmd>w <bar> make f5<cr><cr>$/;"	m
+<F6>	init.vim	/^nnoremap <silent> <F6> <cmd>w <bar> make f6<cr><cr>$/;"	m
+<F7>	init.vim	/^nnoremap <silent> <F7> <cmd>w <bar> make f7<cr><cr>$/;"	m
+<F8>	init.vim	/^nnoremap <silent> <F8> <cmd>w <bar> make f8<cr><cr>$/;"	m
+<F9>	init.vim	/^nnoremap <silent> <F9> <cmd>w <bar> make f9<cr><cr>$/;"	m
 <Home>	init.vim	/^inoremap <Home> <C-o>^$/;"	m
 <Home>	init.vim	/^map <Home> ^$/;"	m
 <Leader>h	init.vim	/^nnoremap <Leader>h <cmd>split<cr>$/;"	m

@@ -374,7 +374,7 @@ if has('win32')
     let g:deoplete#sources#clang#clang_header = 'C:\\Program Files\\LLVM\\lib\\clang'
     let g:python3_host_prog = 'C:\Program Files\Python311\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
-    "luafile ~\AppData\Local\nvim\telescope.lua
+    luafile ~\AppData\Local\nvim\telescope.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')
@@ -542,17 +542,25 @@ let g:clang_format#style_options = {
             \ "PointerAlignment" : "Left",
             \ "SortIncludes" : "Never",
             \ "BreakBeforeBraces" : "Allman",
-            \ "AllowShortIfStatementsOnASingleLine" : "false",
+            \ "AllowShortIfStatementsOnASingleLine" : "Never",
+            \ "AllowShortLambdasOnASingleLine" : "None",
+            \ "AllowShortLoopsOnASingleLine" : "false",
+            \ "AllowShortBlocksOnASingleLine" : "Never",
+            \ "AllowShortCaseLabelsOnASingleLine" : "false",
+            \ "AllowShortEnumsOnASingleLine" : "false",
+            \ "AllowShortFunctionsOnASingleLine" : "None",
+            \ "CompactNamespaces" : "false",
             \ "BinPackArguments" : "false",
             \ "BinPackParameters" : "false",
             \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "SpaceBeforeParens " : "Never",
+            \ "SpaceBeforeParens" : "Never",
             \ "BreakBeforeTernaryOperators" : "true",
             \ "AlignAfterOpenBracket" : "AlwaysBreak",
+            \ "ColumnLimit" : 130,
             \ "Standard" : "C++11"}
 
-autocmd FileType c,cpp,objc nnoremap <buffer>cf :<C-u>ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer>cf :ClangFormat<CR>
+autocmd FileType c,cpp,objc nnoremap <silent><buffer>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <silent><buffer>cf :ClangFormat<CR>
 
 
 highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
@@ -562,18 +570,18 @@ hi link EasyMotionShade  Comment
 hi Cursor guifg=white guibg=white
 hi Cursor2 guifg=white guibg=white
 nnoremap <Esc> <C-\><C-n>
-nnoremap <silent> <F1> :w <bar> Make f1<CR><cr>
-nnoremap <silent> <F2> :w <bar> Make f2<CR><cr>
-nnoremap <silent> <F3> :w <bar> Make f3<CR><cr>
-nnoremap <silent> <F4> :w <bar> Make f4<CR><cr>
-nnoremap <silent> <F5> :w <bar> Make f5<CR><cr>
-nnoremap <silent> <F6> :w <bar> Make f6<CR><cr>
-nnoremap <silent> <F7> :w <bar> Make f7<CR><cr>
-nnoremap <silent> <F8> :w <bar> Make f8<CR><cr>
-nnoremap <silent> <F9> :w <bar> Make f9<CR><cr>
-nnoremap <silent> <F10> :w <bar> Make f10<CR><cr>
-nnoremap <silent> <F11> :w <bar> Make f11<CR><cr>
-nnoremap <silent> <F12> :w <bar> Make f12<CR><cr>
+nnoremap <silent> <F1> <cmd>w <bar> make f1<cr><cr>
+nnoremap <silent> <F2> <cmd>w <bar> make f2<cr><cr>
+nnoremap <silent> <F3> <cmd>w <bar> make f3<cr><cr>
+nnoremap <silent> <F4> <cmd>w <bar> make f4<cr><cr>
+nnoremap <silent> <F5> <cmd>w <bar> make f5<cr><cr>
+nnoremap <silent> <F6> <cmd>w <bar> make f6<cr><cr>
+nnoremap <silent> <F7> <cmd>w <bar> make f7<cr><cr>
+nnoremap <silent> <F8> <cmd>w <bar> make f8<cr><cr>
+nnoremap <silent> <F9> <cmd>w <bar> make f9<cr><cr>
+nnoremap <silent> <F10> <cmd>w <bar> make f10<cr><cr>
+nnoremap <silent> <F11> <cmd>w <bar> make f11<cr><cr>
+nnoremap <silent> <F12> <cmd>w <bar> make f12<cr><cr>
 " filename(line) : error|warning|fatal error C0000: message
 
 set errorformat=%f(%l):\ %trror\ C%n:\ %m
