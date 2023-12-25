@@ -3,6 +3,9 @@ set nobackup nowritebackup
 set noswapfile
 set noundofile
 nnoremap <SPACE> <Nop>
+set lazyredraw
+set synmaxcol=128
+syntax sync minlines=256
 set nocompatible
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
@@ -10,7 +13,7 @@ set noswapfile
 let mapleader=" "
 "nnoremap ; <tab>| nnoremap <tab> ;
 "vnoremap ; <tab>| vnoremap <tab> ;
-
+set guifont=JetBrains\ Mono:h10
 noremap ; l
 noremap l k
 noremap k j
@@ -94,13 +97,17 @@ Plug 'folke/todo-comments.nvim'
 
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
+
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
+
 "Plug 'nvim-telescope/telescope-file-browser.nvim'
+
 Plug 'BurntSushi/ripgrep'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'mbbill/undotree'
@@ -247,7 +254,6 @@ function! SetCSSettings()
                 \ 'CS8019': {'type': 'None'},
                 \ 'RemoveUnnecessaryImportsFixable': {'type': 'None'}
                 \}
-    "exe ":ALEEnable"
     " Use deoplete.
     call deoplete#enable()
     call echodoc#disable()
@@ -258,7 +264,7 @@ function! SetCSSettings()
     call deoplete#custom#option('sources', {
                 \ 'cs': ['omnisharp'],
                 \ })
-    " Use OmniSharp-vim omnifunc 
+     "Use OmniSharp-vim omnifunc 
     call deoplete#custom#source('omni', 'functions', { 'cs':  'OmniSharp#Complete' })
 
     " Set how Deoplete filters omnifunc output.
@@ -266,9 +272,6 @@ function! SetCSSettings()
                 \ 'cs': '[^. *\t]\.\w*',
                 \})
 
-    "nnoremap <C-k> :ALENext<cr>
-    "nnoremap <C-l> :ALEPrevious<cr>
-    " ... then goes your mappings for :OmniSharp* functions, see its doc
 endfunction
 
 augroup csharp_commands
@@ -375,6 +378,7 @@ if has('win32')
     let g:python3_host_prog = 'C:\Program Files\Python311\python.exe'
     luafile ~\AppData\Local\nvim\luasnip.lua
     luafile ~\AppData\Local\nvim\telescope.lua
+    luafile ~\AppData\Local\nvim\lsp.lua
     luafile ~\AppData\Local\nvim\todo-comments.lua
     luafile ~\AppData\Local\nvim\lua\lsp-ext.lua
 elseif has('macunix')

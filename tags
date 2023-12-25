@@ -217,7 +217,6 @@ loaded_tagselect	.\tagselect.vim	/^let loaded_tagselect=100$/;"	v
 local f 	.\luasnip.lua	/^local f = ls.function_node$/;"	f
 local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
 local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
-local on_attach 	.\lsp.lua	/^local on_attach = function(client, bufnr)$/;"	f
 mapleader	init.vim	/^let mapleader=" "$/;"	v
 n	init.vim	/^nnoremap n nzzzv$/;"	m
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
@@ -354,7 +353,6 @@ tp	init.vim	/^nnoremap tp <cmd>tp<CR>$/;"	m
 tq	init.vim	/^nnoremap <silent> tq :call ToggleQuickFix()<cr>$/;"	m
 ts	init.vim	/^nnoremap ts <C-W>r $/;"	m
 tu	init.vim	/^nnoremap tu <cmd>tabprevious<cr>$/;"	m
-vim.lsp.handlers["textDocument/publishDiagnostics"] 	.\lsp.lua	/^vim.lsp.handlers["textDocument\/publishDiagnostics"] = function() end$/;"	f
 x	init.vim	/^nnoremap x d$/;"	m
 xX	init.vim	/^nmap xX ^xg_$/;"	m
 xx	init.vim	/^nnoremap xx dd$/;"	m
