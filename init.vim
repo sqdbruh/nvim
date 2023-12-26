@@ -23,9 +23,9 @@ noremap l gk
 command! ClearQuickfixList cexpr []
 nmap <leader>tq :ClearQuickfixList<cr>
 autocmd VimEnter * :clearjumps
+autocmd VimEnter * wincmd =
 
 call plug#begin()
-"Plug 'rhysd/clever-f.vim'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'Shougo/vimproc.vim'
 Plug 'jbyuki/quickmath.nvim'
@@ -655,3 +655,12 @@ autocmd User SneakLeave highlight clear Sneak
 " 2-character Sneak (default)
 
 nnoremap <silent> tq :call ToggleQuickFix()<cr>
+
+"highlight Cursor guifg=black guibg=#52ad70
+"highlight iCursor guifg=black guibg=#52ad70
+highlight Cursor guifg=black guibg=steelblue
+highlight iCursor guifg=black guibg=steelblue
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10

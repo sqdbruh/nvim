@@ -217,7 +217,7 @@ exe "let s:sp_darkpurple = ' guisp=". s:palette.gui.darkpurple[s:style] ."'"
 " ----------------------------------------------------------------------------
 exe "hi! ColorColumn"   .s:fg_none        .s:bg_line        .s:fmt_none
 "   Conceal"
-"   Cursor"
+   "Cursor"
 "   CursorIM"
 exe "hi! CursorColumn"  .s:fg_none        .s:bg_line        .s:fmt_none
 exe "hi! CursorLine"    .s:fg_none        .s:bg_line        .s:fmt_none
