@@ -23,7 +23,6 @@ require('telescope').setup {
             }
         }
     },
-	
     pickers = {
         -- Default configuration for builtin pickers goes here:
         -- picker_name = {
