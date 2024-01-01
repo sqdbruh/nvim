@@ -6,6 +6,7 @@ require('telescope').setup {
             override_file_sorter = true,     -- override the file sorter
         },
     },
+	
     defaults = {
         file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "tags", "%.unity","%.csproj" , "%.mat", "%.asset", "%.prefab", "%.meta", "TextMesh Pro", "Plugins", "Library", ".git/", ".cache", "%.o", "%.a", "%.out", "%.class",
 		"%.pdf", "%.mkv", "%.mp4", "%.zip", "%.map"},
