@@ -21,11 +21,11 @@ ls.config.set_config {
 }
 
 ls.add_snippets("all", {
-s("todo", { t("// TODO(sqdrck): ") }),
-s("note", { t("// NOTE(sqdrck): ") }),
-s("important", { t("// IMPORTANT(sqdrck): ") }),
-s("warn", { t("// WARNING(sqdrck): ") }),
-s("perf", { t("// PERFORMANCE(sqdrck): ") }),
+s("todo", { t("// TODO(sqd): ") }),
+s("note", { t("// NOTE(sqd): ") }),
+s("important", { t("// IMPORTANT(sqd): ") }),
+s("warn", { t("// WARNING(sqd): ") }),
+s("perf", { t("// PERFORMANCE(sqd): ") }),
 })
 
 require("luasnip/loaders/from_vscode").lazy_load() -- You can pass { paths = "./my-snippets/"} as well
