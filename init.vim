@@ -22,6 +22,7 @@ Plug 'bkad/CamelCaseMotion'
 "Plug 'sharkdp/bat'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'ThePrimeagen/harpoon'
@@ -68,29 +69,64 @@ Plug 'folke/todo-comments.nvim'
 
 "Plug 'BurntSushi/ripgrep'
 "Plug 'ludovicchabant/vim-gutentags'
+Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
 call plug#end()
 lua << EOF
 require("nvim-autopairs").setup {}
 EOF
+
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['go'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
+    \ 'name': 'tags',
+    \ 'allowlist': ['c'],
+    \ 'completor': function('asyncomplete#sources#tags#completor'),
+    \ 'config': {
+    \    'max_file_size': 50000000,
+    \  },
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'allowlist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
 autocmd VimLeave * wshada!
 let g:lsp_diagnostics_enabled = 0 
 set grepprg=rg\ --vimgrep
-
+"let g:asyncomplete_min_chars = 1
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
-    nmap <buffer> gi <plug>(lsp-definition)
-    nmap <buffer> gd <plug>(lsp-declaration)
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gD <plug>(lsp-declaration)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
     nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gl <plug>(lsp-document-diagnostics)
-    nmap <buffer> <f2> <plug>(lsp-rename)
-    nmap <buffer> <f3> <plug>(lsp-hover)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 endfunction
+
 augroup lsp_install
     au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+let g:lsp_document_code_action_signs_enabled=0
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
 nmap <silent> <A-h> :lua require('smart-splits').resize_left()<CR>
@@ -324,17 +360,18 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 
+autocmd FileType cs :call SetCSSettings()
 
 " TODO(sqdrck): Think about this later.
 function! SetCSSettings()
     nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
     nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
     nmap <silent> <buffer> <Leader>osfu <Plug>(omnisharp_fix_usings)
-    nmap <silent> <buffer> cf <Plug>(omnisharp_code_format)
+    nmap <silent> <buffer> <leader>cf <Plug>(omnisharp_code_format)
     nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-    nmap <silent> <buffer> <C-]> <Plug>(omnisharp_go_to_definition)
-    nmap <silent> <buffer> <leader>gi <Plug>(omnisharp_find_implementations)
+    nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
+    nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
 
     nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
     xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)

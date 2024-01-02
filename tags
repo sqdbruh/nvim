@@ -62,8 +62,10 @@ $LANG	init.vim	/^let $LANG = 'en_US'$/;"	v
 <leader>dam	init.vim	/^nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>$/;"	m
 <leader>fb	init.vim	/^nnoremap <leader>fb <cmd>Telescope buffers<cr>$/;"	m
 <leader>fd	init.vim	/^nnoremap <leader>fd :e#<CR>$/;"	m
+<leader>ff	init.vim	/^nnoremap <leader>ff <cmd>Telescope find_files<cr>$/;"	m
 <leader>fg	init.vim	/^nnoremap <leader>fg :call GrepWordUnderCursor()<CR>$/;"	m
 <leader>fh	init.vim	/^nnoremap <leader>fh <cmd>Telescope harpoon marks<cr>$/;"	m
+<leader>fl	init.vim	/^nnoremap <leader>fl <cmd>Telescope live_grep<cr>$/;"	m
 <leader>fm	init.vim	/^nnoremap <leader>fm <cmd>Telescope marks<cr>$/;"	m
 <leader>fp	init.vim	/^nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>$/;"	m
 <leader>fq	init.vim	/^nnoremap <leader>fq <cmd>Telescope quickfix<cr>$/;"	m
@@ -85,7 +87,9 @@ $LANG	init.vim	/^let $LANG = 'en_US'$/;"	v
 <leader>qc	init.vim	/^nmap <leader>qc :ClearQuickfixList<cr>$/;"	m
 <leader>s	init.vim	/^nmap <leader>s <plug>(SubversiveSubstituteRange)$/;"	m
 <leader>tq	init.vim	/^nnoremap <silent> <leader>tq :call ToggleQuickFix()<cr>$/;"	m
+B	init.vim	/^map <silent> B <Plug>CamelCaseMotion_b$/;"	m
 ClearQuickfixList	init.vim	/^command! ClearQuickfixList cexpr []$/;"	c
+E	init.vim	/^map <silent> E <Plug>CamelCaseMotion_e$/;"	m
 GetTagIndxUnderCursor	.\tagselect.vim	/^function! s:GetTagIndxUnderCursor() " {{{$/;"	f
 GrepWordUnderCursor	init.vim	/^function! GrepWordUnderCursor()$/;"	f
 HeaderToggle	init.vim	/^function! HeaderToggle()$/;"	f
@@ -115,6 +119,7 @@ Tags	.\tagselect.vim	/^command! -nargs=0 Tags :call <SID>TagSelectMain('tags')$/
 Tjump	.\tagselect.vim	/^command! -nargs=? -complete=tag Tjump :call <SID>TagSelectMain('tjump',$/;"	c
 ToggleQuickFix	init.vim	/^function! ToggleQuickFix()$/;"	f
 Tselect	.\tagselect.vim	/^command! -nargs=? -complete=tag Tselect :call <SID>TagSelectMain('tselect',$/;"	c
+W	init.vim	/^map <silent> W <Plug>CamelCaseMotion_w$/;"	m
 X	init.vim	/^nnoremap X D$/;"	m
 ["<S-Tab>"] 	.\nvim-cmp.lua	/^        ["<S-Tab>"] = cmp.mapping(function()$/;"	f
 ["<Tab>"] 	.\nvim-cmp.lua	/^        ["<Tab>"] = cmp.mapping(function(fallback)$/;"	f
@@ -127,17 +132,15 @@ dD	init.vim	/^nmap dD ^dg_$/;"	m
 dam	init.vim	/^nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>$/;"	m
 enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
 expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
-ff	init.vim	/^nnoremap ff <cmd>Telescope find_files<cr>$/;"	m
-fl	init.vim	/^nnoremap fl <cmd>Telescope live_grep<cr>$/;"	m
 g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']$/;"	v
 g:OmniSharp_highlighting	init.vim	/^let g:OmniSharp_highlighting = 0$/;"	v
-g:asyncomplete_popup_delay	init.vim	/^let g:asyncomplete_popup_delay = 100$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
 g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
 g:indentLine_color_gui	init.vim	/^let g:indentLine_color_gui = '#262626'$/;"	v
 g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 0$/;"	v
 g:lsp_diagnostics_enabled	init.vim	/^let g:lsp_diagnostics_enabled = 0 $/;"	v
+g:lsp_document_code_action_signs_enabled	init.vim	/^let g:lsp_document_code_action_signs_enabled=0$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
 g:tagselectWinSize	.\tagselect.vim	/^  let g:tagselectWinSize = -1$/;"	v
 g:terminator_split_location	init.vim	/^let g:terminator_split_location = 'vertical belowright'$/;"	v
@@ -149,15 +152,18 @@ g<C-]>	.\tagselect.vim	/^  vnoremap <silent> g<C-]> :<C-U>call <SID>TagSelectVis
 gP	init.vim	/^nmap gP <plug>(YoinkPaste_gP)$/;"	m
 g]	.\tagselect.vim	/^  nnoremap <silent> g] :Tselect <cword><CR>$/;"	m
 g]	.\tagselect.vim	/^  vnoremap <silent> g] :<C-U>call <SID>TagSelectVisual('tselect')<CR>$/;"	m
+ge	init.vim	/^map <silent> ge <Plug>CamelCaseMotion_ge$/;"	m
 gp	init.vim	/^nmap gp <plug>(YoinkPaste_gp)$/;"	m
 i	init.vim	/^nnoremap <expr> i IndentWithI()$/;"	m
 ia	init.vim	/^omap ia <plug>Argumentative_OpPendingInnerTextObject$/;"	m
 loaded_tagselect	.\tagselect.vim	/^let loaded_tagselect=100$/;"	v
-local f 	luasnip.lua	/^local f = ls.function_node$/;"	f
+local f 	.\luasnip.lua	/^local f = ls.function_node$/;"	f
 local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
 local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
+lsp_install	init.vim	/^augroup lsp_install$/;"	a
 mapleader	init.vim	/^let mapleader=" "$/;"	v
 n	init.vim	/^nnoremap n nzzzv$/;"	m
+on_lsp_buffer_enabled	init.vim	/^function! s:on_lsp_buffer_enabled() abort$/;"	f
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
 s	init.vim	/^nmap s <plug>(SubversiveSubstitute)$/;"	m
 s:b	.\colors\handmade.vim	/^let s:b      = ",bold"$/;"	v
