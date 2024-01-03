@@ -134,6 +134,7 @@ enabled 	.\nvim-cmp.lua	/^    enabled = function()$/;"	f
 expand 	.\nvim-cmp.lua	/^        expand = function(args)$/;"	f
 g:Hexokinase_highlighters	init.vim	/^let g:Hexokinase_highlighters = ['virtual']$/;"	v
 g:OmniSharp_highlighting	init.vim	/^let g:OmniSharp_highlighting = 0$/;"	v
+g:asyncomplete_preprocessor	init.vim	/^let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor'), function('s:my_asyncomplete_preprocessor')]$/;"	v
 g:clang_format#style_options	init.vim	/^let g:clang_format#style_options = {$/;"	v
 g:colors_name	.\colors\handmade.vim	/^let g:colors_name = "patatetoy"$/;"	v
 g:compiler	init.vim	/^let g:compiler = 'msvc'$/;"	v
@@ -141,6 +142,7 @@ g:indentLine_color_gui	init.vim	/^let g:indentLine_color_gui = '#262626'$/;"	v
 g:indentLine_leadingSpaceEnabled	init.vim	/^let g:indentLine_leadingSpaceEnabled = 0$/;"	v
 g:lsp_diagnostics_enabled	init.vim	/^let g:lsp_diagnostics_enabled = 0 $/;"	v
 g:lsp_document_code_action_signs_enabled	init.vim	/^let g:lsp_document_code_action_signs_enabled=0$/;"	v
+g:lsp_document_highlight_enabled	init.vim	/^let g:lsp_document_highlight_enabled = 0$/;"	v
 g:tagselectExpandCurWord	.\tagselect.vim	/^  let g:tagselectExpandCurWord = 1$/;"	v
 g:tagselectWinSize	.\tagselect.vim	/^  let g:tagselectWinSize = -1$/;"	v
 g:terminator_split_location	init.vim	/^let g:terminator_split_location = 'vertical belowright'$/;"	v
@@ -162,6 +164,7 @@ local feedkey 	.\nvim-cmp.lua	/^local feedkey = function(key, mode)$/;"	f
 local has_words_before 	.\nvim-cmp.lua	/^local has_words_before = function()$/;"	f
 lsp_install	init.vim	/^augroup lsp_install$/;"	a
 mapleader	init.vim	/^let mapleader=" "$/;"	v
+my_asyncomplete_preprocessor	init.vim	/^function! s:my_asyncomplete_preprocessor(options, matches) abort$/;"	f
 n	init.vim	/^nnoremap n nzzzv$/;"	m
 on_lsp_buffer_enabled	init.vim	/^function! s:on_lsp_buffer_enabled() abort$/;"	f
 p	init.vim	/^nmap p <plug>(YoinkPaste_p)$/;"	m
@@ -272,6 +275,7 @@ s:t_none	.\colors\handmade.vim	/^let s:t_none = "NONE"$/;"	v
 s:title	.\tagselect.vim	/^let s:title = '[Tag Select]'$/;"	v
 s:u	.\colors\handmade.vim	/^let s:u      = ",underline"$/;"	v
 s:wipebuf	.\Session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
+sort_by_priority_preprocessor	init.vim	/^function! s:sort_by_priority_preprocessor(options, matches) abort$/;"	f
 ss	init.vim	/^nmap ss <plug>(SubversiveSubstituteLine)$/;"	m
 x	init.vim	/^nnoremap x d$/;"	m
 xX	init.vim	/^nmap xX ^xg_$/;"	m

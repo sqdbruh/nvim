@@ -1,3 +1,4 @@
+set statusline=%f\ %y\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 nnoremap <SPACE> <Nop>
 set termguicolors
 let mapleader=" "
@@ -103,11 +104,13 @@ autocmd VimLeave * wshada!
 let g:lsp_diagnostics_enabled = 0 
 set grepprg=rg\ --vimgrep
 "let g:asyncomplete_min_chars = 1
+let g:lsp_document_highlight_enabled = 0
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gh :LspDocumentSwitchSourceHeader<cr>
     nmap <buffer> gD <plug>(lsp-declaration)
     nmap <buffer> gs <plug>(lsp-document-symbol-search)
     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
@@ -257,6 +260,44 @@ let g:indentLine_color_gui = '#262626'
 let g:indentLine_leadingSpaceEnabled = 0
 
 nnoremap <C-t> :NERDTreeToggle<CR>
+function! s:my_asyncomplete_preprocessor(options, matches) abort
+    let l:visited = {}
+    let l:items = []
+    for [l:source_name, l:matches] in items(a:matches)
+        for l:item in l:matches['items']
+            if stridx(l:item['word'], a:options['base']) == 0
+                if !has_key(l:visited, l:item['word'])
+                    call add(l:items, l:item)
+                    let l:visited[l:item['word']] = 1
+                endif
+            endif
+        endfor
+    endfor
+
+    call asyncomplete#preprocess_complete(a:options, l:items)
+endfunction
+
+function! s:sort_by_priority_preprocessor(options, matches) abort
+    let l:items = []
+    for [l:source_name, l:matches] in items(a:matches)
+        for l:item in l:matches['items']
+            if stridx(l:item['word'], a:options['base']) == 0
+                let l:item['priority'] =
+                            \ get(asyncomplete#get_source_info(l:source_name),'priority',0)
+                call add(l:items, l:item)
+            endif
+        endfor
+    endfor
+
+    let l:items = sort(l:items, {a, b -> b['priority'] - a['priority']})
+
+    call asyncomplete#preprocess_complete(a:options, l:items)
+endfunction
+
+let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor'), function('s:my_asyncomplete_preprocessor')]
+autocmd FileType TelescopePrompt let b:asyncomplete_enable = 0
+autocmd FileType lsp-quickpick-filter let b:asyncomplete_enable = 0
+autocmd FileType lsp-quickpick let b:asyncomplete_enable = 0
 
 let g:clang_format#style_options = {
             "\ "BasedOnStyle" : "Microsoft", FIX THIS!
