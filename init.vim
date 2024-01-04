@@ -7,7 +7,6 @@ set langmenu=en_US
 let $LANG = 'en_US'
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
-
 set splitbelow
 set splitright
 set guifont=JetBrains\ Mono:h10
@@ -19,6 +18,7 @@ call plug#begin()
 "Plug 'jiangmiao/auto-pairs'
 "Plug 'itchyny/lightline.vim'
 "Plug 'kshenoy/vim-signature'
+Plug 'stevearc/oil.nvim'
 Plug 'bkad/CamelCaseMotion'
 "Plug 'sharkdp/bat'
 Plug 'prabirshrestha/asyncomplete.vim'
@@ -74,8 +74,16 @@ Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 call plug#end()
 lua << EOF
+require("oil").setup()
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("nvim-autopairs").setup {}
 EOF
+
+ let g:lsp_settings = {
+ \  'clangd': {
+ \    'args': ['-header-insertion=never'],
+ \  },
+ \}
 
 call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
     \ 'name': 'buffer',
