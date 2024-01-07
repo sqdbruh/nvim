@@ -15,6 +15,7 @@ autocmd VimEnter * :clearjumps
 autocmd VimEnter * wincmd =
 
 call plug#begin()
+"Plug 'szw/vim-tags'
 "Plug 'jiangmiao/auto-pairs'
 "Plug 'itchyny/lightline.vim'
 "Plug 'kshenoy/vim-signature'
@@ -69,9 +70,9 @@ Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 
 "Plug 'BurntSushi/ripgrep'
-"Plug 'ludovicchabant/vim-gutentags'
 Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'machakann/asyncomplete-ezfilter.vim'
 call plug#end()
 lua << EOF
 require("oil").setup()
@@ -79,57 +80,8 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("nvim-autopairs").setup {}
 EOF
 
- let g:lsp_settings = {
- \  'clangd': {
- \    'args': ['-header-insertion=never'],
- \  },
- \}
+nnoremap gc :silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no<CR>
 
-call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'allowlist': ['*'],
-    \ 'blocklist': ['go'],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-    \ 'config': {
-    \    'max_buffer_size': 5000000,
-    \  },
-    \ }))
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
-    \ 'name': 'tags',
-    \ 'allowlist': ['c'],
-    \ 'completor': function('asyncomplete#sources#tags#completor'),
-    \ 'config': {
-    \    'max_file_size': 50000000,
-    \  },
-    \ }))
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'allowlist': ['*'],
-    \ 'priority': 10,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-autocmd VimLeave * wshada!
-let g:lsp_diagnostics_enabled = 0 
-set grepprg=rg\ --vimgrep
-"let g:asyncomplete_min_chars = 1
-let g:lsp_document_highlight_enabled = 0
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gh :LspDocumentSwitchSourceHeader<cr>
-    nmap <buffer> gD <plug>(lsp-declaration)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-endfunction
 
 augroup lsp_install
     au!
@@ -208,8 +160,8 @@ set number
 set relativenumber
 set backspace=indent,eol,start
 
-map <C-j> :cn<CR>zz
-map <C-k> :cp<CR>zz
+map <C-j> :cn<CR>
+map <C-k> :cp<CR>
 
 map <silent> W <Plug>CamelCaseMotion_w
 map <silent> B <Plug>CamelCaseMotion_b
@@ -263,46 +215,93 @@ endfunction
 nnoremap <leader>fg :call GrepWordUnderCursor()<CR>
 nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 
-
+"
 let g:indentLine_color_gui = '#262626'
 let g:indentLine_leadingSpaceEnabled = 0
 
+ let g:lsp_settings = {
+ \  'clangd': {
+ \    'args': ['-header-insertion=never'],
+ \  },
+ \}
+
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'priority': -1,
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['go'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
+    \ 'name': 'tags',
+    \ 'priority': -2,
+    \ 'allowlist': ['c', 'cpp'],
+    \ 'completor': function('asyncomplete#sources#tags#completor'),
+    \ 'config': {
+    \    'max_file_size': 50000000,
+    \  },
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'allowlist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+autocmd VimLeave * wshada!
+let g:lsp_diagnostics_enabled = 0 
+set grepprg=rg\ --vimgrep
+"let g:asyncomplete_min_chars = 1
+let g:lsp_document_highlight_enabled = 0
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    "if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gh :LspDocumentSwitchSourceHeader<cr>
+    nmap <buffer> gD <plug>(lsp-declaration)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+endfunction
+
 nnoremap <C-t> :NERDTreeToggle<CR>
-function! s:my_asyncomplete_preprocessor(options, matches) abort
-    let l:visited = {}
-    let l:items = []
-    for [l:source_name, l:matches] in items(a:matches)
-        for l:item in l:matches['items']
+
+
+function! s:my_asyncomplete_preprocessor(options, matches) abort 
+    let l:dict = {} 
+    for [l:source_name, l:matches] in items(a:matches) 
+        let l:source_priority = get(asyncomplete#get_source_info(l:source_name),'priority',0)
+        for l:item in l:matches['items'] 
             if stridx(l:item['word'], a:options['base']) == 0
-                if !has_key(l:visited, l:item['word'])
-                    call add(l:items, l:item)
-                    let l:visited[l:item['word']] = 1
+            "if l:item['word'] =~ '^' . a:options['base'] 
+                let l:item['priority'] = l:source_priority
+                if has_key(l:dict,l:item['word'])
+                    let l:old_item = get(l:dict, l:item['word'])
+                    if l:old_item['priority'] <  l:source_priority
+                        let l:dict[item['word']] = l:item
+                    endif
+                else
+                    let l:dict[item['word']] = l:item
                 endif
-            endif
-        endfor
-    endfor
+            endif 
+        endfor 
+    endfor 
+    let l:items =  sort(values(l:dict),{a, b -> b['priority'] - a['priority']})
+    call asyncomplete#preprocess_complete(a:options, l:items) 
+endfunction 
 
-    call asyncomplete#preprocess_complete(a:options, l:items)
-endfunction
+let g:asyncomplete_preprocessor = [function('s:my_asyncomplete_preprocessor')]
 
-function! s:sort_by_priority_preprocessor(options, matches) abort
-    let l:items = []
-    for [l:source_name, l:matches] in items(a:matches)
-        for l:item in l:matches['items']
-            if stridx(l:item['word'], a:options['base']) == 0
-                let l:item['priority'] =
-                            \ get(asyncomplete#get_source_info(l:source_name),'priority',0)
-                call add(l:items, l:item)
-            endif
-        endfor
-    endfor
-
-    let l:items = sort(l:items, {a, b -> b['priority'] - a['priority']})
-
-    call asyncomplete#preprocess_complete(a:options, l:items)
-endfunction
-
-let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor'), function('s:my_asyncomplete_preprocessor')]
+"let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor')]
 autocmd FileType TelescopePrompt let b:asyncomplete_enable = 0
 autocmd FileType lsp-quickpick-filter let b:asyncomplete_enable = 0
 autocmd FileType lsp-quickpick let b:asyncomplete_enable = 0
@@ -372,13 +371,13 @@ autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
 nnoremap <silent> <leader>dam :delm! <bar> delm A-Z0-9 <bar> SignatureRefresh<cr>
 nnoremap <silent> dam :delm! <bar> SignatureRefresh<cr>
-map <silent> K `]zz
-map <silent> L `[zz
+map <silent> K `]
+map <silent> L `[
 
-nnoremap <C-d> <C-d>zz
+nnoremap <C-d> <C-d>
 nnoremap <C-u> <C-u>zz
-nnoremap n nzzzv
-nnoremap N Nzzzv
+nnoremap n nzv
+nnoremap N Nzv
 
 " Go to previous file
 nnoremap <leader>fd :e#<CR>
