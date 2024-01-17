@@ -15,6 +15,7 @@ autocmd VimEnter * :clearjumps
 autocmd VimEnter * wincmd =
 
 call plug#begin()
+Plug 'ycm-core/YouCompleteMe'
 "Plug 'szw/vim-tags'
 "Plug 'jiangmiao/auto-pairs'
 "Plug 'itchyny/lightline.vim'
@@ -25,8 +26,8 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'mattn/vim-lsp-settings'
 Plug 'ThePrimeagen/harpoon'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'L3MON4D3/LuaSnip'
@@ -69,10 +70,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 
-"Plug 'BurntSushi/ripgrep'
-Plug 'prabirshrestha/asyncomplete-tags.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
-Plug 'machakann/asyncomplete-ezfilter.vim'
+"Plug 'prabirshrestha/asyncomplete-tags.vim'
+"Plug 'prabirshrestha/asyncomplete-file.vim'
+"Plug 'machakann/asyncomplete-ezfilter.vim'
 call plug#end()
 lua << EOF
 require("oil").setup()
@@ -301,7 +301,6 @@ endfunction
 
 let g:asyncomplete_preprocessor = [function('s:my_asyncomplete_preprocessor')]
 
-"let g:asyncomplete_preprocessor = [function('s:sort_by_priority_preprocessor')]
 autocmd FileType TelescopePrompt let b:asyncomplete_enable = 0
 autocmd FileType lsp-quickpick-filter let b:asyncomplete_enable = 0
 autocmd FileType lsp-quickpick let b:asyncomplete_enable = 0
