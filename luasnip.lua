@@ -26,6 +26,7 @@ s("note", { t("// NOTE(sqd): ") }),
 s("important", { t("// IMPORTANT(sqd): ") }),
 s("warn", { t("// WARNING(sqd): ") }),
 s("perf", { t("// PERFORMANCE(sqd): ") }),
+s("fmt", { t("// clang-format ") }),
 })
 
 require("luasnip/loaders/from_vscode").lazy_load() -- You can pass { paths = "./my-snippets/"} as well

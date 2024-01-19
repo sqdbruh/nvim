@@ -1,12 +1,12 @@
+colorscheme handmade
 set statusline=%f\ %y\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+inoremap <C-Space> <C-x><C-o>
 nnoremap <SPACE> <Nop>
 set termguicolors
 let mapleader=" "
 syntax on
 set langmenu=en_US
 let $LANG = 'en_US'
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
 set splitbelow
 set splitright
 set guifont=JetBrains\ Mono:h10
@@ -14,26 +14,29 @@ autocmd VimEnter * :clearjumps
 " Even out windows
 autocmd VimEnter * wincmd =
 
+set completeopt=menu,menuone
+set completeopt+=noselect
+set completeopt+=noinsert
+set shortmess+=c   " Shut off completion messages
+set belloff+=ctrlg " Add only if Vim beeps during completion
+let g:mucomplete#enable_auto_at_startup = 0
+let g:mucomplete#no_mappings = 1
+let g:AutoPairsMapSpace = 0
+
 call plug#begin()
-Plug 'ycm-core/YouCompleteMe'
-"Plug 'szw/vim-tags'
-"Plug 'jiangmiao/auto-pairs'
-"Plug 'itchyny/lightline.vim'
-"Plug 'kshenoy/vim-signature'
+Plug 'lifepillar/vim-mucomplete'
 Plug 'stevearc/oil.nvim'
+Plug 'vim-scripts/OmniCppComplete'
+Plug 'xavierd/clang_complete'
 Plug 'bkad/CamelCaseMotion'
-"Plug 'sharkdp/bat'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
-"Plug 'prabirshrestha/vim-lsp'
-"Plug 'mattn/vim-lsp-settings'
 Plug 'ThePrimeagen/harpoon'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'rhysd/vim-clang-format'
-Plug 'preservim/nerdtree'
 Plug 'windwp/nvim-autopairs'
 Plug 'valloric/MatchTagAlways'
 Plug 'preservim/nerdcommenter'
@@ -50,29 +53,26 @@ Plug 'svermeulen/vim-subversive'
 Plug 'dbakker/vim-paragraph-motion'
 
 Plug 'rafamadriz/friendly-snippets'
-
 Plug 'glts/vim-magnum'
 Plug 'glts/vim-radical'
-
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+
+Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-fugitive'
-
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'folke/todo-comments.nvim'
 
-"Plug 'prabirshrestha/asyncomplete-tags.vim'
-"Plug 'prabirshrestha/asyncomplete-file.vim'
-"Plug 'machakann/asyncomplete-ezfilter.vim'
+Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'machakann/asyncomplete-ezfilter.vim'
 call plug#end()
 lua << EOF
 require("oil").setup()
@@ -80,8 +80,12 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("nvim-autopairs").setup {}
 EOF
 
-nnoremap gc :silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no<CR>
+nnoremap <silent> gc :!ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no<CR>
 
+autocmd BufWritePost *.c,*.cpp,*.h silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no > /dev/null 2>&1
+
+let g:clang_library_path='C:\\Program Files\\LLVM\\bin\\libclang.dll'
+let g:clang_omnicppcomplete_compliance=1
 
 augroup lsp_install
     au!
@@ -140,7 +144,6 @@ set clipboard=unnamed,unnamedplus
 
 let g:terminator_split_location = 'vertical belowright'
 
-set completeopt=menu,menuone
 if has('win32')
     luafile ~\AppData\Local\nvim\luasnip.lua
     luafile ~\AppData\Local\nvim\telescope.lua
@@ -219,94 +222,16 @@ nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 let g:indentLine_color_gui = '#262626'
 let g:indentLine_leadingSpaceEnabled = 0
 
- let g:lsp_settings = {
- \  'clangd': {
- \    'args': ['-header-insertion=never'],
- \  },
- \}
-
-call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'priority': -1,
-    \ 'allowlist': ['*'],
-    \ 'blocklist': ['go'],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-    \ 'config': {
-    \    'max_buffer_size': 5000000,
-    \  },
-    \ }))
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
-    \ 'name': 'tags',
-    \ 'priority': -2,
-    \ 'allowlist': ['c', 'cpp'],
-    \ 'completor': function('asyncomplete#sources#tags#completor'),
-    \ 'config': {
-    \    'max_file_size': 50000000,
-    \  },
-    \ }))
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'allowlist': ['*'],
-    \ 'priority': 10,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
 autocmd VimLeave * wshada!
-let g:lsp_diagnostics_enabled = 0 
 set grepprg=rg\ --vimgrep
-"let g:asyncomplete_min_chars = 1
-let g:lsp_document_highlight_enabled = 0
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    "if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gh :LspDocumentSwitchSourceHeader<cr>
-    nmap <buffer> gD <plug>(lsp-declaration)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-endfunction
-
-nnoremap <C-t> :NERDTreeToggle<CR>
-
-
-function! s:my_asyncomplete_preprocessor(options, matches) abort 
-    let l:dict = {} 
-    for [l:source_name, l:matches] in items(a:matches) 
-        let l:source_priority = get(asyncomplete#get_source_info(l:source_name),'priority',0)
-        for l:item in l:matches['items'] 
-            if stridx(l:item['word'], a:options['base']) == 0
-            "if l:item['word'] =~ '^' . a:options['base'] 
-                let l:item['priority'] = l:source_priority
-                if has_key(l:dict,l:item['word'])
-                    let l:old_item = get(l:dict, l:item['word'])
-                    if l:old_item['priority'] <  l:source_priority
-                        let l:dict[item['word']] = l:item
-                    endif
-                else
-                    let l:dict[item['word']] = l:item
-                endif
-            endif 
-        endfor 
-    endfor 
-    let l:items =  sort(values(l:dict),{a, b -> b['priority'] - a['priority']})
-    call asyncomplete#preprocess_complete(a:options, l:items) 
-endfunction 
-
-let g:asyncomplete_preprocessor = [function('s:my_asyncomplete_preprocessor')]
 
 autocmd FileType TelescopePrompt let b:asyncomplete_enable = 0
-autocmd FileType lsp-quickpick-filter let b:asyncomplete_enable = 0
-autocmd FileType lsp-quickpick let b:asyncomplete_enable = 0
+autocmd FileType TelescopePrompt :MUcompleteAutoOff
+autocmd FileType c,cpp,h :MUcompleteAutoOn
+autocmd BufEnter *.c,*.cpp,*.h :MUcompleteAutoOn
 
+    "layout (location = 0) in vec3 aPos;\n"
 let g:clang_format#style_options = {
-            "\ "BasedOnStyle" : "Microsoft", FIX THIS!
             \ "AccessModifierOffset" : -4,
             \ "PointerAlignment" : "Left",
             \ "SortIncludes" : "Never",
@@ -358,9 +283,6 @@ set errorformat=%f(%l):\ %trror\ C%n:\ %m
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73
 
-au BufNewFile,BufRead,BufEnter *.cpp,*.hpp set omnifunc=omni#cpp#complete#Main
-"nmap <silent> fl :lua require'telescope.builtin'.live_grep{ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '-u' } }<cr>
-"nmap <silent> ff :lua require'telescope.builtin'.find_files{no_ignore=true}<cr>
 let g:OmniSharp_highlighting = 0
 
 "Disable deoplete in Telescope
@@ -407,6 +329,9 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 
+        autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+        autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
 autocmd FileType cs :call SetCSSettings()
 
 " TODO(sqdrck): Think about this later.
@@ -417,7 +342,7 @@ function! SetCSSettings()
     nmap <silent> <buffer> <leader>cf <Plug>(omnisharp_code_format)
     nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
     imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-    nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
+    nmap <silent> <buffer> <c-]> <Plug>(omnisharp_go_to_definition)
     nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
 
     nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
@@ -492,4 +417,3 @@ function! IndentWithI()
     endif
 endfunction
 nnoremap <expr> i IndentWithI()
-colorscheme handmade
