@@ -80,9 +80,9 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("nvim-autopairs").setup {}
 EOF
 
-nnoremap <silent> gc :!ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no<CR>
+nnoremap <silent>gc :!ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no<CR><CR>
 
-autocmd BufWritePost *.c,*.cpp,*.h silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no > /dev/null 2>&1
+"autocmd BufWritePost *.c,*.cpp,*.h silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no > /dev/null 2>&1
 
 let g:clang_library_path='C:\\Program Files\\LLVM\\bin\\libclang.dll'
 let g:clang_omnicppcomplete_compliance=1
@@ -250,8 +250,7 @@ let g:clang_format#style_options = {
             \ "SpaceBeforeParens" : "Never",
             \ "BreakBeforeTernaryOperators" : "true",
             \ "AlignAfterOpenBracket" : "AlwaysBreak",
-            \ "ColumnLimit" : 130,
-            \ "Standard" : "C++11"}
+            \ "ColumnLimit" : 130}
 
 autocmd FileType c,cpp,objc nnoremap <silent><buffer><leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <silent><buffer><leader>cf :ClangFormat<CR>
