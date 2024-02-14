@@ -13,7 +13,7 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +285 init.vim
+badd +38 init.vim
 badd +5 colors/handmade.vim
 badd +64 C:/dev/handmade/code/handmade.cpp
 badd +28 C:/dev/handmade/code/handmade_platform.h
@@ -40,11 +40,10 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 118 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 34 + 137) / 274)
-exe 'vert 3resize ' . ((&columns * 120 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 40 + 118) / 236)
+exe 'vert 2resize ' . ((&columns * 39 + 118) / 236)
+exe 'vert 3resize ' . ((&columns * 155 + 118) / 236)
 argglobal
-balt init.vim
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -55,12 +54,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 38 - ((21 * winheight(0) + 33) / 67)
+let s:l = 38 - ((18 * winheight(0) + 29) / 58)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 38
-normal! 030|
+normal! 0
 wincmd w
 argglobal
 if bufexists(fnamemodify("colors/handmade.vim", ":p")) | buffer colors/handmade.vim | else | edit colors/handmade.vim | endif
@@ -78,7 +77,7 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 280 - ((19 * winheight(0) + 33) / 67)
+let s:l = 280 - ((3 * winheight(0) + 29) / 58)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -101,16 +100,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 64 - ((28 * winheight(0) + 33) / 67)
+let s:l = 64 - ((23 * winheight(0) + 29) / 58)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 64
 normal! 09|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 118 + 137) / 274)
-exe 'vert 2resize ' . ((&columns * 34 + 137) / 274)
-exe 'vert 3resize ' . ((&columns * 120 + 137) / 274)
+exe 'vert 1resize ' . ((&columns * 40 + 118) / 236)
+exe 'vert 2resize ' . ((&columns * 39 + 118) / 236)
+exe 'vert 3resize ' . ((&columns * 155 + 118) / 236)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
