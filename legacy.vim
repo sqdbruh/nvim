@@ -1,9 +1,21 @@
 colorscheme handmade
-autocmd FileType c,cpp,cs,hpp,h setlocal formatprg=clang-format
+filetype plugin on
+filetype plugin indent on
+filetype indent on
+set foldlevelstart=99
+set nohidden
+set autoread
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+set smartindent
+set ignorecase
+set smartcase
+set pumheight=8
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set grepformat=%f:%l:%c:%m
 set statusline=%f\ %y\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-inoremap <C-Space> <C-x><C-o>
 nnoremap <SPACE> <Nop>
 set termguicolors
 let mapleader=" "
@@ -14,234 +26,29 @@ set splitbelow
 set splitright
 set guifont=JetBrainsMono\ Nerd\ Font:h10
 set signcolumn=yes
+autocmd FileType c,cpp,h,hpp,cs setlocal commentstring=//\ %s
+autocmd FileType c,cpp,cs,hpp,h setlocal formatprg=clang-format
 autocmd VimEnter * :clearjumps
 " Even out windows
 autocmd VimEnter * wincmd =
-" map <C-j> :cn<CR>
-" map <C-k> :cp<CR>
+map <A-j> :cn<CR>
+map <A-k> :cp<CR>
 
 set completeopt=menu,menuone,noselect
 set shortmess+=c   " Shut off completion messages
 set belloff+=ctrlg " Add only if Vim beeps during completion
 let g:AutoPairsMapSpace = 0
 
-call plug#begin()
-Plug 'stevearc/oil.nvim'
-Plug 'bkad/CamelCaseMotion'
-"Plug 'OmniSharp/omnisharp-vim'
-Plug 'L3MON4D3/LuaSnip'
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'rhysd/vim-clang-format'
-Plug 'windwp/nvim-autopairs'
-Plug 'valloric/MatchTagAlways'
-"Plug 'preservim/nerdcommenter'
-Plug 'sheerun/vim-polyglot'
-Plug 'dhruvasagar/vim-markify'
-Plug 'Yggdroot/indentLine'
-Plug 'easymotion/vim-easymotion'
-Plug 'PeterRincker/vim-argumentative'
-
-Plug 'svermeulen/vim-cutlass'
-Plug 'svermeulen/vim-yoink'
-Plug 'svermeulen/vim-subversive'
-
-Plug 'dbakker/vim-paragraph-motion'
-
-Plug 'glts/vim-magnum'
-Plug 'glts/vim-radical'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
-Plug 'nvim-telescope/telescope-project.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
-
-Plug 'BurntSushi/ripgrep'
-
-Plug 'mrjones2014/smart-splits.nvim'
-Plug 'folke/todo-comments.nvim'
-
-Plug 'neovim/nvim-lspconfig'
-Plug 'ray-x/lsp_signature.nvim'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'L3MON4D3/LuaSnip'
-Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'hrsh7th/cmp-calc'
-Plug 'razzmatazz/csharp-language-server'
-Plug 'nvim-pack/nvim-spectre'
-Plug 'nvim-tree/nvim-web-devicons'
-" Plug 'nvim-treesitter/nvim-treesitter'
-" Plug 'nvim-lualine/lualine.nvim'
-
-call plug#end()
-lua <<EOF
-  -- Set up nvim-cmp.
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      -- REQUIRED - you must specify a snippet engine
-      expand = function(args)
-        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-      end,
-    },
-    window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'calc' },
-      -- { name = 'vsnip' }, -- For vsnip users.
-       { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-  require'lspconfig'.csharp_ls.setup{}
-  -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  require('lspconfig')['clangd'].setup {
-    capabilities = capabilities
-  }
-require "lsp_signature".setup({
-  hint_prefix = "",
-  floating_window = false,
-  bind = true,
-})
-
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-local cmp = require('cmp')
-cmp.event:on(
-  'confirm_done',
-  cmp_autopairs.on_confirm_done()
-)
-
-require'nvim-web-devicons'.setup()
-
-
-require("oil").setup()
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-require("nvim-autopairs").setup {}
-
-vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
-    desc = "Toggle Spectre"
-})
-vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-    desc = "Search current word"
-})
-vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-    desc = "Search current word"
-})
-vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-    desc = "Search on current file"
-})
-
-local diagnostics_visible = true
-
-function ToggleDiagnostics()
-    diagnostics_visible = not diagnostics_visible
-    if diagnostics_visible then
-        vim.diagnostic.show(nil, 0)
-        vim.diagnostic.config({
-            virtual_text = true,
-            signs = true,
-            underline = true,
-            update_in_insert = false,
-            severity_sort = false,
-        })
-    else
-        vim.diagnostic.hide(nil, 0)
-        vim.diagnostic.config({
-            virtual_text = false,
-            signs = false,
-            underline = false,
-            update_in_insert = false,
-            severity_sort = false,
-        })
-    end
-end
-
-vim.api.nvim_create_user_command('ToggleDiagnostics', ToggleDiagnostics, {})
-ToggleDiagnostics()
-
-local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<leader>d', ':ToggleDiagnostics<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-EOF
-
-
-"autocmd BufWritePost *.c,*.cpp,*.h silent !ctags -R --fields=+ailmnS --c++-types=+l --extra=+fq --c++-kinds=+pl --links=no > /dev/null 2>&1
-
-let g:clang_library_path='C:\\Program Files\\LLVM\\bin\\libclang.dll'
-let g:clang_omnicppcomplete_compliance=1
-
 augroup lsp_install
     au!
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-
-let g:lsp_document_code_action_signs_enabled=0
 nnoremap <leader>/ <cmd>nohlsearch<CR> 
 
 nmap <silent> <A-h> :lua require('smart-splits').resize_left()<CR>
-nmap <silent> <A-j> :lua require('smart-splits').resize_down()<CR>
-nmap <silent> <A-k> :lua require('smart-splits').resize_up()<CR>
+" nmap <silent> <A-j> :lua require('smart-splits').resize_down()<CR>
+" nmap <silent> <A-k> :lua require('smart-splits').resize_up()<CR>
 nmap <silent> <A-l> :lua require('smart-splits').resize_right()<CR>
 
 let g:yoinkIncludeDeleteOperations=1 
@@ -287,16 +94,6 @@ set clipboard=unnamed,unnamedplus
 
 let g:terminator_split_location = 'vertical belowright'
 
-if has('win32')
-    luafile ~\AppData\Local\nvim\luasnip.lua
-    luafile ~\AppData\Local\nvim\telescope.lua
-    luafile ~\AppData\Local\nvim\todo-comments.lua
-elseif has('macunix')
-    luafile ~/.config/nvim/luasnip.lua
-    luafile ~/.config/nvim/telescope.lua
-    luafile ~/.config/nvim/todo-comments.lua
-endif
-
 set encoding=utf-8
 
 set mouse=a
@@ -305,7 +102,6 @@ set cursorline
 set number
 set relativenumber
 set backspace=indent,eol,start
-
 
 map <silent> W <Plug>CamelCaseMotion_w
 map <silent> B <Plug>CamelCaseMotion_b
@@ -316,19 +112,6 @@ sunmap B
 sunmap E
 sunmap ge
 
-filetype plugin on
-filetype plugin indent on
-filetype indent on
-set tabstop=4
-set shiftwidth=4
-set smarttab
-set expandtab
-set smartindent
-set ignorecase
-set smartcase
-let g:compiler = 'msvc'
-set pumheight=8
-autocmd FileType c,cpp,h,hpp,cs setlocal commentstring=//\ %s
 
 nnoremap <Leader>v <cmd>vsplit<cr>
 nnoremap <Leader>h <cmd>split<cr>
@@ -388,8 +171,8 @@ let g:clang_format#style_options = {
             \ "AlignAfterOpenBracket" : "AlwaysBreak",
             \ "ColumnLimit" : 130}
 
-autocmd FileType c,cpp,objc nnoremap <silent><buffer><leader>cf :<C-u>ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <silent><buffer><leader>cf :ClangFormat<CR>
+" autocmd FileType c,cpp,objc nnoremap <silent><buffer><leader>cf :<C-u>ClangFormat<CR>
+" autocmd FileType c,cpp,objc vnoremap <silent><buffer><leader>cf :ClangFormat<CR>
 
 
 highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
@@ -412,8 +195,7 @@ nnoremap <silent> <F10> <cmd>w <bar> Make f10<cr><cr>
 nnoremap <silent> <F11> <cmd>w <bar> Make f11<cr><cr>
 nnoremap <silent> <F12> <cmd>w <bar> Make f12<cr><cr>
 
-"set errorformat=%f(%l):\ %trror\ C%n:\ %m
-
+set errorformat=%f:%l:%c:\ %trror:\ %m
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73
@@ -523,15 +305,6 @@ function! SetCSSettings()
                 \ 'CS8019': {'type': 'None'},
                 \ 'RemoveUnnecessaryImportsFixable': {'type': 'None'}
                 \}
-endfunction
-
-function! HeaderToggle()
-    let filename = expand("%:t")
-    if filename =~ ".cpp"
-        execute "e %:r.h"
-    else
-        execute "e %:r.cpp"
-    endif
 endfunction
 
 "NOTE(sqd): Map home/end
