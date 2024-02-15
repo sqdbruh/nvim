@@ -112,7 +112,6 @@ sunmap B
 sunmap E
 sunmap ge
 
-
 nnoremap <Leader>v <cmd>vsplit<cr>
 nnoremap <Leader>h <cmd>split<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -123,19 +122,6 @@ nnoremap <leader>fq <cmd>Telescope quickfix<cr>
 nnoremap <leader>fh <cmd>Telescope harpoon marks<cr>
 nnoremap <leader>fr <cmd>Telescope resume<cr>
 nnoremap <leader>fm <cmd>Telescope marks<cr>
-nnoremap <leader>h; <cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>
-nnoremap <leader>ha <cmd>lua require("harpoon.mark").add_file()<cr>
-nnoremap <leader>hp <cmd>lua require("harpoon.ui").nav_prev()<cr> 
-nnoremap <leader>hn <cmd>lua require("harpoon.ui").nav_next()<cr> 
-nnoremap <leader>h1 <cmd>lua require("harpoon.ui").nav_file(1)<cr> 
-nnoremap <leader>h2 <cmd>lua require("harpoon.ui").nav_file(2)<cr> 
-nnoremap <leader>h3 <cmd>lua require("harpoon.ui").nav_file(3)<cr> 
-nnoremap <leader>h4 <cmd>lua require("harpoon.ui").nav_file(4)<cr> 
-nnoremap <leader>h5 <cmd>lua require("harpoon.ui").nav_file(5)<cr> 
-nnoremap <leader>h6 <cmd>lua require("harpoon.ui").nav_file(6)<cr> 
-nnoremap <leader>h7 <cmd>lua require("harpoon.ui").nav_file(7)<cr> 
-nnoremap <leader>h8 <cmd>lua require("harpoon.ui").nav_file(8)<cr> 
-nnoremap <leader>h9 <cmd>lua require("harpoon.ui").nav_file(9)<cr> 
 imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
 function! GrepWordUnderCursor()
     execute 'Telescope grep_string search='.expand("<cword>")
@@ -143,37 +129,10 @@ endfunction
 nnoremap <leader>fg :call GrepWordUnderCursor()<CR>
 nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
 
-"
 let g:indentLine_color_gui = '#262626'
 let g:indentLine_leadingSpaceEnabled = 0
 
 autocmd VimLeave * wshada!
-
-    "layout (location = 0) in vec3 aPos;\n"
-let g:clang_format#style_options = {
-            \ "AccessModifierOffset" : -4,
-            \ "PointerAlignment" : "Left",
-            \ "SortIncludes" : "Never",
-            \ "BreakBeforeBraces" : "Allman",
-            \ "AllowShortIfStatementsOnASingleLine" : "Never",
-            \ "AllowShortLambdasOnASingleLine" : "None",
-            \ "AllowShortLoopsOnASingleLine" : "false",
-            \ "AllowShortBlocksOnASingleLine" : "Never",
-            \ "AllowShortCaseLabelsOnASingleLine" : "false",
-            \ "AllowShortEnumsOnASingleLine" : "false",
-            \ "AllowShortFunctionsOnASingleLine" : "None",
-            \ "CompactNamespaces" : "false",
-            \ "BinPackArguments" : "false",
-            \ "BinPackParameters" : "false",
-            \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "SpaceBeforeParens" : "Never",
-            \ "BreakBeforeTernaryOperators" : "true",
-            \ "AlignAfterOpenBracket" : "AlwaysBreak",
-            \ "ColumnLimit" : 130}
-
-" autocmd FileType c,cpp,objc nnoremap <silent><buffer><leader>cf :<C-u>ClangFormat<CR>
-" autocmd FileType c,cpp,objc vnoremap <silent><buffer><leader>cf :ClangFormat<CR>
-
 
 highlight! EasyMotionTarget guibg=NONE guifg=#b36a5d
 highlight! EasyMotionTarget2First guibg=NONE guifg=#cea046
@@ -199,11 +158,6 @@ set errorformat=%f:%l:%c:\ %trror:\ %m
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73
-
-let g:OmniSharp_highlighting = 0
-
-"Disable deoplete in Telescope
-autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
 
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
@@ -235,7 +189,7 @@ function! ToggleQuickFix()
         cclose
     endif
 endfunction
-nnoremap <silent> <leader>tq :call ToggleQuickFix()<cr>
+nnoremap <silent> <leader>qt :call ToggleQuickFix()<cr>
 command! ClearQuickfixList cexpr []
 nmap <leader>qc :ClearQuickfixList<cr>
 " NOTE(sqdrck): Cursor
@@ -246,66 +200,8 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 
-        autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-        autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-autocmd FileType cs :call SetCSSettings()
-
-" TODO(sqdrck): Think about this later.
-function! SetCSSettings()
-    nmap <silent> <buffer> <Leader>rn <Plug>(omnisharp_rename)
-    nmap <buffer> <Leader>rs :OmniSharpRestartServer<cr>
-    nmap <silent> <buffer> <Leader>osfu <Plug>(omnisharp_fix_usings)
-    nmap <silent> <buffer> <leader>cf <Plug>(omnisharp_code_format)
-    nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-    imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-    nmap <silent> <buffer> <c-]> <Plug>(omnisharp_go_to_definition)
-    nmap <silent> <buffer> gi <Plug>(omnisharp_find_implementations)
-
-    nmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
-    xmap <silent> <buffer> <Leader>ca <Plug>(omnisharp_code_actions)
-
-    nmap <silent> <buffer> <Leader>. <Plug>(omnisharp_code_action_repeat)
-    xmap <silent> <buffer> <Leader>. <Plug>(omnisharp_code_action_repeat)
-
-    nmap <silent> <buffer> <Leader>tl <Plug>(omnisharp_type_lookup)
-
-    nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
-    nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
-    nmap <silent> <buffer> gr <Plug>(omnisharp_find_usages)
-    " Find all code errors/warnings for the current solution and populate the quickfix window
-    nmap <silent> <buffer> <F1> <Plug>(omnisharp_global_code_check)
-    let g:OmniSharp_open_quickfix = 0
-    let g:omnicomplete_fetch_full_documentation = 0
-    let g:OmniSharp_popup_mappings = {
-                \ 'sigNext': '<C-k>',
-                \ 'sigPrev': '<C-l>',
-                \ 'sigParamPrev': '<C-j>',
-                \ 'sigParamNext': '<C-;>',
-                \}
-    let g:OmniSharp_diagnostic_showid = 1
-    let g:OmniSharp_highlight_groups = {
-                \ 'ClassName': 'Type',
-                \ 'StructName': 'Type',
-                \ 'DelegateName': 'Type',
-                \ 'EnumName': 'Type',
-                \ 'InterfaceName': 'Type',
-                \ 'Keyword': 'Keyword',
-                \ 'Operator': 'Operator',
-                \ 'Comment': 'Comment',
-                \}
-    let g:OmniSharp_diagnostic_exclude_paths = [
-                \ 'obj\\',
-                \ '[Tt]emp\\',
-                \ '\.nuget\\',
-                \ 'Library\\',
-                \ '\<AssemblyInfo\.cs\>'
-                \]
-    let g:OmniSharp_diagnostic_overrides = {
-                \ 'CS8019': {'type': 'None'},
-                \ 'RemoveUnnecessaryImportsFixable': {'type': 'None'}
-                \}
-endfunction
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 "NOTE(sqd): Map home/end
 inoremap <Home> <C-o>^
