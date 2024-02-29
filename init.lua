@@ -1,3 +1,4 @@
+local api, if_nil = vim.api, vim.F.if_nil
 require('plugins')
 require('luasnip-settings')
 require('telescope-settings')
@@ -138,11 +139,16 @@ ToggleDiagnostics()
 local opts = { noremap=true, silent=true }
 vim.api.nvim_set_keymap('n', 'gh', ':ClangdSwitchSourceHeader<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>d', ':ToggleDiagnostics<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist({open = false, severity = vim.diagnostic.severity.ERROR})<CR>', opts)
 
-local on_attach_c = function(client, bufnr)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+vim.keymap.set('n', '<leader>wl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, opts)
+
+local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -162,7 +168,7 @@ local on_attach_c = function(client, bufnr)
 end
 
 require('lspconfig')['clangd'].setup {
-    on_attach = on_attach_c,
+    on_attach = on_attach,
     capabilities = capabilities
 }
 
@@ -197,32 +203,12 @@ require'lspconfig'.lua_ls.setup {
   end
 }
 
-
-local on_attach_cs = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cf', '<cmd>lua vim.lsp.buf.format()<CR>', opts)
-end
-
 local config = {
   handlers = {
     ["textDocument/definition"] = require('csharpls_extended').handler,
     ["textDocument/typeDefinition"] = require('csharpls_extended').handler,
 },
-on_attach = on_attach_cs,
+on_attach = on_attach,
 capabilities = capabilities,
 }
 
@@ -231,3 +217,49 @@ require'lspconfig'.csharp_ls.setup(config)
 vim.cmd("highlight DiagnosticError guifg=#e65c5c")
 vim.cmd("highlight DiagnosticWarn guifg=#ffb833")
 
+-- Autocommand that updates the quickfix list with LSP diagnostics
+-- vim.api.nvim_create_autocmd({"DiagnosticChanged"}, {
+--     pattern = "*",
+--     callback = function()
+--         -- Update the quickfix list with current diagnostics
+--         vim.diagnostic.setqflist({open = false, severity = vim.diagnostic.severity.ERROR})
+--     end,
+-- })
+
+function GoToQuickfixItem(opts, direction)
+    -- Ensure opts is a table, defaulting to an empty table if not provided
+    opts = opts or {}
+    -- Default float to true if it's nil; no need for if_nil with this pattern
+    local float = opts.float
+    if float == nil then float = true end
+
+    -- Determine the command based on the direction
+    local command = direction == "next" and 'cn' or 'cp'
+
+    -- Try to execute the command and capture if it fails due to no more items
+    local status, err = pcall(vim.cmd, command)
+    if not status then
+        print("No more items.") -- Or handle the error however you prefer
+        return
+    end
+
+    -- Only proceed with opening the float if desired
+    if float then
+        local float_opts = type(float) == 'table' and float or {}
+        vim.schedule(function()
+            vim.diagnostic.open_float(nil, vim.tbl_extend('keep', float_opts, {
+                scope = 'cursor',
+                focus = false,
+            }))
+        end)
+    end
+end
+
+vim.api.nvim_set_keymap('n', '<A-j>', ':lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<A-k>', ':lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>Cnext<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>Cprev<CR>', opts)
+require("project_nvim").setup
+{
+    manual_mode = true,
+}

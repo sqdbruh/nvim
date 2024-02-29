@@ -26,7 +26,7 @@ set splitbelow
 set splitright
 set guifont=JetBrainsMono\ Nerd\ Font:h10
 set signcolumn=yes
-autocmd FileType c,cpp,h,hpp,cs setlocal commentstring=//\ %s
+autocmd FileType c,cpp,h,hpp,cs,frag,vert,glsl setlocal commentstring=//\ %s
 autocmd FileType c,cpp,cs,hpp,h setlocal formatprg=clang-format
 autocmd VimEnter * :clearjumps
 " Even out windows
@@ -127,7 +127,8 @@ function! GrepWordUnderCursor()
     execute 'Telescope grep_string search='.expand("<cword>")
 endfunction
 nnoremap <leader>fg :call GrepWordUnderCursor()<CR>
-nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
+" nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{}<cr>
+nnoremap <leader>fp <cmd>Telescope projects<cr>
 
 let g:indentLine_color_gui = '#262626'
 let g:indentLine_leadingSpaceEnabled = 0
@@ -154,7 +155,9 @@ nnoremap <silent> <F10> <cmd>w <bar> Make f10<cr><cr>
 nnoremap <silent> <F11> <cmd>w <bar> Make f11<cr><cr>
 nnoremap <silent> <F12> <cmd>w <bar> Make f12<cr><cr>
 
-set errorformat=%f:%l:%c:\ %trror:\ %m
+" MSVC
+set errorformat=%f(%l):\ %m
+
 " Inactive tab highlight
 hi! NormalNC guibg=#000000
 hi! SignatureMarkText guifg=#bf9d73
@@ -221,3 +224,30 @@ function! IndentWithI()
     endif
 endfunction
 nnoremap <expr> i IndentWithI()
+
+function! SafeCnext()
+    if len(getqflist()) == 0
+        echo "Quickfix list is empty."
+    else
+        try
+            cnext
+        catch
+            cfirst
+        endtry
+    endif
+endfunction
+
+function! SafeCprev()
+    if len(getqflist()) == 0
+        echo "Quickfix list is empty."
+    else
+        try
+            cprev
+        catch
+            clast
+        endtry
+    endif
+endfunction
+
+command! Cnext call SafeCnext()
+command! Cprev call SafeCprev()
