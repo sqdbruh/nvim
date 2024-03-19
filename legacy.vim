@@ -1,4 +1,11 @@
 colorscheme handmade
+
+noremap h ;
+noremap j h
+noremap k j
+noremap l k
+noremap ; l
+
 filetype plugin on
 filetype plugin indent on
 filetype indent on
@@ -223,7 +230,32 @@ function! IndentWithI()
         return "i"
     endif
 endfunction
+function! IndentWithA()
+    if len(getline('.')) == 0
+        return "\"_cc"
+    else
+        return "a"
+    endif
+endfunction
+function! IndentWithCapA()
+    if len(getline('.')) == 0
+        return "\"_cc"
+    else
+        return "A"
+    endif
+endfunction
+function! IndentWithCapI()
+    if len(getline('.')) == 0
+        return "\"_cc"
+    else
+        return "I"
+    endif
+endfunction
+
 nnoremap <expr> i IndentWithI()
+nnoremap <expr> a IndentWithA()
+nnoremap <expr> I IndentWithCapI()
+nnoremap <expr> A IndentWithCapA()
 
 function! SafeCnext()
     if len(getqflist()) == 0
@@ -251,3 +283,9 @@ endfunction
 
 command! Cnext call SafeCnext()
 command! Cprev call SafeCprev()
+
+" nnoremap <Leader>; <C-w>w
+nnoremap <Leader>j <C-w>h
+nnoremap <Leader>k <C-w>j
+nnoremap <Leader>l <C-w>k
+nnoremap <Leader>; <C-w>l

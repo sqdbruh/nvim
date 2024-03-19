@@ -255,10 +255,10 @@ function GoToQuickfixItem(opts, direction)
     end
 end
 
-vim.api.nvim_set_keymap('n', '<A-j>', ':lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<A-k>', ':lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>Cnext<CR>', opts)
-vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>Cprev<CR>', opts)
+vim.api.nvim_set_keymap('n', '<A-k>', ':lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<A-l>', ':lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>Cnext<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-l>', '<cmd>Cprev<CR>', opts)
 require("project_nvim").setup
 {
     manual_mode = true,
