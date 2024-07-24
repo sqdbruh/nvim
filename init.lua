@@ -92,7 +92,7 @@ require'nvim-web-devicons'.setup()
 
 
 require("oil").setup()
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "<kMinus>", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("nvim-autopairs").setup {}
 
 vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
@@ -262,4 +262,28 @@ vim.api.nvim_set_keymap('n', '<C-l>', '<cmd>Cprev<CR>', opts)
 require("project_nvim").setup
 {
     manual_mode = true,
+
 }
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+  if not err and result and result.uri then
+    -- Extract the file path from the URI
+    local uri = result.uri
+    local bufnr = vim.uri_to_bufnr(uri)
+
+    -- Check if the file name is generated.h
+    if string.find(vim.api.nvim_buf_get_name(bufnr), "generated.h$") then
+      -- Do not process diagnostics for generated.h
+      return
+    end
+  end
+
+  -- Process diagnostics normally for other files
+  vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
+end
+
+vim.api.nvim_set_keymap('n', '<leader>md', ':%s/\\r//g<CR>', { noremap = true, silent = true })
+
+function ShowSemanticTokens()
+  vim.lsp.buf.semantic_tokens()
+end

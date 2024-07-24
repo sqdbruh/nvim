@@ -35,6 +35,7 @@ Plug ('tpope/vim-unimpaired')
 Plug ('tpope/vim-sensible')
 Plug ('tpope/vim-fugitive')
 Plug ('tpope/vim-commentary')
+Plug('ellisonleao/gruvbox.nvim')
 
 Plug ('ahmedkhalf/project.nvim')
 
@@ -51,8 +52,11 @@ Plug ('hrsh7th/nvim-cmp')
 Plug ('L3MON4D3/LuaSnip')
 Plug ('saadparwaiz1/cmp_luasnip')
 Plug ('hrsh7th/cmp-calc')
+
 Plug ('razzmatazz/csharp-language-server')
 Plug ('Decodetalkers/csharpls-extended-lsp.nvim')
+Plug ('OmniSharp/omnisharp-roslyn')
+
 Plug ('nvim-pack/nvim-spectre')
 Plug ('nvim-tree/nvim-web-devicons')
 

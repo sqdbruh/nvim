@@ -1,4 +1,4 @@
-colorscheme handmade
+colorscheme handmade1
 
 noremap h ;
 noremap j h
@@ -166,8 +166,8 @@ nnoremap <silent> <F12> <cmd>w <bar> Make f12<cr><cr>
 set errorformat=%f(%l):\ %m
 
 " Inactive tab highlight
-hi! NormalNC guibg=#000000
-hi! SignatureMarkText guifg=#bf9d73
+" hi! NormalNC guibg=#000000
+" hi! SignatureMarkText guifg=#bf9d73
 
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
@@ -289,3 +289,8 @@ nnoremap <Leader>j <C-w>h
 nnoremap <Leader>k <C-w>j
 nnoremap <Leader>l <C-w>k
 nnoremap <Leader>; <C-w>l
+
+" Show the syntax highlight group under cursor
+nnoremap <F10> <cmd>echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<cr>
