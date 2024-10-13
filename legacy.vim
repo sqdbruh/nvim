@@ -129,7 +129,17 @@ nnoremap <leader>fq <cmd>Telescope quickfix<cr>
 nnoremap <leader>fh <cmd>Telescope harpoon marks<cr>
 nnoremap <leader>fr <cmd>Telescope resume<cr>
 nnoremap <leader>fm <cmd>Telescope marks<cr>
-imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
+" imap <silent><expr> <C-f> '<Plug>luasnip-expand-or-jump'
+imap <silent><expr> <C-f> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<C-f>' 
+" -1 for jumping backwards.
+" inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+
+snoremap <silent> <C-f> <cmd>lua require('luasnip').jump(1)<Cr>
+" snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
+
+" For changing choices in choiceNodes (not strictly necessary for a basic setup).
+imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
+smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
 function! GrepWordUnderCursor()
     execute 'Telescope grep_string search='.expand("<cword>")
 endfunction
