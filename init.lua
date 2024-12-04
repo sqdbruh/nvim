@@ -141,6 +141,13 @@ vim.api.nvim_set_keymap('n', 'gh', ':ClangdSwitchSourceHeader<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>d', ':ToggleDiagnostics<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist({open = false, severity = vim.diagnostic.severity.ERROR})<CR>', opts)
 
+-- -- NOTE(sqd): Keep cursor in the same position while yank-pasting
+-- vim.keymap.set("n", "p", function()
+--     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+--     vim.cmd('put')
+--     vim.api.nvim_win_set_cursor(0, { row + 1, col })
+--   end)
+
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
 vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)

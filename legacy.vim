@@ -173,7 +173,12 @@ nnoremap <silent> <F11> <cmd>w <bar> Make f11<cr><cr>
 nnoremap <silent> <F12> <cmd>w <bar> Make f12<cr><cr>
 
 " MSVC
-set errorformat=%f(%l):\ %m
+" set errorformat=%f(%l):\ %m
+
+" Clang
+" set errorformat=%f:%l:%c:\ %t%*[^:]:\ %m
+" Clang without notes
+set errorformat=%E%f:%l:%c:\ error:\ %m,%W%f:%l:%c:\ warning:\ %m
 
 " Inactive tab highlight
 " hi! NormalNC guibg=#000000
