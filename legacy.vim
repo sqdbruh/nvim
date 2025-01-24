@@ -32,6 +32,7 @@ let $LANG = 'en_US'
 set splitbelow
 set splitright
 set guifont=JetBrainsMono\ Nerd\ Font:h10
+" ��❤️
 set signcolumn=yes
 autocmd FileType c,cpp,h,hpp,cs,frag,vert,glsl setlocal commentstring=//\ %s
 autocmd FileType c,cpp,cs,hpp,h setlocal formatprg=clang-format
@@ -102,6 +103,7 @@ set clipboard=unnamed,unnamedplus
 let g:terminator_split_location = 'vertical belowright'
 
 set encoding=utf-8
+set fileencoding=utf-8
 
 set mouse=a
 set hidden
