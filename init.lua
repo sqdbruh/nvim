@@ -13,6 +13,7 @@ vim.cmd('source ' .. legacy_vim_path)
 local cmp = require'cmp'
 
 cmp.setup({
+        preselect = cmp.PreselectMode.None,
         snippet = {
             -- REQUIRED - you must specify a snippet engine
             expand = function(args)
@@ -221,8 +222,88 @@ capabilities = capabilities,
 
 require'lspconfig'.csharp_ls.setup(config)
 
+require('go').setup()
+-- Go (gopls) configuration
+require('lspconfig').gopls.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "go", "gomod" },
+  settings = {
+    gopls = {
+      -- Enable analyses for unused parameters and nilness.
+      analyses = {
+        unusedparams = true,
+        nilness = true,
+      },
+      -- Use staticcheck for additional diagnostics.
+      staticcheck = true,
+    },
+  },
+}
+
+
+-- Vue LSP configuration using Volar (recommended for Vue 3)
+-- Dynamically compute the global TypeScript SDK path
+local global_tsdk = vim.fn.system("npm root -g"):gsub("\n", "") .. "/typescript/lib"
+
+require('lspconfig').volar.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "vue" },
+  init_options = {
+    typescript = {
+      tsdk = global_tsdk,
+    },
+  },
+})
+
+
+-- require('lspconfig').tsserver.setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     root_dir = require('lspconfig').util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+--     settings = {
+--         typescript = {
+--             inlayHints = {
+--                 includeInlayParameterNameHints = "all",
+--                 includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+--                 includeInlayVariableTypeHints = true,
+--                 includeInlayFunctionParameterTypeHints = true,
+--                 includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+--                 includeInlayFunctionLikeReturnTypeHints = true,
+--                 includeInlayPropertyDeclarationTypeHints = true,
+--             },
+--         },
+--         javascript = {
+--             inlayHints = {
+--                 includeInlayParameterNameHints = "all",
+--                 includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+--                 includeInlayVariableTypeHints = true,
+--                 includeInlayFunctionParameterTypeHints = true,
+--                 includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+--                 includeInlayFunctionLikeReturnTypeHints = true,
+--                 includeInlayPropertyDeclarationTypeHints = true,
+--             },
+--         },
+--     },
+-- }
+
 vim.cmd("highlight DiagnosticError guifg=#e65c5c")
 vim.cmd("highlight DiagnosticWarn guifg=#ffb833")
+
+
+
+-- Create an autocommand that applies only to Go files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "go", "gomod" },
+  callback = function()
+    -- Set a buffer-local normal mode mapping for <leader>cf
+    vim.api.nvim_buf_set_keymap(0, "n", "<leader>cf", 
+      '<cmd>lua require("go.format").goimports()<CR>', 
+      { noremap = true, silent = true }
+    )
+  end,
+})
 
 -- Autocommand that updates the quickfix list with LSP diagnostics
 -- vim.api.nvim_create_autocmd({"DiagnosticChanged"}, {
@@ -294,3 +375,7 @@ vim.api.nvim_set_keymap('n', '<leader>md', ':%s/\\r//g<CR>', { noremap = true, s
 function ShowSemanticTokens()
   vim.lsp.buf.semantic_tokens()
 end
+
+-- NEW: Map F1 to trigger ":GoBuild %" and F2 to trigger ":GoRun %"
+vim.api.nvim_set_keymap('n', '<F1>', ':GoBuild %<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<F2>', ':GoRun %<CR>', { noremap = true, silent = true })

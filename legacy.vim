@@ -227,8 +227,8 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if pumvisible() == 0 | silent! pclose | endif
+autocmd InsertLeave * if pumvisible() == 0| silent! pclose|endif
 
 "NOTE(sqd): Map home/end
 inoremap <Home> <C-o>^

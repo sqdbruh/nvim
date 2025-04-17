@@ -1,6 +1,7 @@
 local vim = vim
 local Plug = vim.fn['plug#']
 vim.call('plug#begin')
+Plug ('ray-x/go.nvim')
 Plug ('sheerun/vim-polyglot')
 Plug ('stevearc/oil.nvim')
 Plug ('bkad/CamelCaseMotion')
