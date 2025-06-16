@@ -11,39 +11,95 @@ vim.cmd('source ' .. legacy_vim_path)
 
 -- Set up nvim-cmp.
 local cmp = require'cmp'
+local function small_current_buf(max_lines)
+  return vim.api.nvim_buf_line_count(0) < max_lines
+end
 
 cmp.setup({
-        preselect = cmp.PreselectMode.None,
-        snippet = {
-            -- REQUIRED - you must specify a snippet engine
-            expand = function(args)
-                -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-                require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-                -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-                -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-            end,
-        },
-        window = {
-            -- completion = cmp.config.window.bordered(),
-            -- documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                ['<C-Space>'] = cmp.mapping.complete(),
-                ['<C-e>'] = cmp.mapping.abort(),
-            }),
-        sources = cmp.config.sources({
-                { name = 'nvim_lsp' },
-                { name = 'calc' },
-                -- { name = 'vsnip' }, -- For vsnip users.
-                { name = 'luasnip' }, -- For luasnip users.
-                -- { name = 'ultisnips' }, -- For ultisnips users.
-                -- { name = 'snippy' }, -- For snippy users.
-            }, {
-                { name = 'buffer' },
-            })
-    })
+  -------------------------------------------------------------------------
+  -- 1.  Don’t even pop up until the user has typed two chars
+  -------------------------------------------------------------------------
+  completion  = { keyword_length = 2 },
+
+  -------------------------------------------------------------------------
+  -- 2.  Rate-limit redraws + drop slow sources that hang
+  -------------------------------------------------------------------------
+  performance = {
+    debounce         = 80,   -- wait this long (ms) after last keystroke
+    throttle         = 30,   -- never refresh the menu faster than this
+    fetching_timeout = 150,  -- give up if a source stalls
+    max_view_entries = 40,   -- never try to render 800 Tailwind classes
+  },
+
+  -------------------------------------------------------------------------
+  -- 3.  Keep every label ≤ 50 columns so the window never grows wider
+  -------------------------------------------------------------------------
+  formatting  = {
+    fields = { 'abbr', 'kind', 'menu' },
+    format = function(_, item)
+      local MAX = 50
+      if #item.abbr > MAX then
+        item.abbr = item.abbr:sub(1, MAX - 1) .. '…'
+      end
+      if item.menu and #item.menu > MAX then
+        item.menu = item.menu:sub(1, MAX - 1) .. '…'
+      end
+      return item
+    end,
+  },
+
+  preselect = cmp.PreselectMode.None,
+
+  -------------------------------------------------------------------------
+  -- 4.  Snippets (luasnip)
+  -------------------------------------------------------------------------
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+
+  -------------------------------------------------------------------------
+  -- 5.  Windows (bordered + docs width capped at 60 columns)
+  -------------------------------------------------------------------------
+  window = {
+    documentation = {   -- keep the width cap, drop the border
+      max_width = 60,
+      border    = 'none',  -- explicit, but not actually needed
+    },
+  },
+
+  -------------------------------------------------------------------------
+  -- 6.  Key-maps (unchanged)
+  -------------------------------------------------------------------------
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>']     = cmp.mapping.scroll_docs(-4),
+    ['<C-f>']     = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>']     = cmp.mapping.abort(),
+  }),
+
+  -------------------------------------------------------------------------
+  -- 7.  Sources
+  -------------------------------------------------------------------------
+  sources = cmp.config.sources({
+      { name = 'nvim_lsp', max_item_count = 40 },
+      { name = 'calc' },
+      { name = 'luasnip' },
+    }, {
+      -- buffer source                                  ─────────┐
+      {                                                    --   │
+        name   = 'buffer',                                 --   │
+        option = {                                         --   │
+          keyword_length = 3,  -- needs 3 chars            --   │
+          get_bufnrs = function()                          --   │
+            -- skip > 20 000-line monsters                 --   │
+            return small_current_buf(20000) and {0} or {}  --   │
+          end,                                             --   │
+        },                                                 --   │
+      },                                                   --   ▼
+    }),
+})
 
 -- Set configuration for specific filetype.
 cmp.setup.filetype('gitcommit', {
@@ -109,37 +165,37 @@ vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search(
         desc = "Search on current file"
     })
 
-local diagnostics_visible = true
+-- 1) a global flag, defaulted to “off”
+vim.g.lsp_diagnostics_enabled = false
 
-function ToggleDiagnostics()
-    diagnostics_visible = not diagnostics_visible
-    if diagnostics_visible then
-        vim.diagnostic.show(nil, 0)
-        vim.diagnostic.config({
-                virtual_text = true,
-                signs = true,
-                underline = true,
-                update_in_insert = false,
-                severity_sort = false,
-            })
-    else
-        vim.diagnostic.hide(nil, 0)
-        vim.diagnostic.config({
-                virtual_text = false,
-                signs = false,
-                underline = false,
-                update_in_insert = false,
-                severity_sort = false,
-            })
+-- 2) on *each* LSP attach, disable diagnostics for that buffer if our flag is false
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    if not vim.g.lsp_diagnostics_enabled then
+      vim.diagnostic.disable(args.buf)
     end
+  end,
+})
+
+-- 3) a toggle command/function to flip the flag and enable/disable *all* diagnostics
+local function ToggleDiagnostics()
+  vim.g.lsp_diagnostics_enabled = not vim.g.lsp_diagnostics_enabled
+
+  if vim.g.lsp_diagnostics_enabled then
+    vim.diagnostic.enable()    -- show everything again
+    vim.notify("Diagnostics ON", vim.log.levels.INFO)
+  else
+    vim.diagnostic.disable()   -- hide everything again
+    vim.notify("Diagnostics OFF", vim.log.levels.INFO)
+  end
 end
 
+-- 4) expose it via :ToggleDiagnostics and <leader>d
 vim.api.nvim_create_user_command('ToggleDiagnostics', ToggleDiagnostics, {})
-ToggleDiagnostics()
+vim.keymap.set('n', '<leader>d', ToggleDiagnostics, { silent = true, desc = "Toggle LSP diagnostics" })
 
 local opts = { noremap=true, silent=true }
 vim.api.nvim_set_keymap('n', 'gh', ':ClangdSwitchSourceHeader<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>d', ':ToggleDiagnostics<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist({open = false, severity = vim.diagnostic.severity.ERROR})<CR>', opts)
 
 -- -- NOTE(sqd): Keep cursor in the same position while yank-pasting
@@ -375,7 +431,3 @@ vim.api.nvim_set_keymap('n', '<leader>md', ':%s/\\r//g<CR>', { noremap = true, s
 function ShowSemanticTokens()
   vim.lsp.buf.semantic_tokens()
 end
-
--- NEW: Map F1 to trigger ":GoBuild %" and F2 to trigger ":GoRun %"
-vim.api.nvim_set_keymap('n', '<F1>', ':GoBuild %<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<F2>', ':GoRun %<CR>', { noremap = true, silent = true })

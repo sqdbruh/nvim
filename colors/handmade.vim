@@ -22,7 +22,7 @@ let g:colors_name = "patatetoy"
 
 let s:palette = {'gui' : {} , 'cterm' : {}}
 
-  let s:gui_background = "#0c0c0c"
+  let s:gui_background = "000000"
   let s:gui_selection  = "#373b41"
   let s:gui_line       = "#282a2e"
   let s:gui_comment    = "#606060"

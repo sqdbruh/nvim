@@ -72,9 +72,9 @@ Gruvbox.config = {
 Gruvbox.palette = {
   bright_green = "#7f9a59",
 
-  dark0_hard = "#0c0c0c",
-  dark0 = "#0c0c0c",
-  dark0_soft = "#0c0c0c",
+  dark0_hard = "#000000",
+  dark0 = "#000000",
+  dark0_soft = "#000000",
   dark1 = "#212121",
   dark2 = "#504945",
   dark3 = "#665c54",
