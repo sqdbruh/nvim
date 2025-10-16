@@ -1,59 +1,39 @@
-require('telescope').setup {
-      extensions = {
-        fzf = {
-            fuzzy = true,                    -- false will only do exact matching
-            override_generic_sorter = true,  -- override the generic sorter
-            override_file_sorter = true,     -- override the file sorter
-        },
-    },
-	
-    defaults = {
-        file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "tags", "%.unity","%.csproj" , "%.mat", "%.asset", "%.prefab", "%.meta", "TextMesh Pro", "Plugins", "Library", ".git/", ".cache", "%.o", "%.a", "%.out", "%.class",
-		"%.pdf", "%.mkv", "%.mp4", "%.zip", "%.map"},
+local telescope = require('telescope')
+local actions_layout = require('telescope.actions.layout')
 
-        -- Default configuration for telescope goes here:
-        -- config_key = value,
-        mappings = {
-            i = {
-                -- map actions.which_key to <C-h> (default: <C-/>)
-                -- actions.which_key shows the mappings for your picker,
-                -- e.g. git_{create, delete, ...}_branch for the git_branches picker
-                ["<C-h>"] = "which_key",
-            },
-        }
+telescope.setup {
+  defaults = {
+    -- всё тяжёлое игнорим сразу в rg:
+    vimgrep_arguments = {
+      'rg',
+      '--color=never', '--no-heading', '--with-filename', '--line-number', '--column',
+      '--smart-case',
+      '--max-columns=200',              
+      '--max-filesize','1M',            
+      '-g','!.git/*',
+      '-g','!node_modules/*',
+      '-g','!Library/*',                 
+      '-g','!dist/*','-g','!build/*','-g','!Build/*',
+      '-g','!bin/*','-g','!obj/*','-g','!target/*',
+      '-g','!*.pdf','-g','!*.zip','-g','!*.mp4','-g','!*.mkv',
+      '-g','!*.unity','-g','!*.asset','-g','!*.prefab','-g','!*.mat','-g','!*.map',
+      '-g','!TextMesh*',
     },
-	
-    pickers = {
-        -- Default configuration for builtin pickers goes here:
-        -- picker_name = {
-        --   picker_config_key = value,
-        --   ...
-        -- }
-        -- Now the picker_config_key will be applied every time you call this
-        -- builtin picker
+    file_ignore_patterns = {},          
+    color_devicons = false,             
+    mappings = {
     },
-    extensions = {
-        -- Your extension configuration goes here:
-        -- extension_name = {
-        --   extension_config_key = value,
-        -- }
-        -- please take a look at the readme of the extension you want to configure
-    }
+  },
+  pickers = {
+    live_grep = {
+      previewer = true,                
+      only_sort_text = true,
+    },
+  },
+  extensions = {
+    fzf = { fuzzy=true, override_generic_sorter=true, override_file_sorter=true },
+  },
 }
 
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('projects')
---require("telescope").load_extension('harpoon')
-
---require'nvim-treesitter.configs'.setup {
-  --highlight = {
-    --enable = true,
-    --disable = {"c_sharp"},
-    ---- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    ---- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    ---- Using this option may slow down your editor, and you may see some duplicate highlights.
-    ---- Instead of true it can also be a list of languages
-    --additional_vim_regex_highlighting = false,
-  --},
---}
-
+telescope.load_extension('fzf')
+telescope.load_extension('projects')
