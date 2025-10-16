@@ -42,8 +42,6 @@ o.completeopt = { "menu", "menuone", "noselect" }
 o.shortmess:append("c")
 cmd("set belloff+=ctrlg")
 vim.g.AutoPairsMapSpace = 0
-vim.g.Hexokinase_highlighters = { "virtual" }
-o.clipboard = "unnamed,unnamedplus"
 vim.g.terminator_split_location = 'vertical belowright'
 o.encoding = "utf-8"
 o.fileencoding = "utf-8"
@@ -53,8 +51,6 @@ o.number = true
 o.relativenumber = true
 o.backspace = { "indent", "eol", "start" }
 
--- Лидер и Space
-vim.g.mapleader = " "
 map('n', '<SPACE>', '<Nop>', { noremap = true })
 
 -- ====== АВТОКОМАНДЫ И РАЗНОЕ ==============================================
@@ -63,7 +59,7 @@ api.nvim_create_autocmd("FileType", {
   callback = function() vim.opt_local.commentstring = "// %s" end,
 })
 api.nvim_create_autocmd("FileType", {
-  pattern = { "c","cpp","cs","hpp","h" },
+  pattern = { "c","cpp","hpp","h" },
   callback = function() vim.opt_local.formatprg = "clang-format" end,
 })
 
@@ -150,6 +146,13 @@ local function IndentWith(key)
   end
 end
 
+
+-- Smart i/a/I/A на пустых строках (из legacy)
+map('n', 'i', IndentWith('i'), { expr = true })
+map('n', 'a', IndentWith('a'), { expr = true })
+map('n', 'I', IndentWith('I'), { expr = true })
+map('n', 'A', IndentWith('A'), { expr = true })
+
 -- ====== МАППИНГИ (1:1) =====================================================
 -- j k l ; движение вместо hjkl (во всех обычных режимах: n/x/s/o)
 for _, m in ipairs({ 'n','x','s','o' }) do
@@ -169,8 +172,15 @@ map('n', '<silent> <A-l>', function() require('smart-splits').resize_right() end
 -- Поиск/очистка
 map('n', '<leader>/', '<cmd>nohlsearch<CR>', { silent = true })
 
--- Yoink/Subversive (в точности)
+vim.g.clipboard = {
+  name = 'win32yank',
+  copy  = { ['+'] = 'win32yank.exe -i --crlf', ['*'] = 'win32yank.exe -i --crlf' },
+  paste = { ['+'] = 'win32yank.exe -o --lf',   ['*'] = 'win32yank.exe -o --lf' },
+  cache_enabled = 1,  -- ВАЖНО: включён кэш
+}
+
 vim.g.yoinkIncludeDeleteOperations = 1
+
 map('n', 's',  '<plug>(SubversiveSubstitute)', { remap = true })
 map('n', 'ss', '<plug>(SubversiveSubstituteLine)', { remap = true })
 map('n', 'S',  '<plug>(SubversiveSubstituteToEndOfLine)', { remap = true })
@@ -196,6 +206,42 @@ map('n', ')', '<plug>Argumentative_MoveRight', { remap = true })
 map('x', 'ia', '<plug>Argumentative_InnerTextObject', { remap = true })
 map('x', 'aa', '<plug>Argumentative_OuterTextObject', { remap = true })
 map('o', 'ia', '<plug>Argumentative_OpPendingInnerTextObject', { remap = true })
+
+-- vim.g.yoinkPersistSystemClipboard = 0
+-- vim.g.yoinkSyncSystemClipboardOnFocus = 0
+
+-- vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
+--   callback = function()
+--     -- pcall, чтобы не падать, если провайдера нет/пусто
+--     pcall(vim.fn.getreg, '+')
+--     pcall(vim.fn.getreg, '*')
+--   end,
+-- })
+
+-- vim.keymap.set('n', 'p', 'p', { noremap = true })
+-- vim.keymap.set('n', 'P', 'P', { noremap = true })
+-- vim.keymap.set('n', 'gp', '<plug>(YoinkPaste_gp)', { remap = true })
+-- vim.keymap.set('n', 'gP', '<plug>(YoinkPaste_gP)', { remap = true })
+-- vim.keymap.set('n', '[y', '<plug>(YoinkRotateBack)',    { remap = true })
+-- vim.keymap.set('n', ']y', '<plug>(YoinkRotateForward)', { remap = true })
+-- vim.keymap.set('n', '<c-n>', '<plug>(YoinkPostPasteSwapBack)',    { remap = true })
+-- vim.keymap.set('n', '<c-p>', '<plug>(YoinkPostPasteSwapForward)', { remap = true })
+
+-- vim.keymap.set({'n','v'}, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
+-- vim.keymap.set('n',        '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
+-- vim.keymap.set({'n','v'}, '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+-- vim.keymap.set('n',        '<leader>P', '"+P', { desc = 'Paste before from system clipboard' })
+
+-- -- Subversive (s)
+-- vim.keymap.set('n', 's',  '<plug>(SubversiveSubstitute)',                 { remap = true, desc = 'Subversive: substitute' })
+-- vim.keymap.set('n', 'ss', '<plug>(SubversiveSubstituteLine)',             { remap = true, desc = 'Subversive: substitute line' })
+-- vim.keymap.set('n', 'S',  '<plug>(SubversiveSubstituteToEndOfLine)',      { remap = true, desc = 'Subversive: substitute to EOL' })
+-- vim.keymap.set('x', 's',  '<plug>(SubversiveSubstitute)',                 { remap = true, desc = 'Subversive: substitute (visual)' })
+-- vim.keymap.set('n', '<leader>s',  '"+<plug>(SubversiveSubstituteRange)',      { remap = true, desc = 'Subversive: substitute range from system clipboard' })
+-- vim.keymap.set('x', '<leader>s',  '"+<plug>(SubversiveSubstituteRange)',      { remap = true, desc = 'Subversive: substitute range (visual) from system clipboard' })
+-- vim.keymap.set('n', '<leader>SS', '"+<plug>(SubversiveSubstituteWordRange)',  { remap = true, desc = 'Subversive: substitute word range from system clipboard' })
+-- vim.keymap.set('n', '<leader>ss', '"+<plug>(SubversiveSubstituteLine)',  { remap = true, desc = 'Subversive: substitute word range from system clipboard' })
+
 map('o', 'aa', '<plug>Argumentative_OpPendingOuterTextObject', { remap = true })
 
 -- Переопределения x/X/xx
@@ -258,7 +304,7 @@ end, { expr = true, silent = true, remap = true })
 
 -- Прочие хоткеи
 map('n', '<leader>fg', GrepWordUnderCursor, { noremap = true })
-map('n', '<silent> <leader>qt', ToggleQuickFix, { noremap = true })
+map('n', '<leader>qt', ToggleQuickFix, { noremap = true, silent = true })
 map('n', '<leader>qc', '<cmd>ClearQuickfixList<cr>', { noremap = true })
 map('n', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
 
@@ -268,8 +314,8 @@ for i = 1, 12 do
 end
 
 -- Marks/подсказки/курсор и т.п.
-map('n', '<silent> <leader>dam', ':delm! | delm A-Z0-9 | SignatureRefresh<CR>', { noremap = true })
-map('n', '<silent> dam',         ':delm! | SignatureRefresh<CR>',               { noremap = true })
+map('n', '<leader>dam', ':delm! | delm A-Z0-9 | SignatureRefresh<CR>', { noremap = true, silent = true })
+map('n', 'dam',         ':delm! | SignatureRefresh<CR>',               { noremap = true, silent = true })
 map('',  'K', '`]', { silent = true })  -- как в legacy: map <silent> K `]
 map('',  'L', '`[', { silent = true })
 
