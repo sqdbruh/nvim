@@ -194,7 +194,7 @@ end
 vim.api.nvim_create_user_command('ToggleDiagnostics', ToggleDiagnostics, {})
 vim.keymap.set('n', '<leader>d', ToggleDiagnostics, { silent = true, desc = "Toggle LSP diagnostics" })
 
-local opts = { noremap=true, silent=true }
+local opts = { noremap=true, silent=true, nowait=true }
 vim.api.nvim_set_keymap('n', 'gh', ':ClangdSwitchSourceHeader<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist({open = false, severity = vim.diagnostic.severity.ERROR})<CR>', opts)
 
@@ -233,7 +233,7 @@ end
 
 require('lspconfig')['clangd'].setup {
     on_attach = on_attach,
-    capabilities = capabilities
+        capabilities = capabilities
 }
 
 require'lspconfig'.lua_ls.setup {
@@ -406,7 +406,6 @@ vim.api.nvim_set_keymap('n', '<C-l>', '<cmd>Cprev<CR>', opts)
 require("project_nvim").setup
 {
     manual_mode = true,
-
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
@@ -430,4 +429,63 @@ vim.api.nvim_set_keymap('n', '<leader>md', ':%s/\\r//g<CR>', { noremap = true, s
 
 function ShowSemanticTokens()
   vim.lsp.buf.semantic_tokens()
+end
+
+
+--------------------------------------------------------------------------------
+-- 1) Inlay hints OFF на каждом LSP-буфере (Neovim 0.11+)
+--------------------------------------------------------------------------------
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local ih = vim.lsp.inlay_hint
+    if ih and ih.enable then
+      ih.enable(false, { bufnr = args.buf })
+    end
+  end,
+})
+
+--------------------------------------------------------------------------------
+-- 2) Глушим спам логов и “Press ENTER”
+--------------------------------------------------------------------------------
+-- делаем сообщения короче/тише
+vim.opt.shortmess:append("FIWc")  -- меньше file/info/warn/completion спама
+
+-- если есть nvim-notify — используем его для уведомлений
+do
+  local ok, notify = pcall(require, "notify")
+  if ok then
+    notify.setup({
+      stages = "static",  -- disable animations
+      timeout = 1000,
+      -- you can set other options here too (timeout, render, etc.)
+    })
+    vim.notify = notify
+  end
+end
+
+-- полностью отключаем запись LSP-логов в файл
+vim.lsp.set_log_level("OFF")
+
+-- не показывать LSP logMessage вообще
+vim.lsp.handlers["window/logMessage"] = function() end
+
+-- показывать только warning/error, Info/Log — игнорировать (без Press ENTER)
+local mt = vim.lsp.protocol.MessageType
+local level_map = {
+  [mt.Error]   = vim.log.levels.ERROR,
+  [mt.Warning] = vim.log.levels.WARN,
+}
+vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
+  if result.type == mt.Info or result.type == mt.Log then return end
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  local title  = client and (client.name .. " (LSP)") or "LSP"
+  local ok, n = pcall(require, "notify")
+  if ok then
+    n(result.message, level_map[result.type] or vim.log.levels.INFO, { title = title, timeout = 3000 })
+  else
+    -- fallback: вывести тихо, без паузы на ENTER
+    vim.schedule(function()
+      vim.api.nvim_echo({{result.message}}, false, {})
+    end)
+  end
 end
