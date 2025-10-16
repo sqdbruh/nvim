@@ -172,13 +172,6 @@ map('n', '<silent> <A-l>', function() require('smart-splits').resize_right() end
 -- Поиск/очистка
 map('n', '<leader>/', '<cmd>nohlsearch<CR>', { silent = true })
 
-vim.g.clipboard = {
-  name = 'win32yank',
-  copy  = { ['+'] = 'win32yank.exe -i --crlf', ['*'] = 'win32yank.exe -i --crlf' },
-  paste = { ['+'] = 'win32yank.exe -o --lf',   ['*'] = 'win32yank.exe -o --lf' },
-  cache_enabled = 1,  -- ВАЖНО: включён кэш
-}
-
 vim.g.yoinkIncludeDeleteOperations = 1
 
 map('n', 's',  '<plug>(SubversiveSubstitute)', { remap = true })
@@ -357,4 +350,17 @@ map('n', '<F10>', [[<cmd>echo "hi<" . synIDattr(synID(line("."),col("."),1),"nam
   \ synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>]],
   { noremap = true })
 
--- ====== КОНЕЦ ==============================================================
+local yank_grp = api.nvim_create_augroup("YankHighlight", { clear = true })
+api.nvim_create_autocmd("TextYankPost", {
+  group = yank_grp,
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "YankFlash", -- своё имя группы (см. ниже)
+      timeout = 100,         -- длительность в мс
+      on_visual = true,      -- подсвечивать и визуальные yank'и
+    })
+  end,
+})
+-- Настрой цвет подсветки (пример: мягкая заливка, без смешивания)
+cmd([[highlight YankFlash gui=nocombine guibg=#3c4150]])
+

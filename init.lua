@@ -277,6 +277,6 @@ vim.keymap.set('n', '<C-k>', '<cmd>Cnext<CR>', { noremap=true, silent=true, nowa
 vim.keymap.set('n', '<C-l>', '<cmd>Cprev<CR>', { noremap=true, silent=true, nowait=true })
 
 vim.cmd.highlight('IndentLine guifg=#212121')
-vim.cmd.highlight('IndentLineCurrent guifg=#777777')
+vim.cmd.highlight('IndentLineCurrent guifg=#333333')
 vim.cmd("highlight DiagnosticError guifg=#e65c5c")
 vim.cmd("highlight DiagnosticWarn  guifg=#ffb833")
