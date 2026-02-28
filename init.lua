@@ -20,7 +20,7 @@ vim.opt.swapfile = false
 
 require("lazy").setup({
   spec = {
-  { "kalvinpearce/ShaderHighlight" },    -- можно потом повесить на ft={'glsl','shader'} и др.
+  { "kalvinpearce/ShaderHighlight" },  
 
   { "ray-x/go.nvim",                     lazy = false, dependencies = {
       "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig"
@@ -32,7 +32,7 @@ require("lazy").setup({
   },
 
   { "stevearc/oil.nvim",                 lazy = false },
-  { "bkad/CamelCaseMotion" },            -- хоткеи сами по себе, можно оставить лениво
+  { "bkad/CamelCaseMotion" },           
 
   { "windwp/nvim-autopairs",             lazy = false },
   { "windwp/nvim-ts-autotag",            dependencies = { "nvim-treesitter/nvim-treesitter" } },
@@ -78,16 +78,21 @@ require("lazy").setup({
   { "ellisonleao/gruvbox.nvim" },
   { "rafamadriz/friendly-snippets",      lazy = false },
   { "ahmedkhalf/project.nvim",           lazy = false },
-
-  -- ВНИМАНИЕ: BurntSushi/ripgrep — это не neovim-плагин. Установи ripgrep системно (scoop/choco/pacman/apt).
-  -- { "BurntSushi/ripgrep" },
-
   { "mrjones2014/smart-splits.nvim" },
   { "folke/todo-comments.nvim",          lazy = false, dependencies = { "nvim-lua/plenary.nvim" } },
 
-  { "neovim/nvim-lspconfig",             lazy = false },  -- нужен util + серверные конфиги
-  -- { "ray-x/lsp_signature.nvim",          lazy = false },
-
+  { "neovim/nvim-lspconfig",             lazy = false },  
+  {
+      "ray-x/lsp_signature.nvim",
+      event = "InsertEnter",
+      opts = {
+          bind = true,
+          floating_window = true,  
+          handler_opts = { border = "none" },
+          doc_lines = 0,            
+          hint_enable = false,      
+      },
+  },
   { "hrsh7th/cmp-nvim-lsp",              lazy = false },
   { "hrsh7th/cmp-buffer",                lazy = false },
   { "hrsh7th/cmp-path",                  lazy = false },
@@ -101,7 +106,7 @@ require("lazy").setup({
       opts = {
           broad_search = false,   
           lock_target  = true,   
-          filewatching = "off",
+          filewatching = "roslyn",
           settings = {
               ["csharp|inlay_hints"] = {
                   csharp_enable_inlay_hints_for_implicit_object_creation = false,
@@ -127,7 +132,7 @@ require("lazy").setup({
   { "nvim-tree/nvim-web-devicons",       lazy = false },
   },
   install = { colorscheme = { "habamax" } },
-  checker = { enabled = true },
+  checker = { enabled = false },
 })
 
 require('deferred-clipboard').setup {
@@ -135,10 +140,14 @@ require('deferred-clipboard').setup {
 }
 
 pcall(function() vim.loader.enable() end)  
-require("indentmini").setup()
+require("indentmini").setup({
+  char = "|",
+  minlevel = 1,
+  only_current = false,
+})
 require('nvim-treesitter.configs').setup({
   highlight = {
-    enable = false,
+    enable = true,
     additional_vim_regex_highlighting = false,
   },
 })
@@ -175,6 +184,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map('n', '<leader>ca', vim.lsp.buf.code_action)
     map('n', 'gr', vim.lsp.buf.references)
     map('n', '<leader>cf', function() vim.lsp.buf.format({ async = true }) end)
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(event)
+    local ft = vim.bo[event.buf].filetype
+    if ft ~= "c" and ft ~= "cpp" then return end
+
+    local client_id = event.data and event.data.client_id
+    if not client_id then return end
+
+    local client = vim.lsp.get_client_by_id(client_id)
+    if client and client.name == "clangd" then
+      client.server_capabilities.inlayHintProvider = false
+      if vim.lsp.inlay_hint and vim.lsp.inlay_hint.enable then
+        vim.lsp.inlay_hint.enable(false, { bufnr = event.buf })
+      end
+    end
   end,
 })
 
@@ -229,14 +256,6 @@ require('nvim-web-devicons').setup()
 require('oil').setup()
 vim.keymap.set('n', '<kMinus>', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
--- require('lsp_signature').setup({
---   bind = true,
---   floating_window = true,  
---   handler_opts = { border = "none" },
---   doc_lines = 0,            
---   hint_enable = false,      
--- })
-
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require('go').setup()
 vim.lsp.config('gopls', {
@@ -245,8 +264,81 @@ vim.lsp.config('gopls', {
   settings = { gopls = { analyses = { unusedparams = true, nilness = true }, staticcheck = true } },
 })
 
+local function blob_to_string(value)
+  if type(value) == "string" then return value end
+
+  local ok_type, value_type = pcall(vim.fn.type, value)
+  if not ok_type or value_type ~= vim.v.t_blob then return value end
+
+  local ok_str, str = pcall(vim.fn.blob2str, value)
+  if ok_str then return str end
+
+  local ok_list, bytes = pcall(vim.fn.blob2list, value)
+  if not ok_list then return value end
+
+  local chars = {}
+  for i, byte in ipairs(bytes) do
+    chars[i] = string.char(byte)
+  end
+  return table.concat(chars)
+end
+
+local orig_uri_to_bufnr = vim.uri_to_bufnr
+vim.uri_to_bufnr = function(uri)
+  return orig_uri_to_bufnr(blob_to_string(uri))
+end
+
+local orig_uri_to_fname = vim.uri_to_fname
+vim.uri_to_fname = function(uri)
+  return orig_uri_to_fname(blob_to_string(uri))
+end
+
+local function normalize_location_result(result)
+  if type(result) ~= "table" then return result end
+
+  local function normalize_location(location)
+    if type(location) ~= "table" then return end
+    if location.uri ~= nil then location.uri = blob_to_string(location.uri) end
+    if location.targetUri ~= nil then location.targetUri = blob_to_string(location.targetUri) end
+  end
+
+  if vim.tbl_islist(result) then
+    for _, location in ipairs(result) do
+      normalize_location(location)
+    end
+    return result
+  end
+
+  normalize_location(result)
+  return result
+end
+
+local function wrap_location_handler(method)
+  local handler = vim.lsp.handlers[method]
+  return function(err, result, ctx, config)
+    if result ~= nil then
+      result = normalize_location_result(result)
+    end
+    if handler then
+      return handler(err, result, ctx, config)
+    end
+  end
+end
+
+vim.lsp.config('ols', {
+  capabilities = capabilities,
+  handlers = {
+    ["textDocument/definition"] = wrap_location_handler("textDocument/definition"),
+    ["textDocument/declaration"] = wrap_location_handler("textDocument/declaration"),
+    ["textDocument/typeDefinition"] = wrap_location_handler("textDocument/typeDefinition"),
+    ["textDocument/implementation"] = wrap_location_handler("textDocument/implementation"),
+    ["textDocument/references"] = wrap_location_handler("textDocument/references"),
+  },
+})
+
 vim.lsp.enable('clangd') 
 vim.lsp.enable('gopls')
+vim.lsp.enable('ols')
 
 -- === Диагностики: новый toggle без deprecated ===
 vim.g.lsp_diagnostics_enabled = false  -- по-умолчанию OFF (как у вас)
@@ -275,8 +367,16 @@ vim.keymap.set('n', '<A-k>', function() vim.diagnostic.goto_next({severity = vim
 vim.keymap.set('n', '<A-l>', function() vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR}) end, {silent=true})
 vim.keymap.set('n', '<C-k>', '<cmd>Cnext<CR>', { noremap=true, silent=true, nowait=true })
 vim.keymap.set('n', '<C-l>', '<cmd>Cprev<CR>', { noremap=true, silent=true, nowait=true })
+vim.keymap.set("n", "<leader>rl", [[:%s/\r//g<CR>]], { desc = "Strip CRs from file" })
 
 vim.cmd.highlight('IndentLine guifg=#212121')
 vim.cmd.highlight('IndentLineCurrent guifg=#333333')
 vim.cmd("highlight DiagnosticError guifg=#e65c5c")
 vim.cmd("highlight DiagnosticWarn  guifg=#ffb833")
+
+
+vim.api.nvim_create_user_command("DeleteAllComments", function()
+  require("delete_comments").run()
+end, {})
+
+vim.keymap.set("n", "<leader>dc", ":DeleteAllComments<CR>", { silent = true, desc = "Delete all comments in buffer" })

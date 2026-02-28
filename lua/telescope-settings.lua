@@ -21,6 +21,7 @@ file_ignore_patterns = {
   "^%.idea/",
   "^%.fleet/",
   "%.meta$",
+  "%.asset$",
   -- тяжёлые ассеты (если хочешь “кодовый” find_files):
   "%.fbx$", "%.obj$", "%.blend%d*$",
   "%.tga$", "%.exr$", "%.png$", "%.jpe?g$", "%.psd$",
