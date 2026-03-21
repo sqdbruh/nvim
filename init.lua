@@ -26,6 +26,7 @@ vim.opt.shiftwidth = 4 -- indent size when using >> << or autoindent
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+vim.o.cmdheight = 0
 vim.o.smartindent = true
 vim.o.autoindent = true
 
@@ -208,6 +209,30 @@ vim.keymap.set("n", "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)")
 vim.keymap.set("n", "=p", "<Plug>(YankyPutAfterFilter)")
 vim.keymap.set("n", "=P", "<Plug>(YankyPutBeforeFilter)")
 
+local todo_snippet_keywords = {
+	"TODO",
+	"NOTE",
+	"WARNING",
+	"PERFORMANCE",
+	"CRITICAL",
+	"HACK",
+	"FIX",
+}
+
+local todo_comment_keywords = {
+	TODO = { icon = " ", color = "yellow" },
+	NOTE = { icon = " ", color = "green", alt = { "INFO" } },
+	WARNING = { icon = " ", color = "yellow", alt = { "WARN", "XXX" } },
+	PERFORMANCE = { icon = " ", color = "yellow", alt = { "PERF", "OPTIM", "OPTIMIZE" } },
+	CRITICAL = { icon = " ", color = "red", alt = { "CRIT" } },
+	HACK = { icon = " ", color = "gray" },
+	FIX = { icon = " ", color = "red", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+	TEST = { icon = "⏲ ", color = "gray", alt = { "TESTING", "PASSED", "FAILED" } },
+}
+
+local todo_highlight_pattern = [[.*<((KEYWORDS)\s*(\([^)]*\))?\s*:)]]
+local todo_search_pattern = [[\b(KEYWORDS)\s*(\([^)]*\))?\s*:]]
+
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	{ "EtiamNullam/deferred-clipboard.nvim" },
@@ -307,7 +332,54 @@ require("lazy").setup({
 			init = function()
 				local lackluster = require("lackluster")
 				local color = lackluster.color
+				local special = lackluster.color_special
+				local todo_palette = {
+					gray = special.comment,
+					green = color.green,
+					yellow = color.yellow,
+					red = color.red,
+				}
+				local todo_highlight_aliases = {
+					TODO = { "Todo" },
+					NOTE = { "Note" },
+					WARNING = { "Warn", "Warning" },
+					PERFORMANCE = { "Perf", "Performance" },
+					HACK = { "Hack" },
+					FIX = { "Fix" },
+					TEST = { "Test" },
+					CRITICAL = { "Critical" },
+				}
+				local tweak_highlight = {
+					Visual = {
+						bg = lackluster.color.green,
+					},
+					VisualNOS = {
+						overwrite = true,
+						link = "Visual",
+					},
+				}
 	
+				local function set_todo_highlight(suffix, fg)
+					tweak_highlight["TodoFg" .. suffix] = {
+						overwrite = true,
+						fg = fg,
+						bold = true,
+					}
+					tweak_highlight["TodoBg" .. suffix] = {
+						overwrite = true,
+						link = "TodoFg" .. suffix,
+					}
+				end
+
+				for keyword, opts in pairs(todo_comment_keywords) do
+					local fg = todo_palette[opts.color]
+					set_todo_highlight(keyword, fg)
+
+					for _, alias in ipairs(todo_highlight_aliases[keyword] or {}) do
+						set_todo_highlight(alias, fg)
+					end
+				end
+		
 				-- !must called setup() before setting the colorscheme!
 				lackluster.setup({
 					-- tweak_color allows you to overwrite the default colors in the lackluster theme
@@ -320,15 +392,7 @@ require("lazy").setup({
 						menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
 						popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
 					},
-					tweak_highlight = {
-						Visual = {
-							bg = lackluster.color.green,
-						},
-						VisualNOS = {
-							overwrite = true,
-							link = "Visual",
-						},
-					},
+					tweak_highlight = tweak_highlight,
 				})
 
 				vim.cmd.colorscheme("lackluster-mint") -- my favorite
@@ -861,16 +925,11 @@ require("lazy").setup({
 						})
 					end
 
-					-- TODO(sqd):
-					ls.add_snippets("all", {
-						make_comment_snippet("TODO"),
-						make_comment_snippet("NOTE"),
-						make_comment_snippet("WARNING"),
-						make_comment_snippet("PERFORMANCE"),
-						make_comment_snippet("CRITICAL"),
-						make_comment_snippet("HACK"),
-						make_comment_snippet("FIX"),
-					})
+					local snippets = {}
+					for _, keyword in ipairs(todo_snippet_keywords) do
+						snippets[#snippets + 1] = make_comment_snippet(keyword)
+					end
+					ls.add_snippets("all", snippets)
 				end,
 			},
 		},
@@ -970,9 +1029,33 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 		---@module 'todo-comments'
 		---@type TodoOptions
-		---@diagnostic disable-next-line: missing-fields
-		opts = { signs = false },
-	},
+		opts = function()
+			local lackluster = require("lackluster")
+			local color = lackluster.color
+			local special = lackluster.color_special
+
+				return {
+					signs = false,
+					merge_keywords = false,
+					keywords = todo_comment_keywords,
+					highlight = {
+						pattern = todo_highlight_pattern,
+						before = "fg",
+						keyword = "fg",
+						after = "fg",
+					},
+					search = {
+						pattern = todo_search_pattern,
+					},
+					colors = {
+						gray = { special.comment },
+						green = { color.green },
+						yellow = { color.yellow },
+						red = { color.red },
+					},
+				}
+			end,
+		},
 
 	{ -- Collection of various small independent plugins/modules
 		"nvim-mini/mini.nvim",
