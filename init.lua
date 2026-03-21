@@ -1,8 +1,11 @@
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
+--
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+vim.o.swapfile = false
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -23,6 +26,8 @@ vim.opt.shiftwidth = 4 -- indent size when using >> << or autoindent
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
+vim.o.smartindent = true
+vim.o.autoindent = true
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -138,15 +143,9 @@ vim.keymap.set("n", "<leader>q", function()
 	if is_open then
 		vim.cmd("cclose")
 	else
-		local diags = vim.diagnostic.get()
-		if #diags > 0 then
-			vim.diagnostic.setqflist()
-			vim.cmd("copen")
-		else
-			print("No diagnostics")
-		end
+		vim.cmd("copen")
 	end
-end, { desc = "Toggle diagnostics quickfix" })
+end, { desc = "Toggle quickfix" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -219,10 +218,10 @@ require("lazy").setup({
 			local utils = require("yanky.utils")
 
 			return {
-
 				highlight = {
 					on_put = true,
 					on_yank = true,
+
 					timer = 100,
 				},
 				picker = {
@@ -259,9 +258,6 @@ require("lazy").setup({
 			-- refer to the configuration section below
 		},
 	},
-	{
-		"EtiamNullam/deferred-clipboard.nvim",
-	},
 	{ "bkad/CamelCaseMotion" },
 	{
 		"tpope/vim-dispatch",
@@ -272,72 +268,49 @@ require("lazy").setup({
 			require("pendulum").setup()
 		end,
 	},
-	{
-		"rmagatti/auto-session",
-		lazy = false,
-		opts = {
-			root_dir = vim.fn.stdpath("data") .. "/sessions/",
-			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-			session_lens = {
-				picker = "telescope",
-				load_on_setup = true,
-			},
-		},
-		config = function(_, opts)
-			require("auto-session").setup(opts)
-
-			vim.keymap.set("n", "<leader>ss", "<cmd>AutoSession search<CR>", {
-				desc = "Search sessions",
-			})
-		end,
-	},
+	-- {
+	-- 	"rmagatti/auto-session",
+	-- 	lazy = false,
+	-- 	opts = {
+	-- 		root_dir = vim.fn.stdpath("data") .. "/sessions/",
+	-- 		suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+	-- 		session_lens = {
+	-- 			picker = "telescope",
+	-- 			load_on_setup = true,
+	-- 		},
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		require("auto-session").setup(opts)
+	--
+	-- 		vim.keymap.set("n", "<leader>ss", "<cmd>AutoSession search<CR>", {
+	-- 			desc = "Search sessions",
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"stevearc/oil.nvim",
 		---@module 'oil'
 		---@type oil.SetupOpts
 		opts = {},
 		-- Optional dependencies
-		dependencies = { { "nvim-mini/mini.icons", opts = {} } },
-		-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+		-- dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+		dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
 		-- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
 		lazy = false,
 		config = function()
 			require("oil").setup()
-			vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 		end,
 	},
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("tokyonight").setup({
-				styles = {
-					comments = { italic = false }, -- Disable italics in comments
-				},
-			})
+	{
+		"slugbyte/lackluster.nvim",
+		lazy = false,
+		init = function()
+			-- vim.cmd.colorscheme("lackluster")
+			vim.cmd.colorscheme("lackluster-hack") -- my favorite
+			-- vim.cmd.colorscheme("lackluster-mint")
+		end,
+	},
 
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
-		end,
-	},
-	-- {
-	-- 	"lukas-reineke/indent-blankline.nvim",
-	-- 	main = "ibl",
-	-- 	---@module "ibl"
-	-- 	---@type ibl.config
-	-- 	opts = {
-	-- 		indent = {
-	-- 			char = "│", -- most stable solid line
-	-- 		},
-	-- 	},
-	-- },
 	{
 		"seblyng/roslyn.nvim",
 		opts = {
@@ -691,29 +664,6 @@ require("lazy").setup({
 					--
 					-- When you move your cursor, the highlights will be cleared (the second autocommand).
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client:supports_method("textDocument/documentHighlight", event.buf) then
-						local highlight_augroup =
-							vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
-						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-							buffer = event.buf,
-							group = highlight_augroup,
-							callback = vim.lsp.buf.document_highlight,
-						})
-
-						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-							buffer = event.buf,
-							group = highlight_augroup,
-							callback = vim.lsp.buf.clear_references,
-						})
-
-						vim.api.nvim_create_autocmd("LspDetach", {
-							group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-							callback = function(event2)
-								vim.lsp.buf.clear_references()
-								vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
-							end,
-						})
-					end
 
 					-- The following code creates a keymap to toggle inlay hints in your
 					-- code, if the language server you are using supports them
@@ -824,20 +774,7 @@ require("lazy").setup({
 		---@type conform.setupOpts
 		opts = {
 			notify_on_error = false,
-			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't
-				-- have a well standardized coding style. You can add additional
-				-- languages here or re-enable it for the disabled ones.
-				local disable_filetypes = { c = true, cpp = true }
-				if disable_filetypes[vim.bo[bufnr].filetype] then
-					return nil
-				else
-					return {
-						timeout_ms = 500,
-						lsp_format = "fallback",
-					}
-				end
-			end,
+			format_on_save = nil,
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
@@ -1014,7 +951,17 @@ require("lazy").setup({
 			-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
-			require("mini.surround").setup()
+			require("mini.surround").setup({
+				mappings = {
+					add = "Sa", -- add surrounding
+					delete = "Sd", -- delete surrounding
+					find = "Sf", -- find surrounding (right)
+					find_left = "SF", -- find surrounding (left)
+					highlight = "Sh", -- highlight surrounding
+					replace = "Sr", -- replace surrounding
+					update_n_lines = "Sn", -- update search length
+				},
+			})
 			require("mini.pairs").setup()
 
 			-- Simple and easy statusline.
@@ -1081,8 +1028,16 @@ require("lazy").setup({
 					-- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 					-- vim.wo.foldmethod = 'expr'
 
-					-- enables treesitter based indentation
-					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					-- C# uses Neovim's built-in indent script, which delegates to
+					-- GetCSIndent(). Tree-sitter has no c_sharp indent queries.
+					if filetype == "cs" and vim.fn.exists("*GetCSIndent") == 1 then
+						vim.bo[buf].cindent = true
+						vim.bo[buf].indentexpr = "GetCSIndent(v:lnum)"
+					-- Only enable Tree-sitter indentation when the language provides
+					-- indent queries. Languages like C# ship a parser without them.
+					elseif vim.treesitter.query.get(language, "indents") then
+						vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
 				end,
 			})
 		end,
@@ -1161,10 +1116,10 @@ for i = 1, 12 do
 		desc = "Build f" .. i,
 	})
 end
+vim.keymap.set("n", "s", require("substitute").eol, { noremap = true })
 vim.keymap.set("n", "s", require("substitute").operator, { noremap = true })
 vim.keymap.set("n", "ss", require("substitute").line, { noremap = true })
-vim.keymap.set("n", "S", require("substitute").eol, { noremap = true })
-vim.keymap.set("x", "S", require("substitute").visual, { noremap = true })
+vim.keymap.set("x", "s", require("substitute").visual, { noremap = true })
 
 require("deferred-clipboard").setup({
 	lazy = true,
@@ -1175,4 +1130,13 @@ vim.keymap.set("n", "<leader>sy", "<cmd>Telescope yank_history<CR>", {
 
 vim.keymap.set({ "n", "v", "o" }, "<Home>", "^", { noremap = true, silent = true })
 
-require("handmade").load()
+-- require("handmade").load()
+
+vim.keymap.set({ "n", "x", "o" }, "-", "<CMD>Oil<CR>", {
+	desc = "Open parent directory",
+	silent = true,
+})
+
+vim.keymap.set({ "n", "x", "o" }, "W", "<Plug>CamelCaseMotion_w")
+vim.keymap.set({ "n", "x", "o" }, "B", "<Plug>CamelCaseMotion_b")
+vim.keymap.set({ "n", "x", "o" }, "E", "<Plug>CamelCaseMotion_e")
