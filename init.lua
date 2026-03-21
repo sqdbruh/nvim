@@ -284,13 +284,29 @@ require("lazy").setup({
 		},
 	},
 	{ "bkad/CamelCaseMotion" },
-	{
-		"tpope/vim-dispatch",
-	},
-	{
-		"ptdewey/pendulum-nvim",
-		config = function()
-			require("pendulum").setup()
+		{
+			"tpope/vim-dispatch",
+		},
+		{
+			"folke/snacks.nvim",
+			lazy = true,
+			opts = {
+				scratch = { enabled = true },
+			},
+			keys = {
+				{
+					"<leader>.",
+					function()
+						Snacks.scratch()
+					end,
+					desc = "Toggle scratch buffer",
+				},
+			},
+		},
+		{
+			"ptdewey/pendulum-nvim",
+			config = function()
+				require("pendulum").setup()
 		end,
 	},
 	{
@@ -642,14 +658,46 @@ require("lazy").setup({
 				end,
 			})
 
-			-- Override default behavior and theme when searching
-			vim.keymap.set("n", "<leader>/", function()
-				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
-				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
+				local function get_visual_selection()
+					local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+					local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+					local srow, scol = start_pos[1] - 1, start_pos[2]
+					local erow, ecol = end_pos[1] - 1, end_pos[2]
+
+					if srow > erow or (srow == erow and scol > ecol) then
+						srow, erow = erow, srow
+						scol, ecol = ecol, scol
+					end
+
+					local lines = vim.api.nvim_buf_get_text(0, srow, scol, erow, ecol + 1, {})
+					return table.concat(lines, "\n")
+				end
+
+				local function highlight_search(pattern)
+					if not pattern or pattern == "" then
+						return
+					end
+					vim.fn.setreg("/", pattern)
+					vim.o.hlsearch = true
+				end
+
+				vim.keymap.set({ "n", "x" }, "<leader>/", function()
+					local mode = vim.fn.mode()
+					if mode:match("[vV\22]") then
+						local selection = get_visual_selection()
+						if selection and selection ~= "" then
+							local pattern = "\\V" .. selection:gsub("\\", "\\\\"):gsub("\n", "\\n")
+							highlight_search(pattern)
+						end
+						return
+					end
+
+					local word = vim.fn.expand("<cword>")
+					if word ~= "" then
+						local escaped = word:gsub("\\", "\\\\")
+						highlight_search("\\V\\<" .. escaped .. "\\>")
+					end
+				end, { desc = "[/] Highlight current word" })
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -877,11 +925,18 @@ require("lazy").setup({
 	{ -- Autocompletion
 		"saghen/blink.cmp",
 		event = "VimEnter",
-		version = "1.*",
-		dependencies = {
-			-- Snippet Engine
-			{
-				"L3MON4D3/LuaSnip",
+			version = "1.*",
+			dependencies = {
+				{
+					"saghen/blink.compat",
+					version = "2.*",
+					lazy = true,
+					opts = {},
+				},
+				{ "hrsh7th/cmp-calc" },
+				-- Snippet Engine
+				{
+					"L3MON4D3/LuaSnip",
 				version = "2.*",
 				build = (function()
 					-- Build Step is needed for regex support in snippets.
@@ -992,12 +1047,17 @@ require("lazy").setup({
 				documentation = { auto_show = false, auto_show_delay_ms = 300 },
 			},
 
-			sources = {
-				default = { "lsp", "path", "snippets" },
-				providers = {
-					lsp = {
-						transform_items = function(_, items)
-							local kinds = require("blink.cmp.types").CompletionItemKind
+				sources = {
+					default = { "lsp", "path", "snippets", "calc" },
+					providers = {
+						calc = {
+							name = "calc",
+							module = "blink.compat.source",
+							score_offset = 100,
+						},
+						lsp = {
+							transform_items = function(_, items)
+								local kinds = require("blink.cmp.types").CompletionItemKind
 							return vim.tbl_filter(function(item)
 								return item.kind ~= kinds.Keyword
 							end, items)
