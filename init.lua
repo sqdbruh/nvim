@@ -268,25 +268,25 @@ require("lazy").setup({
 			require("pendulum").setup()
 		end,
 	},
-	-- {
-	-- 	"rmagatti/auto-session",
-	-- 	lazy = false,
-	-- 	opts = {
-	-- 		root_dir = vim.fn.stdpath("data") .. "/sessions/",
-	-- 		suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-	-- 		session_lens = {
-	-- 			picker = "telescope",
-	-- 			load_on_setup = true,
-	-- 		},
-	-- 	},
-	-- 	config = function(_, opts)
-	-- 		require("auto-session").setup(opts)
-	--
-	-- 		vim.keymap.set("n", "<leader>ss", "<cmd>AutoSession search<CR>", {
-	-- 			desc = "Search sessions",
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"rmagatti/auto-session",
+		lazy = false,
+		opts = {
+			root_dir = vim.fn.stdpath("data") .. "/sessions/",
+			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+			session_lens = {
+				picker = "telescope",
+				load_on_setup = true,
+			},
+		},
+		config = function(_, opts)
+			require("auto-session").setup(opts)
+
+			vim.keymap.set("n", "<leader>ss", "<cmd>AutoSession search<CR>", {
+				desc = "Search sessions",
+			})
+		end,
+	},
 	{
 		"stevearc/oil.nvim",
 		---@module 'oil'
@@ -301,14 +301,38 @@ require("lazy").setup({
 			require("oil").setup()
 		end,
 	},
-	{
-		"slugbyte/lackluster.nvim",
-		lazy = false,
-		init = function()
-			-- vim.cmd.colorscheme("lackluster")
-			vim.cmd.colorscheme("lackluster-hack") -- my favorite
-			-- vim.cmd.colorscheme("lackluster-mint")
-		end,
+		{
+			"slugbyte/lackluster.nvim",
+			lazy = false,
+			init = function()
+				local lackluster = require("lackluster")
+				local color = lackluster.color
+	
+				-- !must called setup() before setting the colorscheme!
+				lackluster.setup({
+					-- tweak_color allows you to overwrite the default colors in the lackluster theme
+					tweak_background = {
+						-- normal = 'default',    -- main background
+						-- normal = 'none',    -- transparent
+						normal = "#000000", -- hexcode
+						-- normal = color.green,    -- lackluster color
+						telescope = "default", -- telescope
+						menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
+						popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
+					},
+					tweak_highlight = {
+						Visual = {
+							bg = lackluster.color.green,
+						},
+						VisualNOS = {
+							overwrite = true,
+							link = "Visual",
+						},
+					},
+				})
+
+				vim.cmd.colorscheme("lackluster-mint") -- my favorite
+			end,
 	},
 
 	{
@@ -808,12 +832,12 @@ require("lazy").setup({
 					-- `friendly-snippets` contains a variety of premade snippets.
 					--    See the README about individual language/framework/plugin snippets:
 					--    https://github.com/rafamadriz/friendly-snippets
-					-- {
-					--   'rafamadriz/friendly-snippets',
-					--   config = function()
-					--     require('luasnip.loaders.from_vscode').lazy_load()
-					--   end,
-					-- },
+					{
+						"rafamadriz/friendly-snippets",
+						config = function()
+							require("luasnip.loaders.from_vscode").lazy_load()
+						end,
+					},
 				},
 				opts = function()
 					local ls = require("luasnip")
@@ -877,7 +901,12 @@ require("lazy").setup({
 				--
 				-- See :h blink-cmp-config-keymap for defining your own keymap
 				preset = "default",
-				["<C-f>"] = { "accept" }, -- your new accept key
+				["<C-f>"] = {
+					function(cmp)
+						return cmp.select_and_accept({ force = true })
+					end,
+					"fallback",
+				},
 
 				-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
 				--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -906,6 +935,16 @@ require("lazy").setup({
 
 			sources = {
 				default = { "lsp", "path", "snippets" },
+				providers = {
+					lsp = {
+						transform_items = function(_, items)
+							local kinds = require("blink.cmp.types").CompletionItemKind
+							return vim.tbl_filter(function(item)
+								return item.kind ~= kinds.Keyword
+							end, items)
+						end,
+					},
+				},
 			},
 
 			snippets = { preset = "luasnip" },
@@ -1132,11 +1171,29 @@ vim.keymap.set({ "n", "v", "o" }, "<Home>", "^", { noremap = true, silent = true
 
 -- require("handmade").load()
 
-vim.keymap.set({ "n", "x", "o" }, "-", "<CMD>Oil<CR>", {
-	desc = "Open parent directory",
-	silent = true,
-})
+for _, lhs in ipairs({ "-", "<kMinus>" }) do
+	vim.keymap.set({ "n", "x", "o" }, lhs, function()
+		require("oil").open()
+	end, {
+		desc = "Open parent directory",
+		silent = true,
+	})
+end
 
 vim.keymap.set({ "n", "x", "o" }, "W", "<Plug>CamelCaseMotion_w")
 vim.keymap.set({ "n", "x", "o" }, "B", "<Plug>CamelCaseMotion_b")
 vim.keymap.set({ "n", "x", "o" }, "E", "<Plug>CamelCaseMotion_e")
+if vim.g.neovide then
+  vim.o.guifont = "JetBrainsMono Nerd Font:h10"
+
+  vim.g.neovide_font_features = {
+    ["JetBrainsMono Nerd Font"] = {
+      "-calt",
+      "-liga",
+    },
+  }
+
+  vim.g.neovide_scroll_animation_far_lines = 0
+  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_trail_size = 0
+end
