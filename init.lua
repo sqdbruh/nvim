@@ -1056,6 +1056,8 @@ require("lazy").setup({
 				"query",
 				"vim",
 				"vimdoc",
+				"odin",
+				"c_sharp",
 			}
 			require("nvim-treesitter").install(parsers)
 			vim.api.nvim_create_autocmd("FileType", {
