@@ -566,6 +566,32 @@ require("lazy").setup({
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
+			local function jump_to_qf_item(item)
+				local bufnr = item.bufnr
+				if not bufnr or bufnr == 0 then
+					bufnr = vim.fn.bufadd(item.filename)
+				end
+
+				vim.fn.bufload(bufnr)
+				vim.api.nvim_win_set_buf(0, bufnr)
+				vim.api.nvim_win_set_cursor(0, { item.lnum, math.max(item.col - 1, 0) })
+				vim.cmd.normal({ args = { "zv" }, bang = true })
+			end
+
+			local function lsp_jump_or_qf(request)
+				return function()
+					request(function(options)
+						if #options.items == 1 then
+							jump_to_qf_item(options.items[1])
+							return
+						end
+
+						vim.fn.setqflist({}, " ", options)
+						vim.cmd.copen()
+					end)
+				end
+			end
+
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
@@ -585,27 +611,33 @@ require("lazy").setup({
 					local buf = event.buf
 
 					-- Find references for the word under your cursor.
-					vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = buf, desc = "[G]oto [R]eferences" })
+					vim.keymap.set("n", "gr", lsp_jump_or_qf(function(on_list)
+						vim.lsp.buf.references(nil, { on_list = on_list })
+					end), { buffer = buf, desc = "[G]oto [R]eferences" })
 
 					-- Jump to the implementation of the word under your cursor.
 					-- Useful when your language has ways of declaring types without an actual implementation.
 					vim.keymap.set(
 						"n",
 						"gi",
-						builtin.lsp_implementations,
+						lsp_jump_or_qf(function(on_list)
+							vim.lsp.buf.implementation({ on_list = on_list, reuse_win = true })
+						end),
 						{ buffer = buf, desc = "[G]oto [I]mplementation" }
 					)
 
 					-- Jump to the definition of the word under your cursor.
 					-- This is where a variable was first declared, or where a function is defined, etc.
 					-- To jump back, press <C-t>.
-					vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = buf, desc = "[G]oto [D]efinition" })
+					vim.keymap.set("n", "gd", lsp_jump_or_qf(function(on_list)
+						vim.lsp.buf.definition({ on_list = on_list, reuse_win = true })
+					end), { buffer = buf, desc = "[G]oto [D]efinition" })
 
 					-- Fuzzy find all the symbols in your current document.
 					-- Symbols are things like variables, functions, types, etc.
 					vim.keymap.set(
 						"n",
-						"gO",
+						"go",
 						builtin.lsp_document_symbols,
 						{ buffer = buf, desc = "Open Document Symbols" }
 					)
@@ -614,7 +646,7 @@ require("lazy").setup({
 					-- Similar to document symbols, except searches over your entire project.
 					vim.keymap.set(
 						"n",
-						"gW",
+						"gw",
 						builtin.lsp_dynamic_workspace_symbols,
 						{ buffer = buf, desc = "Open Workspace Symbols" }
 					)
@@ -625,7 +657,9 @@ require("lazy").setup({
 					vim.keymap.set(
 						"n",
 						"gt",
-						builtin.lsp_type_definitions,
+						lsp_jump_or_qf(function(on_list)
+							vim.lsp.buf.type_definition({ on_list = on_list, reuse_win = true })
+						end),
 						{ buffer = buf, desc = "[G]oto [T]ype Definition" }
 					)
 				end,
@@ -975,6 +1009,7 @@ require("lazy").setup({
 					},
 				},
 				list = {
+					max_items = 5,
 					selection = {
 						preselect = false,
 					},
