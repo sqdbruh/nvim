@@ -92,18 +92,53 @@ vim.keymap.set({ "n", "v", "o" }, ";", "l", { noremap = true, silent = true, des
 -- Quickfix navigation
 local function quickfix_jump(delta)
 	return function()
-		local qf = vim.fn.getqflist({ idx = 0, size = 0 })
-		if qf.size == 0 then
+		local qf = vim.fn.getqflist({ idx = 0, items = 1, size = 0 })
+		if qf.size == 0 or not qf.items then
 			return
 		end
 
-		local target = ((qf.idx - 1 + (vim.v.count1 * delta)) % qf.size) + 1
-		vim.cmd("cc " .. target)
+		local valid_indexes = {}
+		for idx, item in ipairs(qf.items) do
+			if item.valid == 1 then
+				valid_indexes[#valid_indexes + 1] = idx
+			end
+		end
+
+		if #valid_indexes == 0 then
+			return
+		end
+
+		local current = qf.idx
+		local target_pos
+
+		if delta > 0 then
+			local pos = 0
+			for i, idx in ipairs(valid_indexes) do
+				if idx <= current then
+					pos = i
+				else
+					break
+				end
+			end
+
+			target_pos = ((pos + vim.v.count1 - 1) % #valid_indexes) + 1
+		else
+			local pos = #valid_indexes + 1
+			for i, idx in ipairs(valid_indexes) do
+				if idx >= current then
+					pos = i
+					break
+				end
+			end
+
+			target_pos = ((pos - vim.v.count1 - 1) % #valid_indexes) + 1
+		end
+
+		vim.cmd("cc " .. valid_indexes[target_pos])
 	end
 end
 
 vim.keymap.set("n", "<C-k>", quickfix_jump(1), { desc = "Next quickfix item" })
-vim.keymap.set("n", "<C-h>", "<cmd>cfirst<CR>", { desc = "First quickfix item" })
 vim.keymap.set("n", "<C-l>", quickfix_jump(-1), { desc = "Previous quickfix item" })
 vim.keymap.set("n", "]q", quickfix_jump(1), { desc = "Next quickfix item" })
 vim.keymap.set("n", "[q", quickfix_jump(-1), { desc = "Previous quickfix item" })
