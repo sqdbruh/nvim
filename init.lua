@@ -90,9 +90,23 @@ vim.keymap.set({ "n", "v", "o" }, "l", "k", { noremap = true, silent = true, des
 vim.keymap.set({ "n", "v", "o" }, ";", "l", { noremap = true, silent = true, desc = "Right" })
 
 -- Quickfix navigation
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>", { desc = "Next quickfix item" })
+local function quickfix_jump(delta)
+	return function()
+		local qf = vim.fn.getqflist({ idx = 0, size = 0 })
+		if qf.size == 0 then
+			return
+		end
+
+		local target = ((qf.idx - 1 + (vim.v.count1 * delta)) % qf.size) + 1
+		vim.cmd("cc " .. target)
+	end
+end
+
+vim.keymap.set("n", "<C-k>", quickfix_jump(1), { desc = "Next quickfix item" })
 vim.keymap.set("n", "<C-h>", "<cmd>cfirst<CR>", { desc = "First quickfix item" })
-vim.keymap.set("n", "<C-l>", "<cmd>cprev<CR>", { desc = "Previous quickfix item" })
+vim.keymap.set("n", "<C-l>", quickfix_jump(-1), { desc = "Previous quickfix item" })
+vim.keymap.set("n", "]q", quickfix_jump(1), { desc = "Next quickfix item" })
+vim.keymap.set("n", "[q", quickfix_jump(-1), { desc = "Previous quickfix item" })
 
 -- Diagnostics navigation
 vim.keymap.set("n", "<A-k>", function()
