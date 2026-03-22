@@ -220,14 +220,7 @@ local todo_snippet_keywords = {
 }
 
 local todo_comment_keywords = {
-	TODO = { icon = " ", color = "yellow" },
-	NOTE = { icon = " ", color = "green", alt = { "INFO" } },
-	WARNING = { icon = " ", color = "yellow", alt = { "WARN", "XXX" } },
-	PERFORMANCE = { icon = " ", color = "yellow", alt = { "PERF", "OPTIM", "OPTIMIZE" } },
-	CRITICAL = { icon = " ", color = "red", alt = { "CRIT" } },
-	HACK = { icon = " ", color = "gray" },
-	FIX = { icon = " ", color = "red", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
-	TEST = { icon = "⏲ ", color = "gray", alt = { "TESTING", "PASSED", "FAILED" } },
+	FIX = { alt = { "FIXME", "BUG", "FIXIT", "ISSUE", "CRITICAL", "CRIT" } },
 }
 
 local todo_highlight_pattern = [[.*<((KEYWORDS)\s*(\([^)]*\))?\s*:)]]
@@ -284,35 +277,35 @@ require("lazy").setup({
 		},
 	},
 	{ "bkad/CamelCaseMotion" },
-		{
-			"tpope/vim-dispatch",
+	{
+		"tpope/vim-dispatch",
+	},
+	{
+		"folke/snacks.nvim",
+		lazy = true,
+		opts = {
+			scratch = { enabled = true },
 		},
-		{
-			"folke/snacks.nvim",
-			lazy = true,
-			opts = {
-				scratch = { enabled = true },
-			},
-			keys = {
-				{
-					"<leader>.",
-					function()
-						Snacks.scratch()
-					end,
-					desc = "Toggle scratch buffer",
-				},
-			},
-		},
-		{
-			"chrisgrieser/nvim-recorder",
-			opts = {
-				useNerdfontIcons = vim.g.have_nerd_font,
+		keys = {
+			{
+				"<leader>.",
+				function()
+					Snacks.scratch()
+				end,
+				desc = "Toggle scratch buffer",
 			},
 		},
-		{
-			"ptdewey/pendulum-nvim",
-			config = function()
-				require("pendulum").setup()
+	},
+	{
+		"chrisgrieser/nvim-recorder",
+		opts = {
+			useNerdfontIcons = vim.g.have_nerd_font,
+		},
+	},
+	{
+		"ptdewey/pendulum-nvim",
+		config = function()
+			require("pendulum").setup()
 		end,
 	},
 	{
@@ -354,71 +347,45 @@ require("lazy").setup({
 			init = function()
 				local lackluster = require("lackluster")
 				local color = lackluster.color
-				local special = lackluster.color_special
-				local todo_palette = {
-					gray = special.comment,
-					green = color.green,
-					yellow = color.yellow,
-					red = color.red,
-				}
-				local todo_highlight_aliases = {
-					TODO = { "Todo" },
-					NOTE = { "Note" },
-					WARNING = { "Warn", "Warning" },
-					PERFORMANCE = { "Perf", "Performance" },
-					HACK = { "Hack" },
-					FIX = { "Fix" },
-					TEST = { "Test" },
-					CRITICAL = { "Critical" },
-				}
-				local tweak_highlight = {
-					Visual = {
-						bg = lackluster.color.green,
-					},
-					VisualNOS = {
-						overwrite = true,
-						link = "Visual",
-					},
-				}
-	
-				local function set_todo_highlight(suffix, fg)
-					tweak_highlight["TodoFg" .. suffix] = {
-						overwrite = true,
-						fg = fg,
-						bold = true,
-					}
-					tweak_highlight["TodoBg" .. suffix] = {
-						overwrite = true,
-						link = "TodoFg" .. suffix,
-					}
-				end
 
-				for keyword, opts in pairs(todo_comment_keywords) do
-					local fg = todo_palette[opts.color]
-					set_todo_highlight(keyword, fg)
-
-					for _, alias in ipairs(todo_highlight_aliases[keyword] or {}) do
-						set_todo_highlight(alias, fg)
-					end
-				end
-		
 				-- !must called setup() before setting the colorscheme!
 				lackluster.setup({
-					-- tweak_color allows you to overwrite the default colors in the lackluster theme
-					tweak_background = {
-						-- normal = 'default',    -- main background
-						-- normal = 'none',    -- transparent
-						normal = "#000000", -- hexcode
-						-- normal = color.green,    -- lackluster color
-						telescope = "default", -- telescope
-						menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
-						popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
-					},
-					tweak_highlight = tweak_highlight,
-				})
+					tweak_syntax = {
+						type = color.blue,
+					string = color.green,
+				},
+				-- tweak_color allows you to overwrite the default colors in the lackluster theme
+				tweak_background = {
+					-- normal = 'default',    -- main background
+					-- normal = 'none',    -- transparent
+					-- normal = "#000000", -- hexcode
+					-- normal = color.green,    -- lackluster color
+					telescope = "default", -- telescope
+					menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
+					popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
+				},
+				-- tweak_highlight = vim.tbl_extend("force", tweak_highlight, {
+				-- 	Function = {
+				-- 		overwrite = true,
+				-- 		fg = color.blue,
+				-- 	},
+				-- 	["@function.call"] = {
+				-- 		overwrite = true,
+				-- 		fg = color.blue,
+				-- 	},
+				-- 	["@function.method.call"] = {
+				-- 		overwrite = true,
+				-- 		fg = color.blue,
+				-- 	},
+				-- 	["@type.definition"] = {
+				-- 		overwrite = true,
+				-- 		fg = color.yellow,
+				-- 	},
+				-- }),
+			})
 
-				vim.cmd.colorscheme("lackluster-mint") -- my favorite
-			end,
+			vim.cmd.colorscheme("lackluster-mint") -- my favorite
+		end,
 	},
 
 	{
@@ -664,46 +631,7 @@ require("lazy").setup({
 				end,
 			})
 
-				local function get_visual_selection()
-					local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-					local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-					local srow, scol = start_pos[1] - 1, start_pos[2]
-					local erow, ecol = end_pos[1] - 1, end_pos[2]
-
-					if srow > erow or (srow == erow and scol > ecol) then
-						srow, erow = erow, srow
-						scol, ecol = ecol, scol
-					end
-
-					local lines = vim.api.nvim_buf_get_text(0, srow, scol, erow, ecol + 1, {})
-					return table.concat(lines, "\n")
-				end
-
-				local function highlight_search(pattern)
-					if not pattern or pattern == "" then
-						return
-					end
-					vim.fn.setreg("/", pattern)
-					vim.o.hlsearch = true
-				end
-
-				vim.keymap.set({ "n", "x" }, "<leader>/", function()
-					local mode = vim.fn.mode()
-					if mode:match("[vV\22]") then
-						local selection = get_visual_selection()
-						if selection and selection ~= "" then
-							local pattern = "\\V" .. selection:gsub("\\", "\\\\"):gsub("\n", "\\n")
-							highlight_search(pattern)
-						end
-						return
-					end
-
-					local word = vim.fn.expand("<cword>")
-					if word ~= "" then
-						local escaped = word:gsub("\\", "\\\\")
-						highlight_search("\\V\\<" .. escaped .. "\\>")
-					end
-				end, { desc = "[/] Highlight current word" })
+					vim.keymap.set({ "n", "x" }, "<leader>/", "<cmd>nohlsearch<CR>", { desc = "[/] Clear search highlight" })
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -804,11 +732,14 @@ require("lazy").setup({
 					-- word under your cursor when your cursor rests there for a little while.
 					--    See `:help CursorHold` for information about when this is executed
 					--
-					-- When you move your cursor, the highlights will be cleared (the second autocommand).
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
+						-- When you move your cursor, the highlights will be cleared (the second autocommand).
+						local client = vim.lsp.get_client_by_id(event.data.client_id)
+						if client and client.server_capabilities.semanticTokensProvider then
+							client.server_capabilities.semanticTokensProvider = nil
+						end
 
-					-- The following code creates a keymap to toggle inlay hints in your
-					-- code, if the language server you are using supports them
+						-- The following code creates a keymap to toggle inlay hints in your
+						-- code, if the language server you are using supports them
 					--
 					-- This may be unwanted, since they displace some of your code
 					if client and client:supports_method("textDocument/inlayHint", event.buf) then
@@ -931,18 +862,18 @@ require("lazy").setup({
 	{ -- Autocompletion
 		"saghen/blink.cmp",
 		event = "VimEnter",
-			version = "1.*",
-			dependencies = {
-				{
-					"saghen/blink.compat",
-					version = "2.*",
-					lazy = true,
-					opts = {},
-				},
-				{ "hrsh7th/cmp-calc" },
-				-- Snippet Engine
-				{
-					"L3MON4D3/LuaSnip",
+		version = "1.*",
+		dependencies = {
+			{
+				"saghen/blink.compat",
+				version = "2.*",
+				lazy = true,
+				opts = {},
+			},
+			{ "hrsh7th/cmp-calc" },
+			-- Snippet Engine
+			{
+				"L3MON4D3/LuaSnip",
 				version = "2.*",
 				build = (function()
 					-- Build Step is needed for regex support in snippets.
@@ -1053,17 +984,17 @@ require("lazy").setup({
 				documentation = { auto_show = false, auto_show_delay_ms = 300 },
 			},
 
-				sources = {
-					default = { "lsp", "path", "snippets", "calc" },
-					providers = {
-						calc = {
-							name = "calc",
-							module = "blink.compat.source",
-							score_offset = 100,
-						},
-						lsp = {
-							transform_items = function(_, items)
-								local kinds = require("blink.cmp.types").CompletionItemKind
+			sources = {
+				default = { "lsp", "path", "snippets", "calc" },
+				providers = {
+					calc = {
+						name = "calc",
+						module = "blink.compat.source",
+						score_offset = 100,
+					},
+					lsp = {
+						transform_items = function(_, items)
+							local kinds = require("blink.cmp.types").CompletionItemKind
 							return vim.tbl_filter(function(item)
 								return item.kind ~= kinds.Keyword
 							end, items)
@@ -1089,38 +1020,22 @@ require("lazy").setup({
 	},
 
 	-- Highlight todo, notes, etc in comments
-	{
-		"folke/todo-comments.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		{
+			"folke/todo-comments.nvim",
+			event = "VimEnter",
+			dependencies = { "nvim-lua/plenary.nvim" },
 		---@module 'todo-comments'
 		---@type TodoOptions
-		opts = function()
-			local lackluster = require("lackluster")
-			local color = lackluster.color
-			local special = lackluster.color_special
-
-				return {
-					signs = false,
-					merge_keywords = false,
-					keywords = todo_comment_keywords,
-					highlight = {
-						pattern = todo_highlight_pattern,
-						before = "fg",
-						keyword = "fg",
-						after = "fg",
-					},
-					search = {
-						pattern = todo_search_pattern,
-					},
-					colors = {
-						gray = { special.comment },
-						green = { color.green },
-						yellow = { color.yellow },
-						red = { color.red },
-					},
-				}
-			end,
+			opts = {
+				signs = false,
+				keywords = todo_comment_keywords,
+				highlight = {
+					pattern = todo_highlight_pattern,
+				},
+				search = {
+					pattern = todo_search_pattern,
+				},
+			},
 		},
 
 	{ -- Collection of various small independent plugins/modules
@@ -1152,44 +1067,44 @@ require("lazy").setup({
 			})
 			require("mini.pairs").setup()
 
-				-- Simple and easy statusline.
-				--  You could remove this setup call if you don't like it,
-				--  and try some other statusline plugin
-				local statusline = require("mini.statusline")
-				-- set use_icons to true if you have a Nerd Font
-				statusline.setup({
-					use_icons = vim.g.have_nerd_font,
-					content = {
-						active = function()
-							local mode, mode_hl = statusline.section_mode({ trunc_width = 120 })
-							local git = statusline.section_git({ trunc_width = 40 })
-							local diff = statusline.section_diff({ trunc_width = 75 })
-							local diagnostics = statusline.section_diagnostics({ trunc_width = 75 })
-							local lsp = statusline.section_lsp({ trunc_width = 75 })
-							local filename = statusline.section_filename({ trunc_width = 140 })
-							local fileinfo = statusline.section_fileinfo({ trunc_width = 120 })
-							local location = statusline.section_location({ trunc_width = 75 })
-							local search = statusline.section_searchcount({ trunc_width = 75 })
-							local recorder_slots, recorder_status = "", ""
-							local has_recorder, recorder = pcall(require, "recorder")
+			-- Simple and easy statusline.
+			--  You could remove this setup call if you don't like it,
+			--  and try some other statusline plugin
+			local statusline = require("mini.statusline")
+			-- set use_icons to true if you have a Nerd Font
+			statusline.setup({
+				use_icons = vim.g.have_nerd_font,
+				content = {
+					active = function()
+						local mode, mode_hl = statusline.section_mode({ trunc_width = 120 })
+						local git = statusline.section_git({ trunc_width = 40 })
+						local diff = statusline.section_diff({ trunc_width = 75 })
+						local diagnostics = statusline.section_diagnostics({ trunc_width = 75 })
+						local lsp = statusline.section_lsp({ trunc_width = 75 })
+						local filename = statusline.section_filename({ trunc_width = 140 })
+						local fileinfo = statusline.section_fileinfo({ trunc_width = 120 })
+						local location = statusline.section_location({ trunc_width = 75 })
+						local search = statusline.section_searchcount({ trunc_width = 75 })
+						local recorder_slots, recorder_status = "", ""
+						local has_recorder, recorder = pcall(require, "recorder")
 
-							if has_recorder then
-								recorder_slots = recorder.displaySlots()
-								recorder_status = recorder.recordingStatus()
-							end
+						if has_recorder then
+							recorder_slots = recorder.displaySlots()
+							recorder_status = recorder.recordingStatus()
+						end
 
-							return statusline.combine_groups({
-								{ hl = mode_hl, strings = { mode } },
-								{ hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
-								"%<",
-								{ hl = "MiniStatuslineFilename", strings = { filename } },
-								"%=",
-								{ hl = "MiniStatuslineFileinfo", strings = { recorder_slots, fileinfo } },
-								{ hl = mode_hl, strings = { recorder_status, search, location } },
-							})
-						end,
-					},
-				})
+						return statusline.combine_groups({
+							{ hl = mode_hl, strings = { mode } },
+							{ hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
+							"%<",
+							{ hl = "MiniStatuslineFilename", strings = { filename } },
+							"%=",
+							{ hl = "MiniStatuslineFileinfo", strings = { recorder_slots, fileinfo } },
+							{ hl = mode_hl, strings = { recorder_status, search, location } },
+						})
+					end,
+				},
+			})
 
 			-- You can configure sections in the statusline by overriding their
 			-- default behavior. For example, here we set the section for
@@ -1365,16 +1280,16 @@ vim.keymap.set({ "n", "x", "o" }, "W", "<Plug>CamelCaseMotion_w")
 vim.keymap.set({ "n", "x", "o" }, "B", "<Plug>CamelCaseMotion_b")
 vim.keymap.set({ "n", "x", "o" }, "E", "<Plug>CamelCaseMotion_e")
 if vim.g.neovide then
-  vim.o.guifont = "JetBrainsMono Nerd Font:h10"
+	vim.o.guifont = "JetBrainsMono Nerd Font:h10"
 
-  vim.g.neovide_font_features = {
-    ["JetBrainsMono Nerd Font"] = {
-      "-calt",
-      "-liga",
-    },
-  }
+	vim.g.neovide_font_features = {
+		["JetBrainsMono Nerd Font"] = {
+			"-calt",
+			"-liga",
+		},
+	}
 
-  vim.g.neovide_scroll_animation_far_lines = 0
-  vim.g.neovide_cursor_animation_length = 0
-  vim.g.neovide_cursor_trail_size = 0
+	vim.g.neovide_scroll_animation_far_lines = 0
+	vim.g.neovide_cursor_animation_length = 0
+	vim.g.neovide_cursor_trail_size = 0
 end
