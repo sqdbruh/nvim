@@ -163,12 +163,17 @@ vim.keymap.set("n", "<leader>;", "<C-w>l", { desc = "Go to right split" })
 vim.keymap.set("n", "<leader>k", "<C-w>j", { desc = "Go to bottom split" })
 vim.keymap.set("n", "<leader>l", "<C-w>k", { desc = "Go to top split" })
 
+vim.api.nvim_create_user_command("Reveal", function()
+	vim.fn.system('explorer /select,"' .. vim.fn.expand("%:p") .. '"')
+end, {})
+vim.keymap.set("n", "<leader>e", "<cmd>Reveal<CR>", { desc = "Reveal current file in Explorer" })
+
 -- Diagnostic Config & Keymaps
 -- See :help vim.diagnostic.Opts
 vim.diagnostic.config({
 	update_in_insert = false,
 	severity_sort = true,
-	float = { border = "rounded", source = "if_many" },
+	float = { border = "single", source = "if_many" },
 	underline = false,
 	signs = false,
 
@@ -406,10 +411,10 @@ require("lazy").setup({
 
 			-- !must called setup() before setting the colorscheme!
 			lackluster.setup({
-				tweak_syntax = {
-					type = color.blue,
-					string = color.green,
-				},
+				-- tweak_syntax = {
+				-- 	type = color.blue,
+				-- 	string = color.green,
+				-- },
 				-- tweak_color allows you to overwrite the default colors in the lackluster theme
 				tweak_background = {
 					-- normal = 'default',    -- main background
@@ -602,6 +607,10 @@ require("lazy").setup({
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
 			require("telescope").setup({
+				defaults = {
+					border = true,
+					borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+				},
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
@@ -1399,11 +1408,6 @@ vim.keymap.set("n", "<leader>q", function()
   require("quicker").toggle()
 end, {
   desc = "Toggle quickfix",
-})
-vim.keymap.set("n", "<leader>l", function()
-  require("quicker").toggle({ loclist = true })
-end, {
-  desc = "Toggle loclist",
 })
 require("quicker").setup({
   keys = {
