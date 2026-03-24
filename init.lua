@@ -180,22 +180,22 @@ vim.diagnostic.config({
 	jump = { float = true },
 })
 
-vim.keymap.set("n", "<leader>q", function()
-	local is_open = false
-
-	for _, win in ipairs(vim.fn.getwininfo()) do
-		if win.quickfix == 1 then
-			is_open = true
-			break
-		end
-	end
-
-	if is_open then
-		vim.cmd("cclose")
-	else
-		vim.cmd("copen")
-	end
-end, { desc = "Toggle quickfix" })
+-- vim.keymap.set("n", "<leader>q", function()
+-- 	local is_open = false
+--
+-- 	for _, win in ipairs(vim.fn.getwininfo()) do
+-- 		if win.quickfix == 1 then
+-- 			is_open = true
+-- 			break
+-- 		end
+-- 	end
+--
+-- 	if is_open then
+-- 		vim.cmd("cclose")
+-- 	else
+-- 		vim.cmd("copen")
+-- 	end
+-- end, { desc = "Toggle quickfix" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -371,10 +371,17 @@ require("lazy").setup({
 		config = function(_, opts)
 			require("auto-session").setup(opts)
 
-			vim.keymap.set("n", "<leader>ss", "<cmd>AutoSession search<CR>", {
-				desc = "Search sessions",
+			vim.keymap.set("n", "<leader>fs", "<cmd>AutoSession search<CR>", {
+				desc = "Find sessions",
 			})
 		end,
+	},
+	{
+		"stevearc/quicker.nvim",
+		ft = "qf",
+		---@module "quicker"
+		---@type quicker.SetupOptions
+		opts = {},
 	},
 	{
 		"stevearc/oil.nvim",
@@ -390,17 +397,17 @@ require("lazy").setup({
 			require("oil").setup()
 		end,
 	},
-		{
-			"slugbyte/lackluster.nvim",
-			lazy = false,
-			init = function()
-				local lackluster = require("lackluster")
-				local color = lackluster.color
+	{
+		"slugbyte/lackluster.nvim",
+		lazy = false,
+		init = function()
+			local lackluster = require("lackluster")
+			local color = lackluster.color
 
-				-- !must called setup() before setting the colorscheme!
-				lackluster.setup({
-					tweak_syntax = {
-						type = color.blue,
+			-- !must called setup() before setting the colorscheme!
+			lackluster.setup({
+				tweak_syntax = {
+					type = color.blue,
 					string = color.green,
 				},
 				-- tweak_color allows you to overwrite the default colors in the lackluster theme
@@ -525,7 +532,7 @@ require("lazy").setup({
 
 			-- Document existing key chains
 			spec = {
-				{ "<leader>s", group = "[S]earch", mode = { "n", "v" } },
+				{ "<leader>f", group = "[F]ind", mode = { "n", "v" } },
 				{ "<leader>t", group = "[T]oggle" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } }, -- Enable gitsigns recommended keymaps first
 			},
@@ -641,15 +648,15 @@ require("lazy").setup({
 				end
 			end
 
-			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set({ "n", "v" }, "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "[S]earch [C]ommands" })
+			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
+			vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
+			vim.keymap.set({ "n", "v" }, "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
+			vim.keymap.set("n", "<leader>fl", builtin.live_grep, { desc = "[F]ind by [G]rep" })
+			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
+			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[F]ind [R]esume" })
+			vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
+			vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "[F]ind [C]ommands" })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
 			-- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
@@ -660,9 +667,14 @@ require("lazy").setup({
 					local buf = event.buf
 
 					-- Find references for the word under your cursor.
-					vim.keymap.set("n", "gr", lsp_jump_or_qf(function(on_list)
-						vim.lsp.buf.references(nil, { on_list = on_list })
-					end), { buffer = buf, desc = "[G]oto [R]eferences" })
+					vim.keymap.set(
+						"n",
+						"gr",
+						lsp_jump_or_qf(function(on_list)
+							vim.lsp.buf.references(nil, { on_list = on_list })
+						end),
+						{ buffer = buf, desc = "[G]oto [R]eferences" }
+					)
 
 					-- Jump to the implementation of the word under your cursor.
 					-- Useful when your language has ways of declaring types without an actual implementation.
@@ -678,9 +690,14 @@ require("lazy").setup({
 					-- Jump to the definition of the word under your cursor.
 					-- This is where a variable was first declared, or where a function is defined, etc.
 					-- To jump back, press <C-t>.
-					vim.keymap.set("n", "gd", lsp_jump_or_qf(function(on_list)
-						vim.lsp.buf.definition({ on_list = on_list, reuse_win = true })
-					end), { buffer = buf, desc = "[G]oto [D]efinition" })
+					vim.keymap.set(
+						"n",
+						"gd",
+						lsp_jump_or_qf(function(on_list)
+							vim.lsp.buf.definition({ on_list = on_list, reuse_win = true })
+						end),
+						{ buffer = buf, desc = "[G]oto [D]efinition" }
+					)
 
 					-- Fuzzy find all the symbols in your current document.
 					-- Symbols are things like variables, functions, types, etc.
@@ -714,21 +731,21 @@ require("lazy").setup({
 				end,
 			})
 
-					vim.keymap.set({ "n", "x" }, "<leader>/", "<cmd>nohlsearch<CR>", { desc = "[/] Clear search highlight" })
+			vim.keymap.set({ "n", "x" }, "<leader>/", "<cmd>nohlsearch<CR>", { desc = "[/] Clear search highlight" })
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
-			vim.keymap.set("n", "<leader>s/", function()
+			vim.keymap.set("n", "<leader>f/", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
+			end, { desc = "[F]ind [/] in Open Files" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>sn", function()
+			vim.keymap.set("n", "<leader>fn", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[S]earch [N]eovim files" })
+			end, { desc = "[F]ind [N]eovim files" })
 		end,
 	},
 
@@ -815,14 +832,14 @@ require("lazy").setup({
 					-- word under your cursor when your cursor rests there for a little while.
 					--    See `:help CursorHold` for information about when this is executed
 					--
-						-- When you move your cursor, the highlights will be cleared (the second autocommand).
-						local client = vim.lsp.get_client_by_id(event.data.client_id)
-						if client and client.server_capabilities.semanticTokensProvider then
-							client.server_capabilities.semanticTokensProvider = nil
-						end
+					-- When you move your cursor, the highlights will be cleared (the second autocommand).
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.server_capabilities.semanticTokensProvider then
+						client.server_capabilities.semanticTokensProvider = nil
+					end
 
-						-- The following code creates a keymap to toggle inlay hints in your
-						-- code, if the language server you are using supports them
+					-- The following code creates a keymap to toggle inlay hints in your
+					-- code, if the language server you are using supports them
 					--
 					-- This may be unwanted, since they displace some of your code
 					if client and client:supports_method("textDocument/inlayHint", event.buf) then
@@ -918,12 +935,12 @@ require("lazy").setup({
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>cf",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
-				desc = "[F]ormat buffer",
+				desc = "[C]ode [F]ormat buffer",
 			},
 		},
 		---@module 'conform'
@@ -1104,23 +1121,23 @@ require("lazy").setup({
 	},
 
 	-- Highlight todo, notes, etc in comments
-		{
-			"folke/todo-comments.nvim",
-			event = "VimEnter",
-			dependencies = { "nvim-lua/plenary.nvim" },
+	{
+		"folke/todo-comments.nvim",
+		event = "VimEnter",
+		dependencies = { "nvim-lua/plenary.nvim" },
 		---@module 'todo-comments'
 		---@type TodoOptions
-			opts = {
-				signs = false,
-				keywords = todo_comment_keywords,
-				highlight = {
-					pattern = todo_highlight_pattern,
-				},
-				search = {
-					pattern = todo_search_pattern,
-				},
+		opts = {
+			signs = false,
+			keywords = todo_comment_keywords,
+			highlight = {
+				pattern = todo_highlight_pattern,
+			},
+			search = {
+				pattern = todo_search_pattern,
 			},
 		},
+	},
 
 	{ -- Collection of various small independent plugins/modules
 		"nvim-mini/mini.nvim",
@@ -1286,8 +1303,8 @@ require("lazy").setup({
 	--
 	-- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
 	-- Or use telescope!
-	-- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
-	-- you can continue same window with `<space>sr` which resumes last telescope search
+	-- In normal mode type `<space>fh` then write `lazy.nvim-plugin`
+	-- you can continue same window with `<space>fr` which resumes last telescope search
 }, { ---@diagnostic disable-line: missing-fields
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -1343,7 +1360,7 @@ vim.keymap.set("x", "s", require("substitute").visual, { noremap = true })
 require("deferred-clipboard").setup({
 	lazy = true,
 })
-vim.keymap.set("n", "<leader>sy", "<cmd>Telescope yank_history<CR>", {
+vim.keymap.set("n", "<leader>fy", "<cmd>Telescope yank_history<CR>", {
 	desc = "Yank history",
 })
 
@@ -1377,3 +1394,32 @@ if vim.g.neovide then
 	vim.g.neovide_cursor_animation_length = 0
 	vim.g.neovide_cursor_trail_size = 0
 end
+
+vim.keymap.set("n", "<leader>q", function()
+  require("quicker").toggle()
+end, {
+  desc = "Toggle quickfix",
+})
+vim.keymap.set("n", "<leader>l", function()
+  require("quicker").toggle({ loclist = true })
+end, {
+  desc = "Toggle loclist",
+})
+require("quicker").setup({
+  keys = {
+    {
+      ">",
+      function()
+        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+      end,
+      desc = "Expand quickfix context",
+    },
+    {
+      "<",
+      function()
+        require("quicker").collapse()
+      end,
+      desc = "Collapse quickfix context",
+    },
+  },
+})
