@@ -4,6 +4,7 @@
 --
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.keymap.set({ "n", "v", "o" }, "<Space>", "<Nop>", { silent = true })
 
 vim.o.swapfile = false
 
@@ -26,7 +27,7 @@ vim.opt.shiftwidth = 4 -- indent size when using >> << or autoindent
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
-vim.o.cmdheight = 0
+vim.o.cmdheight = 1
 vim.o.smartindent = true
 vim.o.autoindent = true
 
@@ -376,7 +377,7 @@ require("lazy").setup({
 		config = function(_, opts)
 			require("auto-session").setup(opts)
 
-			vim.keymap.set("n", "<leader>fs", "<cmd>AutoSession search<CR>", {
+			vim.keymap.set("n", "fs", "<cmd>AutoSession search<CR>", {
 				desc = "Find sessions",
 			})
 		end,
@@ -416,6 +417,15 @@ require("lazy").setup({
 				-- 	string = color.green,
 				-- },
 				-- tweak_color allows you to overwrite the default colors in the lackluster theme
+				tweak_highlight = {
+					Visual = {
+						bg = lackluster.color.green,
+					},
+					VisualNOS = {
+						overwrite = true,
+						link = "Visual",
+					},
+				},
 				tweak_background = {
 					-- normal = 'default',    -- main background
 					-- normal = 'none',    -- transparent
@@ -446,6 +456,11 @@ require("lazy").setup({
 			})
 
 			vim.cmd.colorscheme("lackluster-mint") -- my favorite
+			vim.api.nvim_set_hl(0, "Cursor", { fg = color.black, bg = color.green })
+			vim.api.nvim_set_hl(0, "lCursor", { fg = color.black, bg = color.green })
+			vim.api.nvim_set_hl(0, "TermCursor", { fg = color.black, bg = color.green })
+			vim.opt.guicursor =
+				"n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor,r-cr-o:hor20-Cursor/lCursor,t:block-TermCursor"
 		end,
 	},
 
@@ -632,6 +647,20 @@ require("lazy").setup({
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
 			local function jump_to_qf_item(item)
+				local win = vim.api.nvim_get_current_win()
+				local from = vim.fn.getpos(".")
+				from[1] = vim.api.nvim_get_current_buf()
+				local tagname = vim.fn.expand("<cword>")
+
+				-- Mirror Neovim's built-in LSP location handler so single-result jumps
+				-- are recorded for <C-o> and <C-t>.
+				vim.cmd("normal! m'")
+				vim.fn.settagstack(vim.fn.win_getid(win), {
+					items = {
+						{ tagname = tagname, from = from },
+					},
+				}, "t")
+
 				local bufnr = item.bufnr
 				if not bufnr or bufnr == 0 then
 					bufnr = vim.fn.bufadd(item.filename)
@@ -657,15 +686,104 @@ require("lazy").setup({
 				end
 			end
 
-			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
-			vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-			vim.keymap.set({ "n", "v" }, "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
-			vim.keymap.set("n", "<leader>fl", builtin.live_grep, { desc = "[F]ind by [G]rep" })
-			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
-			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[F]ind [R]esume" })
-			vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "[F]ind [C]ommands" })
+			local function find_code_files()
+				local code_globs = {
+					"*.cs",
+					"*.lua",
+					"*.py",
+					"*.js",
+					"*.jsx",
+					"*.ts",
+					"*.tsx",
+					"*.mjs",
+					"*.cjs",
+					"*.java",
+					"*.kt",
+					"*.kts",
+					"*.go",
+					"*.rs",
+					"*.c",
+					"*.h",
+					"*.cpp",
+					"*.cc",
+					"*.cxx",
+					"*.hpp",
+					"*.hh",
+					"*.hxx",
+					"*.swift",
+					"*.rb",
+					"*.php",
+					"*.sh",
+					"*.bash",
+					"*.zsh",
+					"*.fish",
+					"*.ps1",
+					"*.psm1",
+					"*.vim",
+					"*.json",
+					"*.jsonc",
+					"*.json5",
+					"*.yaml",
+					"*.yml",
+					"*.toml",
+					"*.xml",
+					"*.props",
+					"*.targets",
+					"*.csproj",
+					"*.fsproj",
+					"*.vbproj",
+					"*.sln",
+					"*.editorconfig",
+					"*.gitignore",
+					"*.gitattributes",
+					"*.env",
+					"*.md",
+					"*.txt",
+					"*.sql",
+					"*.proto",
+					"*.graphql",
+					"*.html",
+					"*.htm",
+					"*.css",
+					"*.scss",
+					"*.sass",
+					"*.less",
+				}
+				local named_files = {
+					"Dockerfile",
+					"docker-compose.yml",
+					"docker-compose.yaml",
+					"Makefile",
+					"justfile",
+					"CMakeLists.txt",
+				}
+				local find_command = { "rg", "--files" }
+
+				for _, glob in ipairs(code_globs) do
+					table.insert(find_command, "-g")
+					table.insert(find_command, glob)
+				end
+
+				for _, name in ipairs(named_files) do
+					table.insert(find_command, "-g")
+					table.insert(find_command, name)
+				end
+
+				builtin.find_files({
+					find_command = find_command,
+				})
+			end
+
+			vim.keymap.set("n", "fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
+			vim.keymap.set("n", "fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
+			vim.keymap.set("n", "ff", find_code_files, { desc = "[F]ind [F]iles" })
+			vim.keymap.set("n", "fa", builtin.find_files, { desc = "[F]ind [A]ll files" })
+			vim.keymap.set({ "n", "v" }, "fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
+			vim.keymap.set("n", "fl", builtin.live_grep, { desc = "[F]ind by [G]rep" })
+			vim.keymap.set("n", "fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
+			vim.keymap.set("n", "fr", builtin.resume, { desc = "[F]ind [R]esume" })
+			vim.keymap.set("n", "f.", builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
+			vim.keymap.set("n", "fc", builtin.commands, { desc = "[F]ind [C]ommands" })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
 			-- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
@@ -744,7 +862,7 @@ require("lazy").setup({
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
-			vim.keymap.set("n", "<leader>f/", function()
+			vim.keymap.set("n", "f/", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
@@ -752,7 +870,7 @@ require("lazy").setup({
 			end, { desc = "[F]ind [/] in Open Files" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>fn", function()
+			vim.keymap.set("n", "fn", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "[F]ind [N]eovim files" })
 		end,
@@ -946,6 +1064,8 @@ require("lazy").setup({
 			{
 				"<leader>cf",
 				function()
+					vim.bo.fileformat = "unix"
+					vim.cmd([[silent keepjumps keeppatterns %s/\r$//e]])
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
@@ -1369,7 +1489,7 @@ vim.keymap.set("x", "s", require("substitute").visual, { noremap = true })
 require("deferred-clipboard").setup({
 	lazy = true,
 })
-vim.keymap.set("n", "<leader>fy", "<cmd>Telescope yank_history<CR>", {
+vim.keymap.set("n", "fy", "<cmd>Telescope yank_history<CR>", {
 	desc = "Yank history",
 })
 
