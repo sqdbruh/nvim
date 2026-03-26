@@ -1494,6 +1494,7 @@ vim.keymap.set("n", "fy", "<cmd>Telescope yank_history<CR>", {
 })
 
 vim.keymap.set({ "n", "v", "o" }, "<Home>", "^", { noremap = true, silent = true })
+vim.keymap.set("i", "<Home>", "<C-o>^", { noremap = true, silent = true })
 
 -- require("handmade").load()
 
