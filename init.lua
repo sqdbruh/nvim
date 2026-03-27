@@ -403,66 +403,66 @@ require("lazy").setup({
 			require("oil").setup()
 		end,
 	},
-	{
-		"slugbyte/lackluster.nvim",
-		lazy = false,
-		init = function()
-			local lackluster = require("lackluster")
-			local color = lackluster.color
-
-			-- !must called setup() before setting the colorscheme!
-			lackluster.setup({
-				-- tweak_syntax = {
-				-- 	type = color.blue,
-				-- 	string = color.green,
-				-- },
-				-- tweak_color allows you to overwrite the default colors in the lackluster theme
-				tweak_highlight = {
-					Visual = {
-						bg = lackluster.color.green,
-					},
-					VisualNOS = {
-						overwrite = true,
-						link = "Visual",
-					},
-				},
-				tweak_background = {
-					-- normal = 'default',    -- main background
-					-- normal = 'none',    -- transparent
-					-- normal = "#000000", -- hexcode
-					-- normal = color.green,    -- lackluster color
-					telescope = "default", -- telescope
-					menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
-					popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
-				},
-				-- tweak_highlight = vim.tbl_extend("force", tweak_highlight, {
-				-- 	Function = {
-				-- 		overwrite = true,
-				-- 		fg = color.blue,
-				-- 	},
-				-- 	["@function.call"] = {
-				-- 		overwrite = true,
-				-- 		fg = color.blue,
-				-- 	},
-				-- 	["@function.method.call"] = {
-				-- 		overwrite = true,
-				-- 		fg = color.blue,
-				-- 	},
-				-- 	["@type.definition"] = {
-				-- 		overwrite = true,
-				-- 		fg = color.yellow,
-				-- 	},
-				-- }),
-			})
-
-			vim.cmd.colorscheme("lackluster-mint") -- my favorite
-			vim.api.nvim_set_hl(0, "Cursor", { fg = color.black, bg = color.green })
-			vim.api.nvim_set_hl(0, "lCursor", { fg = color.black, bg = color.green })
-			vim.api.nvim_set_hl(0, "TermCursor", { fg = color.black, bg = color.green })
-			vim.opt.guicursor =
-				"n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor,r-cr-o:hor20-Cursor/lCursor,t:block-TermCursor"
-		end,
-	},
+	-- {
+	-- 	"slugbyte/lackluster.nvim",
+	-- 	lazy = false,
+	-- 	init = function()
+	-- 		local lackluster = require("lackluster")
+	-- 		local color = lackluster.color
+	--
+	-- 		-- !must called setup() before setting the colorscheme!
+	-- 		lackluster.setup({
+	-- 			-- tweak_syntax = {
+	-- 			-- 	type = color.blue,
+	-- 			-- 	string = color.green,
+	-- 			-- },
+	-- 			-- tweak_color allows you to overwrite the default colors in the lackluster theme
+	-- 			tweak_highlight = {
+	-- 				Visual = {
+	-- 					bg = lackluster.color.green,
+	-- 				},
+	-- 				VisualNOS = {
+	-- 					overwrite = true,
+	-- 					link = "Visual",
+	-- 				},
+	-- 			},
+	-- 			tweak_background = {
+	-- 				-- normal = 'default',    -- main background
+	-- 				-- normal = 'none',    -- transparent
+	-- 				-- normal = "#000000", -- hexcode
+	-- 				-- normal = color.green,    -- lackluster color
+	-- 				telescope = "default", -- telescope
+	-- 				menu = "default", -- nvim_cmp, wildmenu ... (bad idea to transparent)
+	-- 				popup = "default", -- lazy, mason, whichkey ... (bad idea to transparent)
+	-- 			},
+	-- 			-- tweak_highlight = vim.tbl_extend("force", tweak_highlight, {
+	-- 			-- 	Function = {
+	-- 			-- 		overwrite = true,
+	-- 			-- 		fg = color.blue,
+	-- 			-- 	},
+	-- 			-- 	["@function.call"] = {
+	-- 			-- 		overwrite = true,
+	-- 			-- 		fg = color.blue,
+	-- 			-- 	},
+	-- 			-- 	["@function.method.call"] = {
+	-- 			-- 		overwrite = true,
+	-- 			-- 		fg = color.blue,
+	-- 			-- 	},
+	-- 			-- 	["@type.definition"] = {
+	-- 			-- 		overwrite = true,
+	-- 			-- 		fg = color.yellow,
+	-- 			-- 	},
+	-- 			-- }),
+	-- 		})
+	--
+	-- 		vim.cmd.colorscheme("lackluster-mint") -- my favorite
+	-- 		vim.api.nvim_set_hl(0, "Cursor", { fg = color.black, bg = color.green })
+	-- 		vim.api.nvim_set_hl(0, "lCursor", { fg = color.black, bg = color.green })
+	-- 		vim.api.nvim_set_hl(0, "TermCursor", { fg = color.black, bg = color.green })
+	-- 		vim.opt.guicursor =
+	-- 			"n-v-c-sm:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor,r-cr-o:hor20-Cursor/lCursor,t:block-TermCursor"
+	-- 	end,
+	-- },
 
 	{
 		"seblyng/roslyn.nvim",
@@ -705,6 +705,9 @@ require("lazy").setup({
 					"*.c",
 					"*.h",
 					"*.cpp",
+					"*.frag",
+					"*.vert",
+					"*.odin",
 					"*.cc",
 					"*.cxx",
 					"*.hpp",
@@ -1250,23 +1253,23 @@ require("lazy").setup({
 	},
 
 	-- Highlight todo, notes, etc in comments
-	{
-		"folke/todo-comments.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		---@module 'todo-comments'
-		---@type TodoOptions
-		opts = {
-			signs = false,
-			keywords = todo_comment_keywords,
-			highlight = {
-				pattern = todo_highlight_pattern,
-			},
-			search = {
-				pattern = todo_search_pattern,
-			},
-		},
-	},
+	-- {
+	-- 	"folke/todo-comments.nvim",
+	-- 	event = "VimEnter",
+	-- 	dependencies = { "nvim-lua/plenary.nvim" },
+	-- 	---@module 'todo-comments'
+	-- 	---@type TodoOptions
+	-- 	opts = {
+	-- 		signs = false,
+	-- 		keywords = todo_comment_keywords,
+	-- 		highlight = {
+	-- 			pattern = todo_highlight_pattern,
+	-- 		},
+	-- 		search = {
+	-- 			pattern = todo_search_pattern,
+	-- 		},
+	-- 	},
+	-- },
 
 	{ -- Collection of various small independent plugins/modules
 		"nvim-mini/mini.nvim",
@@ -1548,3 +1551,4 @@ require("quicker").setup({
     },
   },
 })
+require("handmade").load()
