@@ -291,6 +291,11 @@ require("lazy").setup({
 			local utils = require("yanky.utils")
 
 			return {
+				-- deferred-clipboard already syncs the OS clipboard on focus changes.
+				-- Keeping Yanky's focus hooks enabled duplicates blocking clipboard reads.
+				system_clipboard = {
+					sync_with_ring = false,
+				},
 				highlight = {
 					on_put = true,
 					on_yank = true,
