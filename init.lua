@@ -146,13 +146,48 @@ vim.keymap.set("n", "[q", quickfix_jump(-1), { desc = "Previous quickfix item" }
 
 -- Diagnostics navigation
 vim.keymap.set("n", "<A-k>", function()
-	vim.diagnostic.jump({ count = 1, float = true })
-end, { desc = "Next diagnostic" })
+	vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Next error diagnostic" })
 
 vim.keymap.set("n", "<A-l>", function()
-	vim.diagnostic.jump({ count = -1, float = true })
-end, { desc = "Previous diagnostic" })
+	vim.diagnostic.jump({ count = -1, float = true, severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Previous error diagnostic" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+local function has_insert_reindent_key()
+	if vim.bo.indentexpr ~= "" then
+		return vim.bo.indentkeys:find("!^F", 1, true) ~= nil
+	end
+
+	if vim.bo.cindent then
+		return vim.bo.cinkeys:find("!^F", 1, true) ~= nil
+	end
+
+	return false
+end
+
+local function indent_blank_line_before_insert(command)
+	return function()
+		if vim.api.nvim_get_current_line():find("%S") then
+			return command
+		end
+
+		if has_insert_reindent_key() then
+			return "A<C-F>"
+		end
+
+		return "A"
+	end
+end
+
+for _, command in ipairs({ "i", "a", "A" }) do
+	vim.keymap.set(
+		"n",
+		command,
+		indent_blank_line_before_insert(command),
+		{ expr = true, desc = "Insert with computed indent on blank lines" }
+	)
+end
 
 -- Split windows
 vim.keymap.set("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Vertical split" })
@@ -710,6 +745,7 @@ require("lazy").setup({
 					"*.c",
 					"*.h",
 					"*.cpp",
+					"*.shader",
 					"*.frag",
 					"*.vert",
 					"*.odin",
