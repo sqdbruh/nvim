@@ -510,25 +510,42 @@ require("lazy").setup({
 			broad_search = false,
 			lock_target = true,
 			filewatching = "roslyn",
-			settings = {
-				["csharp|inlay_hints"] = {
-					csharp_enable_inlay_hints_for_implicit_object_creation = false,
-					csharp_enable_inlay_hints_for_implicit_variable_types = false,
-					csharp_enable_inlay_hints_for_lambda_parameter_types = false,
-					csharp_enable_inlay_hints_for_types = false,
-					dotnet_enable_inlay_hints_for_parameters = false,
-				},
-				["csharp|background_analysis"] = {
-					["background_analysis.dotnet_analyzer_diagnostics_scope"] = "none",
-					["background_analysis.dotnet_compiler_diagnostics_scope"] = "none",
-				},
-				["csharp|code_lens"] = {
-					dotnet_enable_references_code_lens = false,
-					dotnet_enable_tests_code_lens = false,
-				},
-				["csharp|symbol_search"] = { dotnet_search_reference_assemblies = false },
-			},
+			choose_target = function(targets)
+				if
+					vim.g.roslyn_nvim_selected_solution
+					and vim.list_contains(targets, vim.g.roslyn_nvim_selected_solution)
+				then
+					return vim.g.roslyn_nvim_selected_solution
+				end
+
+				table.sort(targets)
+				return targets[1]
+			end,
 		},
+		config = function(_, opts)
+			require("roslyn").setup(opts)
+
+			vim.lsp.config("roslyn", {
+				settings = {
+					["csharp|inlay_hints"] = {
+						csharp_enable_inlay_hints_for_implicit_object_creation = false,
+						csharp_enable_inlay_hints_for_implicit_variable_types = false,
+						csharp_enable_inlay_hints_for_lambda_parameter_types = false,
+						csharp_enable_inlay_hints_for_types = false,
+						dotnet_enable_inlay_hints_for_parameters = false,
+					},
+					["csharp|background_analysis"] = {
+						["background_analysis.dotnet_analyzer_diagnostics_scope"] = "none",
+						["background_analysis.dotnet_compiler_diagnostics_scope"] = "none",
+					},
+					["csharp|code_lens"] = {
+						dotnet_enable_references_code_lens = false,
+						dotnet_enable_tests_code_lens = false,
+					},
+					["csharp|symbol_search"] = { dotnet_search_reference_assemblies = false },
+				},
+			})
+		end,
 	},
 	{ "NMAC427/guess-indent.nvim", opts = {} },
 
@@ -1029,7 +1046,6 @@ require("lazy").setup({
 				clangd = {},
 				gopls = {},
 				ols = {},
-				roslyn = {},
 				-- pyright = {},
 				-- rust_analyzer = {},
 				--
@@ -1086,11 +1102,17 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				-- You can add other tools here that you want Mason to install
+				"roslyn",
 			})
 
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			local blink = require("blink.cmp")
+
+			local roslyn_capabilities = vim.lsp.config.roslyn and vim.lsp.config.roslyn.capabilities
+			vim.lsp.config("roslyn", {
+				capabilities = blink.get_lsp_capabilities(roslyn_capabilities),
+			})
 
 			for name, server in pairs(servers) do
 				server.capabilities = blink.get_lsp_capabilities(server.capabilities)
