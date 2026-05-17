@@ -404,6 +404,9 @@ require("lazy").setup({
 		end,
 	},
 	{
+		"rluba/jai.vim",
+	},
+	{
 		"rmagatti/auto-session",
 		lazy = false,
 		opts = {
@@ -433,14 +436,18 @@ require("lazy").setup({
 		"stevearc/oil.nvim",
 		---@module 'oil'
 		---@type oil.SetupOpts
-		opts = {},
+		opts = {
+			view_options = {
+				show_hidden = true,
+			},
+		},
 		-- Optional dependencies
 		-- dependencies = { { "nvim-mini/mini.icons", opts = {} } },
 		dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
 		-- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
 		lazy = false,
-		config = function()
-			require("oil").setup()
+		config = function(_, opts)
+			require("oil").setup(opts)
 		end,
 	},
 	-- {
@@ -762,6 +769,7 @@ require("lazy").setup({
 					"*.c",
 					"*.h",
 					"*.cpp",
+					"*.jai",
 					"*.shader",
 					"*.frag",
 					"*.vert",
@@ -1109,6 +1117,17 @@ require("lazy").setup({
 
 			local blink = require("blink.cmp")
 
+			local jails_cmd = vim.fs.joinpath(vim.fn.stdpath("data"), "jails", "bin", "jails.exe")
+			if vim.fn.executable(jails_cmd) == 1 then
+				vim.lsp.config("jails", {
+					cmd = { jails_cmd, "-jai_path", "C:\\jai" },
+					filetypes = { "jai" },
+					root_markers = { "jails.json", "build.jai", "first.jai", ".git" },
+					capabilities = blink.get_lsp_capabilities(),
+				})
+				vim.lsp.enable("jails")
+			end
+
 			local roslyn_capabilities = vim.lsp.config.roslyn and vim.lsp.config.roslyn.capabilities
 			vim.lsp.config("roslyn", {
 				capabilities = blink.get_lsp_capabilities(roslyn_capabilities),
@@ -1145,6 +1164,7 @@ require("lazy").setup({
 			format_on_save = nil,
 			formatters_by_ft = {
 				lua = { "stylua" },
+				jai = { "trim_whitespace", "trim_newlines" },
 				-- Conform can also run multiple formatters sequentially
 				-- python = { "isort", "black" },
 				--
@@ -1281,14 +1301,18 @@ require("lazy").setup({
 			},
 
 			sources = {
-				default = { "lsp", "path", "snippets", "calc" },
+				default = { "lsp", "path", "snippets", "buffer", "calc" },
 				providers = {
 					calc = {
 						name = "calc",
 						module = "blink.compat.source",
 						score_offset = 100,
 					},
+					buffer = {
+						score_offset = -5,
+					},
 					lsp = {
+						fallbacks = {},
 						transform_items = function(_, items)
 							local kinds = require("blink.cmp.types").CompletionItemKind
 							return vim.tbl_filter(function(item)

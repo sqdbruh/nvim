@@ -324,6 +324,8 @@ local function get_groups()
     Comment = { fg = colors.gray, italic = config.italic.comments },
     Todo = { fg = colors.bg0, bold = config.bold, italic = config.italic.comments },
     Done = { fg = colors.orange, bold = config.bold, italic = config.italic.comments },
+    jaiCommentNote = { fg = colors.purple, bold = config.bold, italic = config.italic.comments },
+    jaiTagNote = { fg = colors.purple, bold = config.bold },
     Error = { fg = colors.red, bold = config.bold, reverse = config.inverse },
     Statement = { link = "GruvboxOrange" },
     Conditional = { link = "GruvboxOrange" },
