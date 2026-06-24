@@ -153,6 +153,7 @@ vim.keymap.set("n", "<A-l>", function()
 	vim.diagnostic.jump({ count = -1, float = true, severity = vim.diagnostic.severity.ERROR })
 end, { desc = "Previous error diagnostic" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader><CR>", "i<CR><Esc>", { desc = "Split line at cursor" })
 
 local function has_insert_reindent_key()
 	if vim.bo.indentexpr ~= "" then
@@ -220,6 +221,32 @@ vim.diagnostic.config({
 	-- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
 	jump = { float = true },
 })
+
+if vim.fn.exists(":lsp") == 2 then
+	local function create_lsp_alias(name, command, opts)
+		if vim.fn.exists(":" .. name) == 0 then
+			vim.api.nvim_create_user_command(name, command, opts or {})
+		end
+	end
+
+	local function legacy_lsp_command(subcommand)
+		return function(info)
+			local command = "lsp " .. subcommand
+			if info.args ~= "" then
+				command = command .. " " .. info.args
+			end
+			vim.cmd(command)
+		end
+	end
+
+	create_lsp_alias("LspInfo", "checkhealth vim.lsp", { desc = "Alias to :checkhealth vim.lsp" })
+	create_lsp_alias("LspLog", function()
+		vim.cmd("tabnew " .. vim.fn.fnameescape(vim.lsp.log.get_filename()))
+	end, { desc = "Open the LSP log" })
+	create_lsp_alias("LspStart", legacy_lsp_command("enable"), { nargs = "?", desc = "Alias to :lsp enable" })
+	create_lsp_alias("LspStop", legacy_lsp_command("disable"), { nargs = "?", desc = "Alias to :lsp disable" })
+	create_lsp_alias("LspRestart", legacy_lsp_command("restart"), { nargs = "?", desc = "Alias to :lsp restart" })
+end
 
 -- vim.keymap.set("n", "<leader>q", function()
 -- 	local is_open = false
@@ -373,6 +400,13 @@ require("lazy").setup({
 	},
 	{ "bkad/CamelCaseMotion" },
 	{
+		"AndrewRadev/sideways.vim",
+		keys = {
+			{ "(", "<cmd>SidewaysLeft<CR>", desc = "Move argument left" },
+			{ ")", "<cmd>SidewaysRight<CR>", desc = "Move argument right" },
+		},
+	},
+	{
 		"tpope/vim-dispatch",
 	},
 	{
@@ -422,6 +456,9 @@ require("lazy").setup({
 
 			vim.keymap.set("n", "fs", "<cmd>AutoSession search<CR>", {
 				desc = "Find sessions",
+			})
+			vim.keymap.set("n", "<leader>as", "<cmd>AutoSession save<CR>", {
+				desc = "Save session",
 			})
 		end,
 	},
@@ -1290,14 +1327,17 @@ require("lazy").setup({
 					},
 				},
 				list = {
-					max_items = 5,
 					selection = {
 						preselect = false,
 					},
 				},
+				menu = {
+					max_height = 5,
+					scrollbar = true,
+				},
 				-- By default, you may press `<c-space>` to show the documentation.
 				-- Optionally, set `auto_show = true` to show the documentation after a delay.
-				documentation = { auto_show = false, auto_show_delay_ms = 300 },
+				documentation = { auto_show = true, auto_show_delay_ms = 300 },
 			},
 
 			sources = {
